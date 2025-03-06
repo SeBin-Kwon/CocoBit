@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SnapKit
 
-class ExchangeViewController: BaseViewController {
+final class ExchangeViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.titleView = NavigationTitleView(title: "거래소")
     }
 
 }

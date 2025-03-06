@@ -20,7 +20,7 @@ final class TabBarController: UITabBarController {
         let searchNav = UINavigationController(rootViewController: SearchViewController())
         searchNav.tabBarItem = UITabBarItem(title: "코인정보", image: .setSymbol(.chartBar), tag: 1)
         
-        let emptyNav = UINavigationController(rootViewController: SearchViewController())
+        let emptyNav = UINavigationController(rootViewController: EmptyViewController())
         emptyNav.tabBarItem = UITabBarItem(title: "포트폴리오", image: .setSymbol(.star), tag: 2)
         
         setViewControllers([exchangeNav, searchNav, emptyNav], animated: true)

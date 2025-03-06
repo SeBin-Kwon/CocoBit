@@ -12,6 +12,11 @@ class BaseViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .white
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .white
+//        appearance.titlePositionAdjustment = UIOffset(horizontal: 10, vertical: 10)
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
     }
     
     @available(*, unavailable)

@@ -7,12 +7,12 @@
 
 import UIKit
 
-class SearchViewController: BaseViewController {
+final class SearchViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        navigationItem.titleView = NavigationTitleView(title: "가상자산 / 심볼 검색")
     }
 
 }
