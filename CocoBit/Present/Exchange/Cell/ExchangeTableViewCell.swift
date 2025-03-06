@@ -5,6 +5,7 @@
 //  Created by Sebin Kwon on 3/6/25.
 //
 
+
 import UIKit
 import SnapKit
 
@@ -18,16 +19,33 @@ class ExchangeTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let currentLabel = {
+    let priceLabel = {
         let label = UILabel()
         label.text = "3,868"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label
     }()
+    
+    let changeLabel = {
+        let label = UILabel()
+        label.text = "3,868"
+        label.font = .setFont(.medium)
+        label.textColor = .cocoBitBlack
+        return label
+    }()
+    
+    let tradeLabel = {
+        let label = UILabel()
+        label.text = "3,868"
+        label.font = .setFont(.medium)
+        label.textColor = .cocoBitBlack
+        return label
+    }()
+    
 
     override func configureHierarchy() {
-        addSubviews(coinLabel, currentLabel)
+        addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
     }
     
     override func configureLayout() {
@@ -35,8 +53,16 @@ class ExchangeTableViewCell: BaseTableViewCell {
             make.leading.equalTo(safeAreaLayoutGuide).offset(10)
             make.centerY.equalToSuperview()
         }
-        currentLabel.snp.makeConstraints { make in
+        priceLabel.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-10)
+            make.centerY.equalToSuperview()
+        }
+        changeLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-80)
+            make.centerY.equalToSuperview()
+        }
+        tradeLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-180)
             make.centerY.equalToSuperview()
         }
     }
