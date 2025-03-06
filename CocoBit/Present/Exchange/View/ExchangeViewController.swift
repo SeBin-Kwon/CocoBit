@@ -39,6 +39,25 @@ final class ExchangeViewController: BaseViewController {
                 cell.changeLabel.text = element
             }
             .disposed(by: disposeBag)
+        
+        headerView.tradeButton.rx.tap
+            .bind { value in
+                print("현재가버튼", value)
+            }
+            .disposed(by: disposeBag)
+        
+        headerView.changeButton.rx.tap
+            .bind { value in
+                print("전일대비버튼", value)
+            }
+            .disposed(by: disposeBag)
+        
+        headerView.priceButton.rx.tap
+            .bind { value in
+                print("거래대금버튼", value)
+            }
+            .disposed(by: disposeBag)
+
     }
     
     private func configureLayout() {

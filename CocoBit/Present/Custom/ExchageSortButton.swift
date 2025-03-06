@@ -8,13 +8,19 @@
 import UIKit
 import SnapKit
 
-class ExchageSortButton: BaseView {
+final class ExchageSortButton: UIButton {
     
     let title: String
     
     init(title: String) {
         self.title = title
         super.init(frame: .zero)
+        configureHierarchy()
+        configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     lazy var titleLable = {
@@ -39,11 +45,11 @@ class ExchageSortButton: BaseView {
         return image
     }()
 
-    override func configureHierarchy() {
+    private func configureHierarchy() {
         addSubviews(titleLable, arrowUp, arrowDown)
     }
     
-    override func configureLayout() {
+    private func configureLayout() {
         titleLable.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
