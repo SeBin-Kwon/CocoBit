@@ -16,6 +16,16 @@ final class TabBarController: UITabBarController {
     private func configureTabBarController() {
         let exchangeNav = UINavigationController(rootViewController: ExchangeViewController())
         exchangeNav.tabBarItem = UITabBarItem(title: "거래소", image: .setSymbol(.chartLineUP), tag: 0)
-        setViewControllers([exchangeNav], animated: true)
+        
+        let searchNav = UINavigationController(rootViewController: SearchViewController())
+        searchNav.tabBarItem = UITabBarItem(title: "코인정보", image: .setSymbol(.chartBar), tag: 1)
+        
+        let emptyNav = UINavigationController(rootViewController: SearchViewController())
+        emptyNav.tabBarItem = UITabBarItem(title: "포트폴리오", image: .setSymbol(.star), tag: 2)
+        
+        setViewControllers([exchangeNav, searchNav, emptyNav], animated: true)
+        
+        tabBar.tintColor = .cocoBitBlack
+        tabBar.unselectedItemTintColor = .lightGray
     }
 }
