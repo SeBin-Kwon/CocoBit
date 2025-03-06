@@ -5,7 +5,7 @@
 //  Created by Sebin Kwon on 3/6/25.
 //
 
-import UIKit
+import Foundation
 
 enum SFSymbol: String {
     case arrowUp = "arrowtriangle.up.fill"
