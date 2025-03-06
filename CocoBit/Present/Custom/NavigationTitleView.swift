@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-final class NavigationTitleView: UIView {
+final class NavigationTitleView: BaseView {
     
     let title: String
     
@@ -24,12 +25,11 @@ final class NavigationTitleView: UIView {
         configureLayout()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func configureHierarchy() {
+        addSubview(titleLable)
     }
     
-    private func configureLayout() {
-        addSubview(titleLable)
+    override func configureLayout() {
         titleLable.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(-180)
             make.top.equalToSuperview().offset(10)

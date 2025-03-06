@@ -19,7 +19,7 @@ class ExchangeTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let priceLabel = {
+    let tradeLabel = {
         let label = UILabel()
         label.text = "3,868"
         label.font = .setFont(.medium)
@@ -35,14 +35,13 @@ class ExchangeTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let tradeLabel = {
+    let priceLabel = {
         let label = UILabel()
         label.text = "3,868"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label
     }()
-    
 
     override func configureHierarchy() {
         addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
