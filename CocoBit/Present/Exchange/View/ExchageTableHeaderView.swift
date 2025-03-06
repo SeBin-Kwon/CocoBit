@@ -18,51 +18,47 @@ final class ExchangeTableHeaderView: BaseView {
         return label
     }()
     
-    let tradeLabel = {
-        let label = UILabel()
-        label.text = "3,868"
-        label.font = .setFont(.medium)
-        label.textColor = .cocoBitBlack
-        return label
-    }()
+//    let tradeLabel = {
+//        let label = UILabel()
+//        label.text = "3,868"
+//        label.font = .setFont(.medium)
+//        label.textColor = .cocoBitBlack
+//        return label
+//    }()
     
-    let changeLabel = {
-        let label = UILabel()
-        label.text = "3,868"
-        label.font = .setFont(.medium)
-        label.textColor = .cocoBitBlack
-        return label
-    }()
+    let tradeButton = ExchageSortButton(title: "현재가")
     
-    let priceLabel = {
-        let label = UILabel()
-        label.text = "3,868"
-        label.font = .setFont(.medium)
-        label.textColor = .cocoBitBlack
-        return label
-    }()
+    let changeButton = ExchageSortButton(title: "전일대비")
+    
+    let priceButton = ExchageSortButton(title: "거래대금")
     
     override func configureHierarchy() {
         backgroundColor = .cocoBitLightGray
-        addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
+        addSubviews(coinLabel, priceButton, changeButton, tradeButton)
     }
     
     override func configureLayout() {
         coinLabel.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(20)
             make.centerY.equalToSuperview()
         }
-        priceLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-10)
+        priceButton.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
             make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalToSuperview()
         }
-        changeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-80)
+        changeButton.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-120)
             make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalToSuperview()
         }
-        tradeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-180)
+        tradeButton.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-200)
             make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalToSuperview()
         }
     }
 }

@@ -44,24 +44,24 @@ class ExchangeTableViewCell: BaseTableViewCell {
     }()
 
     override func configureHierarchy() {
-        addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
+        contentView.addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
     }
     
     override func configureLayout() {
         coinLabel.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(20)
             make.centerY.equalToSuperview()
         }
         priceLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-10)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
             make.centerY.equalToSuperview()
         }
         changeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-80)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-120)
             make.centerY.equalToSuperview()
         }
         tradeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-180)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-200)
             make.centerY.equalToSuperview()
         }
     }
