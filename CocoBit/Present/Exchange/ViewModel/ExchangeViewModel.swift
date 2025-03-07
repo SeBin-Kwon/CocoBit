@@ -59,12 +59,18 @@ final class ExchangeViewModel: BaseViewModel {
     private func formattedData(_ data: PrimitiveSequence<SingleTrait, [MarketData]>.Element) -> [MarketFormatted] {
         var result = [MarketFormatted]()
         let formatter = FormatManager.shared
+        
         data.forEach { value in
+            let stringRate = formatter.roundDecimal(value.signedChangeRate).0
+            let colorRate = formatter.roundDecimal(value.signedChangeRate).1
+            let stringPrice = formatter.roundDecimal(value.signedChangePrice).0
+            let colorPrice = formatter.roundDecimal(value.signedChangePrice).1
+            
             let format = MarketFormatted(
                 market: formatter.marketFormatted(value.market),
                 tradePrice: formatter.tradeFormatted(value.tradePrice),
-                signedChangeRate: formatter.roundDecimal(value.signedChangeRate) + "%",
-                signedChangePrice: formatter.roundDecimal(value.signedChangePrice),
+                signedChangeRate: (stringRate + "%", colorRate),
+                signedChangePrice: (stringPrice, colorPrice),
                 accTradePrice24h: formatter.convertToMillions(value.accTradePrice24h))
             result.append(format)
         }
@@ -76,9 +82,8 @@ final class ExchangeViewModel: BaseViewModel {
     struct MarketFormatted {
         let market: String
         let tradePrice: String
-        let signedChangeRate: String
-        let signedChangePrice: String
+        let signedChangeRate: (String, DecimalState)
+        let signedChangePrice: (String, DecimalState)
         let accTradePrice24h: String
     }
 }
-

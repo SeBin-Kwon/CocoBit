@@ -43,8 +43,10 @@ final class ExchangeViewController: BaseViewController {
             .drive(tableView.rx.items(cellIdentifier: ExchangeTableViewCell.identifier, cellType: ExchangeTableViewCell.self)) { row, element, cell in
                 cell.coinLabel.text = element.market
                 cell.tradeLabel.text = element.tradePrice
-                cell.changeRateLabel.text = element.signedChangeRate
-                cell.changePriceLabel.text = element.signedChangePrice
+                cell.changeRateLabel.text = element.signedChangeRate.0
+                cell.changeRateLabel.textColor = element.signedChangeRate.1.color
+                cell.changePriceLabel.text = element.signedChangePrice.0
+                cell.changePriceLabel.textColor = element.signedChangePrice.1.color
                 cell.priceLabel.text = element.accTradePrice24h
             }
             .disposed(by: disposeBag)
@@ -81,4 +83,19 @@ final class ExchangeViewController: BaseViewController {
         }
     }
 
+}
+
+
+enum DecimalState {
+    case up
+    case down
+    case zero
+    
+    var color: UIColor {
+        switch self {
+        case .up: .cocoBitRed
+        case .down: .cocoBitBlue
+        case .zero: .cocoBitBlack
+        }
+    }
 }
