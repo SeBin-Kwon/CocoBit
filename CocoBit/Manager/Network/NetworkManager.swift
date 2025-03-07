@@ -41,6 +41,26 @@ extension APIError: LocalizedError {
 }
 
 final class NetworkManager {
+    static let shared = NetworkManager()
+    private init() {}
     
-
+    func fetchResults<T: Decodable>(api: EndPoint, type: T.Type) -> Single<T> {
+        return Single<T>.create { value in
+            
+            AF.request(api.baseURL, method: api.method, parameters: api.parameter, encoding: URLEncoding(destination: .queryString))
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: T.self) { response in
+                    switch response.result {
+                    case .success(let result):
+                        value(.success(result))
+                    case .failure(let error):
+                        guard let code = error.responseCode else { return }
+                        let apiError = APIError(rawValue: code) ?? APIError.server
+                        print(error.localizedDescription)
+                        value(.failure(apiError))
+                    }
+                }
+            return Disposables.create {}
+        }
+    }
 }
