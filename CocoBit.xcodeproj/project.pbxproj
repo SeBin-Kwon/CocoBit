@@ -14,7 +14,22 @@
 		AE9CF2F32D7981CF00FD5075 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE9CF2F22D7981CF00FD5075 /* SnapKit */; };
 		AE9CF2F62D79824100FD5075 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AE9CF2F52D79824100FD5075 /* Alamofire */; };
 		AE9CF2F92D79826100FD5075 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AE9CF2F82D79826100FD5075 /* Kingfisher */; };
+		AE9CF39A2D7AAEA000FD5075 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = AE9CF2EA2D79819D00FD5075 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AE9CF39B2D7AAEA000FD5075 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AE9CF39A2D7AAEA000FD5075 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AE9CF2562D797D0500FD5075 /* CocoBit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoBit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +101,7 @@
 				AE9CF2522D797D0500FD5075 /* Sources */,
 				AE9CF2532D797D0500FD5075 /* Frameworks */,
 				AE9CF2542D797D0500FD5075 /* Resources */,
+				AE9CF39B2D7AAEA000FD5075 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
