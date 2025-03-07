@@ -23,19 +23,14 @@ final class ExchangeViewModel: BaseViewModel {
     }
     
     func transform(input: Input) -> Output {
-        let marketFirstLoad = BehaviorSubject(value: [MarketData]())
         let marketList = PublishSubject<[MarketData]>()
         
-        marketFirstLoad
-            .debug("marketList")
-            .flatMap { _ in
-                NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
-                    .catch { error in
-                        let data = [MarketData]()
-//                        guard let error = error as? APIError else { return Single.just(data) }
-//                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
-                        return Single.just(data)
-                    }
+        Observable<Int>
+            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+            .debug("TIMER")
+            .withUnretained(self)
+            .flatMap { owner, _ in
+                owner.callRequest()
             }
             .bind { value in
                 marketList.onNext(value)
@@ -49,4 +44,16 @@ final class ExchangeViewModel: BaseViewModel {
             marketList: marketList.asDriver(onErrorJustReturn: [])
         )
     }
+    
+    private func callRequest() -> Single<[MarketData]> {
+        NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
+            .catch { error in
+                let data = [MarketData]()
+//                        guard let error = error as? APIError else { return Single.just(data) }
+//                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                return Single.just(data)
+            }
+    }
+    
+    
 }
