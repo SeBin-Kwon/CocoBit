@@ -84,18 +84,3 @@ final class ExchangeViewController: BaseViewController {
     }
 
 }
-
-
-enum DecimalState {
-    case up
-    case down
-    case zero
-    
-    var color: UIColor {
-        switch self {
-        case .up: .cocoBitRed
-        case .down: .cocoBitBlue
-        case .zero: .cocoBitBlack
-        }
-    }
-}
