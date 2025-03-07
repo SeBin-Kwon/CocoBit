@@ -27,10 +27,18 @@ class ExchangeTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let changeLabel = {
+    let changeRateLabel = {
         let label = UILabel()
         label.text = "3,868"
         label.font = .setFont(.medium)
+        label.textColor = .cocoBitBlack
+        return label
+    }()
+    
+    let changePriceLabel = {
+        let label = UILabel()
+        label.text = "3,868"
+        label.font = .setFont(.small)
         label.textColor = .cocoBitBlack
         return label
     }()
@@ -44,7 +52,7 @@ class ExchangeTableViewCell: BaseTableViewCell {
     }()
 
     override func configureHierarchy() {
-        contentView.addSubviews(coinLabel, priceLabel, changeLabel, tradeLabel)
+        contentView.addSubviews(coinLabel, priceLabel, changeRateLabel, changePriceLabel, tradeLabel)
     }
     
     override func configureLayout() {
@@ -56,9 +64,13 @@ class ExchangeTableViewCell: BaseTableViewCell {
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
             make.centerY.equalToSuperview()
         }
-        changeLabel.snp.makeConstraints { make in
+        changeRateLabel.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-120)
             make.centerY.equalToSuperview()
+        }
+        changePriceLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-120)
+            make.top.equalTo(changeRateLabel.snp.bottom)
         }
         tradeLabel.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-200)

@@ -43,7 +43,8 @@ final class ExchangeViewController: BaseViewController {
             .drive(tableView.rx.items(cellIdentifier: ExchangeTableViewCell.identifier, cellType: ExchangeTableViewCell.self)) { row, element, cell in
                 cell.coinLabel.text = element.market
                 cell.tradeLabel.text = element.tradePrice
-                cell.changeLabel.text = element.signedChangeRate
+                cell.changeRateLabel.text = element.signedChangeRate
+                cell.changePriceLabel.text = element.signedChangePrice
                 cell.priceLabel.text = element.accTradePrice24h
             }
             .disposed(by: disposeBag)

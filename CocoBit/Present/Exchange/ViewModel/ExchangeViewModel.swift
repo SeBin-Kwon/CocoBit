@@ -63,7 +63,7 @@ final class ExchangeViewModel: BaseViewModel {
             let format = MarketFormatted(
                 market: formatter.marketFormatted(value.market),
                 tradePrice: formatter.tradeFormatted(value.tradePrice),
-                signedChangeRate: formatter.roundDecimal(value.signedChangeRate),
+                signedChangeRate: formatter.roundDecimal(value.signedChangeRate) + "%",
                 signedChangePrice: formatter.roundDecimal(value.signedChangePrice),
                 accTradePrice24h: formatter.convertToMillions(value.accTradePrice24h))
             result.append(format)
