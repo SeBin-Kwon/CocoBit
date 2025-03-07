@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ExchageSortButton: UIButton {
+final class ExchangeSortButton: UIButton {
     
     let title: String
     
