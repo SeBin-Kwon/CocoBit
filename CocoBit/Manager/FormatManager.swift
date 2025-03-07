@@ -23,7 +23,7 @@ final class FormatManager {
     }
     
     // 현재가 소수점 1자리 표기
-    func tradeForatted(_ value: Double) -> String {
+    func tradeFormatted(_ value: Double) -> String {
         var num = roundDecimal(value)
         if num.last == "0" {
             num.removeLast()
@@ -31,13 +31,19 @@ final class FormatManager {
         return num
     }
     
-    // 거래대금
+    // 거래대금 표기
     func convertToMillions(_ value: Double) -> String {
         if value >= 1000000 {
             return trunc(value/1000000).formatted() + "백만"
         } else {
             return trunc(value).formatted()
         }
+    }
+    
+    // 마켓 코인 표기
+    func marketFormatted(_ value: String) -> String {
+        let splitString = value.components(separatedBy: "-")
+        return splitString[1] + "/" + splitString[0]
     }
     
 }

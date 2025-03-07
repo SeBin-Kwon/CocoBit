@@ -19,21 +19,22 @@ final class ExchangeViewModel: BaseViewModel {
     
     struct Output {
 //        let tradeSorted: Driver<Void>
-        let marketList: Driver<[MarketData]>
+        let marketList: Driver<[MarketFormatted]>
     }
     
     func transform(input: Input) -> Output {
-        let marketList = PublishSubject<[MarketData]>()
+        let marketList = PublishSubject<[MarketFormatted]>()
         
         Observable<Int>
-            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+            .timer(.microseconds(0), scheduler: MainScheduler.instance)
             .debug("TIMER")
             .withUnretained(self)
             .flatMap { owner, _ in
                 owner.callRequest()
             }
-            .bind { value in
-                marketList.onNext(value)
+            .bind(with: self) { owner, value in
+                let result = owner.formattedData(value)
+                marketList.onNext(result)
             }
             .disposed(by: disposeBag)
 
@@ -55,5 +56,29 @@ final class ExchangeViewModel: BaseViewModel {
             }
     }
     
+    private func formattedData(_ data: PrimitiveSequence<SingleTrait, [MarketData]>.Element) -> [MarketFormatted] {
+        var result = [MarketFormatted]()
+        let formatter = FormatManager.shared
+        data.forEach { value in
+            let format = MarketFormatted(
+                market: formatter.marketFormatted(value.market),
+                tradePrice: formatter.tradeFormatted(value.tradePrice),
+                signedChangeRate: formatter.roundDecimal(value.signedChangeRate),
+                signedChangePrice: formatter.roundDecimal(value.signedChangePrice),
+                accTradePrice24h: formatter.convertToMillions(value.accTradePrice24h))
+            result.append(format)
+        }
+        
+        
+        return result
+    }
     
+    struct MarketFormatted {
+        let market: String
+        let tradePrice: String
+        let signedChangeRate: String
+        let signedChangePrice: String
+        let accTradePrice24h: String
+    }
 }
+
