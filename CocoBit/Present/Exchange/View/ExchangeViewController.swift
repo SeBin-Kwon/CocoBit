@@ -22,6 +22,8 @@ final class ExchangeViewController: BaseViewController {
     }()
     
     let headerView = ExchangeTableHeaderView()
+    
+    let viewModel = ExchangeViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,20 +33,26 @@ final class ExchangeViewController: BaseViewController {
     }
     
     private func bind() {
-        let list = Observable.just(["ser", "serewe", "wer"])
+        let input = ExchangeViewModel.Input(
+            tradeButtonTap: headerView.tradeButton.rx.tap
+        )
         
-        list
-            .bind(to: tableView.rx.items(cellIdentifier: ExchangeTableViewCell.identifier, cellType: ExchangeTableViewCell.self)) { row, element, cell in
-                cell.coinLabel.text = element
-                cell.changeLabel.text = element
+        let output = viewModel.transform(input: input)
+        
+        output.marketList
+            .drive(tableView.rx.items(cellIdentifier: ExchangeTableViewCell.identifier, cellType: ExchangeTableViewCell.self)) { row, element, cell in
+                cell.coinLabel.text = "\(element.market)"
+                cell.tradeLabel.text = "\(element.tradePrice)"
+                cell.changeLabel.text = "\(element.signedChangeRate)"
+                cell.priceLabel.text = "\(element.accTradePrice24h)"
             }
             .disposed(by: disposeBag)
         
-        headerView.tradeButton.rx.tap
-            .bind { value in
-                print("현재가버튼", value)
-            }
-            .disposed(by: disposeBag)
+//        output.tradeSorted
+//            .drive { value in
+//                print("현재가버튼", value)
+//            }
+//            .disposed(by: disposeBag)
         
         headerView.changeButton.rx.tap
             .bind { value in
