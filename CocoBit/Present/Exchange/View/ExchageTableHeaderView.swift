@@ -26,11 +26,11 @@ final class ExchangeTableHeaderView: BaseView {
 //        return label
 //    }()
     
-    let tradeButton = ExchageSortButton(title: "현재가")
+    let tradeButton = ExchangeSortButton(title: "현재가")
     
-    let changeButton = ExchageSortButton(title: "전일대비")
+    let changeButton = ExchangeSortButton(title: "전일대비")
     
-    let priceButton = ExchageSortButton(title: "거래대금")
+    let priceButton = ExchangeSortButton(title: "거래대금")
     
     override func configureHierarchy() {
         backgroundColor = .cocoBitLightGray
