@@ -14,12 +14,9 @@ final class ExchangeViewModel: BaseViewModel {
     var disposeBag = DisposeBag()
     
     struct Input {
-        let tradeButtonTap: ControlEvent<Void>
-        let tradeButtonState: BehaviorRelay<Bool?>
-        let changeButtonTap: ControlEvent<Void>
-        let changeButtonState: BehaviorRelay<Bool?>
-        let priceButtonTap: ControlEvent<Void>
-        let priceButtonState: BehaviorRelay<Bool?>
+        let tradeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
+        let changeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
+        let priceButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
     }
     
     struct Output {
@@ -56,12 +53,12 @@ final class ExchangeViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        input.tradeButtonTap
+        input.tradeButtonTap.tap
             .withLatestFrom(timer)
             .debug("tradeButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.trade)
-                let newState = owner.changeState(input.tradeButtonState.value)
+                let newState = owner.changeState(input.tradeButtonTap.state.value)
                 currentSortState.accept(newState)
                 tradeSorted.accept(newState)
                 priceSorted.accept(nil)
@@ -69,12 +66,12 @@ final class ExchangeViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
 
-        input.changeButtonTap
+        input.changeButtonTap.tap
             .withLatestFrom(timer)
             .debug("changeButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.change)
-                let newState = owner.changeState(input.changeButtonState.value)
+                let newState = owner.changeState(input.changeButtonTap.state.value)
                 currentSortState.accept(newState)
                 changeSorted.accept(newState)
                 priceSorted.accept(nil)
@@ -82,14 +79,13 @@ final class ExchangeViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        input.priceButtonTap
+        input.priceButtonTap.tap
             .withLatestFrom(timer)
             .debug("priceButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.price)
-                let newState = owner.changeState(input.priceButtonState.value)
+                let newState = owner.changeState(input.priceButtonTap.state.value)
                 currentSortState.accept(newState)
-                
                 priceSorted.accept(newState)
                 tradeSorted.accept(nil)
                 changeSorted.accept(nil)
@@ -189,17 +185,18 @@ final class ExchangeViewModel: BaseViewModel {
         return result
     }
     
-    struct MarketFormatted {
-        let market: String
-        let tradePrice: String
-        let signedChangeRate: (String, DecimalState)
-        let signedChangePrice: (String, DecimalState)
-        let accTradePrice24h: String
-    }
 }
 
 enum SortType {
     case trade
     case change
     case price
+}
+
+struct MarketFormatted {
+    let market: String
+    let tradePrice: String
+    let signedChangeRate: (String, DecimalState)
+    let signedChangePrice: (String, DecimalState)
+    let accTradePrice24h: String
 }

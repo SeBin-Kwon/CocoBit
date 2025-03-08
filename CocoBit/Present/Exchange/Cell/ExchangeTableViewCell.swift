@@ -50,6 +50,16 @@ class ExchangeTableViewCell: BaseTableViewCell {
         label.textColor = .cocoBitBlack
         return label
     }()
+    
+    func configureData(_ element: MarketFormatted) {
+        coinLabel.text = element.market
+        tradeLabel.text = element.tradePrice
+        changeRateLabel.text = element.signedChangeRate.0
+        changeRateLabel.textColor = element.signedChangeRate.1.color
+        changePriceLabel.text = element.signedChangePrice.0
+        changePriceLabel.textColor = element.signedChangePrice.1.color
+        priceLabel.text = element.accTradePrice24h
+    }
 
     override func configureHierarchy() {
         contentView.addSubviews(coinLabel, priceLabel, changeRateLabel, changePriceLabel, tradeLabel)

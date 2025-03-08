@@ -39,25 +39,16 @@ final class ExchangeViewController: BaseViewController {
         let priceSortState = BehaviorRelay<Bool?>(value: nil)
         
         let input = ExchangeViewModel.Input(
-            tradeButtonTap: headerView.tradeButton.rx.tap,
-            tradeButtonState: tradeSortState,
-            changeButtonTap: headerView.changeButton.rx.tap,
-            changeButtonState: changeSortState,
-            priceButtonTap: headerView.priceButton.rx.tap,
-            priceButtonState: priceSortState
+            tradeButtonTap: (headerView.tradeButton.rx.tap, tradeSortState),
+            changeButtonTap: (headerView.changeButton.rx.tap, changeSortState),
+            priceButtonTap: (headerView.priceButton.rx.tap, priceSortState)
         )
         
         let output = viewModel.transform(input: input)
         
         output.marketList
             .drive(tableView.rx.items(cellIdentifier: ExchangeTableViewCell.identifier, cellType: ExchangeTableViewCell.self)) { row, element, cell in
-                cell.coinLabel.text = element.market
-                cell.tradeLabel.text = element.tradePrice
-                cell.changeRateLabel.text = element.signedChangeRate.0
-                cell.changeRateLabel.textColor = element.signedChangeRate.1.color
-                cell.changePriceLabel.text = element.signedChangePrice.0
-                cell.changePriceLabel.textColor = element.signedChangePrice.1.color
-                cell.priceLabel.text = element.accTradePrice24h
+                cell.configureData(element)
             }
             .disposed(by: disposeBag)
         
