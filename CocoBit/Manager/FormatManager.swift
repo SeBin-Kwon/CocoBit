@@ -34,6 +34,10 @@ final class FormatManager {
         
         let result = numberFormatter.string(for: value) ?? "0"
         
+        if result == "0.00" || result == "-0.00" {
+            return (result.components(separatedBy: "-").joined(), .zero)
+        }
+        
         return (result, state)
     }
     
