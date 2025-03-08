@@ -39,7 +39,8 @@ final class ExchangeViewModel: BaseViewModel {
         let currentSortState = BehaviorRelay<Bool?>(value: nil)
         
         let timer = Observable<Int>
-            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+            .timer(.microseconds(0), scheduler: MainScheduler.instance)
+//            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
         
         Observable.combineLatest(timer, currentSortType)
             .debug("TIMER")
