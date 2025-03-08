@@ -56,29 +56,6 @@ extension TrendingSectionModel: SectionModelType {
 }
 
 
-class SearchSectionHeaderView: UICollectionReusableView {
-    static let identifier = "SearchSectionHeaderView"
-    let titleLabel: UILabel = {
-            let label = UILabel()
-        label.font = .setFont(.subTitle)
-        label.textColor = .cocoBitBlack
-            return label
-        }()
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { make in
-                make.edges.equalToSuperview().inset(10)
-            }
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-}
-
-
 final class SearchViewController: BaseViewController {
     
     private let searchBar = CocoBitSearchBar()
