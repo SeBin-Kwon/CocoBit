@@ -9,21 +9,68 @@ import UIKit
 import SnapKit
 
 class NFTCollectionViewCell: BaseCollectionViewCell {
-    let titleLabel = {
+    
+    let nameLabel = {
         let label = UILabel()
-        label.text = "NFTCollectionViewCell"
-        label.font = .setFont(.mediumBold)
+        label.text = "name"
+        label.font = .setFont(.smallBold)
         label.textColor = .cocoBitBlack
         return label
     }()
     
+    let symbolLabel = {
+        let label = UILabel()
+        label.text = "0.66 SYMBOL"
+        label.font = .setFont(.small)
+        label.textColor = .cocoBitGray
+        return label
+    }()
+    
+    let imageView = {
+        let image = UIImageView()
+        image.backgroundColor = .gray
+        image.contentMode = .scaleAspectFill
+        image.layer.cornerRadius = 20
+        image.clipsToBounds = true
+        return image
+    }()
+    
+    let changeLabel = {
+        let label = UILabel()
+        label.text = "39.82%"
+        label.font = .setFont(.smallBold)
+        label.textColor = .cocoBitBlack
+        return label
+    }()
+    
+    func configureData(_ item: NFTItem) {
+//        scoreLabel.text = item.score
+//        symbolLabel.text = item.symbol
+//        nameLabel.text = item.name
+//        changeLabel.text = item.change
+    }
+    
     override func configureHierarchy() {
-        contentView.addSubviews(titleLabel)
+        contentView.addSubviews(nameLabel, symbolLabel, imageView, changeLabel)
     }
     
     override func configureLayout() {
-        titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        imageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.size.equalTo(72)
+        }
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(3)
+            make.centerX.equalToSuperview()
+        }
+        symbolLabel.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(3)
+            make.centerX.equalToSuperview()
+        }
+        changeLabel.snp.makeConstraints { make in
+            make.top.equalTo(symbolLabel.snp.bottom).offset(3)
+            make.centerX.equalToSuperview()
         }
     }
 }
