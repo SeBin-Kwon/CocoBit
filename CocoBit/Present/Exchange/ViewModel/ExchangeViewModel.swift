@@ -16,52 +16,96 @@ final class ExchangeViewModel: BaseViewModel {
     struct Input {
         let tradeButtonTap: ControlEvent<Void>
         let tradeButtonState: BehaviorRelay<Bool?>
+        let changeButtonTap: ControlEvent<Void>
+        let changeButtonState: BehaviorRelay<Bool?>
+        let priceButtonTap: ControlEvent<Void>
+        let priceButtonState: BehaviorRelay<Bool?>
     }
     
     struct Output {
-        let tradeSorted: Driver<Bool?>
         let marketList: Driver<[MarketFormatted]>
+        let tradeSorted: Driver<Bool?>
+        let changeSorted: Driver<Bool?>
+        let priceSorted: Driver<Bool?>
     }
     
     func transform(input: Input) -> Output {
         let marketList = PublishSubject<[MarketFormatted]>()
         let tradeSorted = PublishRelay<Bool?>()
+        let changeSorted = PublishRelay<Bool?>()
+        let priceSorted = PublishRelay<Bool?>()
         
-        Observable<Int>
-            .timer(.microseconds(0), scheduler: MainScheduler.instance)
-//            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+        let currentSortType = BehaviorRelay(value: SortType.price)
+        let currentSortState = BehaviorRelay<Bool?>(value: nil)
+        
+        let timer = Observable<Int>
+            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+        
+        Observable.combineLatest(timer, currentSortType)
             .debug("TIMER")
             .withUnretained(self)
-            .flatMap { owner, _ in
+            .flatMapLatest { owner, _ in
                 owner.callRequest()
             }
             .bind(with: self) { owner, value in
-                let result = owner.formattedData(value)
+                let sortedResult = owner.sortedData(value: value, state: currentSortState.value, type: currentSortType.value)
+                
+                let result = owner.formattedData(sortedResult.0)
                 marketList.onNext(result)
             }
             .disposed(by: disposeBag)
         
         input.tradeButtonTap
-            .debug("BUTTON")
-            .withUnretained(self)
-            .flatMap { owner, _ in
-                owner.callRequest()
+            .withLatestFrom(timer)
+            .debug("tradeButtonTap")
+            .bind(with: self) { owner, _ in
+                currentSortType.accept(.trade)
+                let newState = owner.changeState(input.tradeButtonState.value)
+                currentSortState.accept(newState)
+                tradeSorted.accept(newState)
+                priceSorted.accept(nil)
+                changeSorted.accept(nil)
             }
-            .bind(with: self) { owner, value in
-                let sortedResult = owner.sortedData(value: value, state: input.tradeButtonState.value, type: .trade)
-                tradeSorted.accept(sortedResult.1)
-                let result = owner.formattedData(sortedResult.0)
-                marketList.onNext(result)
+            .disposed(by: disposeBag)
+
+        input.changeButtonTap
+            .withLatestFrom(timer)
+            .debug("changeButtonTap")
+            .bind(with: self) { owner, _ in
+                currentSortType.accept(.change)
+                let newState = owner.changeState(input.changeButtonState.value)
+                currentSortState.accept(newState)
+                changeSorted.accept(newState)
+                priceSorted.accept(nil)
+                tradeSorted.accept(nil)
+            }
+            .disposed(by: disposeBag)
+        
+        input.priceButtonTap
+            .withLatestFrom(timer)
+            .debug("priceButtonTap")
+            .bind(with: self) { owner, _ in
+                currentSortType.accept(.price)
+                let newState = owner.changeState(input.priceButtonState.value)
+                currentSortState.accept(newState)
+                
+                priceSorted.accept(newState)
+                tradeSorted.accept(nil)
+                changeSorted.accept(nil)
             }
             .disposed(by: disposeBag)
 
         
-        
         return Output(
+            marketList: marketList.asDriver(onErrorJustReturn: []),
             tradeSorted: tradeSorted.asDriver(onErrorJustReturn: nil),
-            marketList: marketList.asDriver(onErrorJustReturn: [])
+            changeSorted: changeSorted.asDriver(onErrorJustReturn: nil),
+            priceSorted: priceSorted.asDriver(onErrorJustReturn: nil)
         )
     }
+    
+    
+    
     
     private func callRequest() -> Single<[MarketData]> {
         NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
@@ -73,8 +117,7 @@ final class ExchangeViewModel: BaseViewModel {
             }
     }
     
-    private func sortedData(value: [MarketData], state: Bool?, type: SortType) -> ([MarketData], Bool?) {
-        
+    private func changeState(_ state: Bool?) -> Bool? {
         let newState: Bool?
         switch state {
         case .none:
@@ -83,39 +126,43 @@ final class ExchangeViewModel: BaseViewModel {
             let result = value ? nil : true
             newState = result
         }
-        
+        return newState
+    }
+    
+    private func sortedData(value: [MarketData], state: Bool?, type: SortType) -> ([MarketData], Bool?) {
+
         let newList = value.sorted {
             switch type {
             case .trade:
-                guard let newState else {
+                guard let state else {
                     return $0.accTradePrice24h > $1.accTradePrice24h
                 }
-                if newState {
+                if state {
                     return $0.tradePrice < $1.tradePrice
                 } else {
                     return $0.tradePrice > $1.tradePrice
                 }
             case .change:
-                guard let newState else {
+                guard let state else {
                     return $0.accTradePrice24h > $1.accTradePrice24h
                 }
-                if newState {
+                if state {
                     return $0.signedChangeRate < $1.signedChangeRate
                 } else {
                     return $0.signedChangeRate > $1.signedChangeRate
                 }
             case .price:
-                guard let newState else {
+                guard let state else {
                     return $0.accTradePrice24h > $1.accTradePrice24h
                 }
-                if newState {
+                if state {
                     return $0.accTradePrice24h < $1.accTradePrice24h
                 } else {
                     return $0.accTradePrice24h > $1.accTradePrice24h
                 }
             }
         }
-        return (newList, newState)
+        return (newList, state)
     }
     
     private func formattedData(_ data: [MarketData]) -> [MarketFormatted] {

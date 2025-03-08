@@ -35,10 +35,16 @@ final class ExchangeViewController: BaseViewController {
     private func bind() {
         
         let tradeSortState = BehaviorRelay<Bool?>(value: nil)
+        let changeSortState = BehaviorRelay<Bool?>(value: nil)
+        let priceSortState = BehaviorRelay<Bool?>(value: nil)
         
         let input = ExchangeViewModel.Input(
             tradeButtonTap: headerView.tradeButton.rx.tap,
-            tradeButtonState: tradeSortState
+            tradeButtonState: tradeSortState,
+            changeButtonTap: headerView.changeButton.rx.tap,
+            changeButtonState: changeSortState,
+            priceButtonTap: headerView.priceButton.rx.tap,
+            priceButtonState: priceSortState
         )
         
         let output = viewModel.transform(input: input)
@@ -62,16 +68,17 @@ final class ExchangeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-//        headerView.changeButton.rx.tap
-//            .withLatestFrom(Observable.just(headerView.changeButton.sortState))
-//            .bind { value in
-//                print("전일대비버튼", value)
-//            }
-//            .disposed(by: disposeBag)
+        output.changeSorted
+            .drive(with: self) { owner, value in
+                owner.headerView.changeButton.sortState = value
+                changeSortState.accept(value)
+            }
+            .disposed(by: disposeBag)
         
-        headerView.priceButton.rx.tap
-            .bind { value in
-                print("거래대금버튼", value)
+        output.priceSorted
+            .drive(with: self) { owner, value in
+                owner.headerView.priceButton.sortState = value
+                priceSortState.accept(value)
             }
             .disposed(by: disposeBag)
 
