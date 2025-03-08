@@ -18,14 +18,6 @@ final class ExchangeTableHeaderView: BaseView {
         return label
     }()
     
-//    let tradeLabel = {
-//        let label = UILabel()
-//        label.text = "3,868"
-//        label.font = .setFont(.medium)
-//        label.textColor = .cocoBitBlack
-//        return label
-//    }()
-    
     let tradeButton = ExchangeSortButton(title: "현재가")
     
     let changeButton = ExchangeSortButton(title: "전일대비")

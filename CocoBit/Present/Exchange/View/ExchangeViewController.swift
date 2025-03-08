@@ -15,7 +15,7 @@ final class ExchangeViewController: BaseViewController {
     let tableView = {
        let view = UITableView()
         view.register(ExchangeTableViewCell.self, forCellReuseIdentifier: ExchangeTableViewCell.identifier)
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .cocoBitLightGray
         view.rowHeight = 50
         view.separatorStyle = .none
         return view
@@ -88,7 +88,7 @@ final class ExchangeViewController: BaseViewController {
         view.addSubviews(tableView, headerView)
         headerView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
