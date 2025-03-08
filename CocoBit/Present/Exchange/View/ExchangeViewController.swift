@@ -22,12 +22,12 @@ final class ExchangeViewController: BaseViewController {
     }()
     
     let headerView = ExchangeTableHeaderView()
-    
     let viewModel = ExchangeViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.titleView = NavigationTitleView(title: "거래소")
+        configureHierarchy()
         configureLayout()
         bind()
     }
@@ -83,9 +83,15 @@ final class ExchangeViewController: BaseViewController {
             .disposed(by: disposeBag)
 
     }
+}
+
+
+extension ExchangeViewController {
+    private func configureHierarchy() {
+        view.addSubviews(tableView, headerView)
+    }
     
     private func configureLayout() {
-        view.addSubviews(tableView, headerView)
         headerView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(40)
@@ -95,5 +101,4 @@ final class ExchangeViewController: BaseViewController {
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
-
 }
