@@ -12,19 +12,19 @@ import RxCocoa
 import RxDataSources
 
 
-struct SectionModel {
-    var name: String
+struct TrendingSearchModel {
+    var header: String
     var items: [Item]
 }
 
-struct CellItem {
+struct TrendingItem {
     let title: String
 }
 
-extension SectionModel: SectionModelType {
-    typealias Item = CellItem
+extension TrendingSearchModel: SectionModelType {
+    typealias Item = TrendingItem
     
-    init(original: SectionModel, items: [CellItem]) {
+    init(original: TrendingSearchModel, items: [TrendingItem]) {
         self = original
         self.items = items
     }
@@ -34,8 +34,8 @@ class SearchSectionHeaderView: UICollectionReusableView {
     static let identifier = "SearchSectionHeaderView"
     let titleLabel: UILabel = {
             let label = UILabel()
-            label.font = .boldSystemFont(ofSize: 18)
-            label.textColor = .black
+        label.font = .setFont(.subTitle)
+        label.textColor = .cocoBitBlack
             return label
         }()
         
@@ -79,44 +79,45 @@ final class SearchViewController: BaseViewController {
     
     private func bind() {
         
-        let dataSource = RxCollectionViewSectionedReloadDataSource<SectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
-            //            let section = dataSource[indexPath.section].sectionType
+        let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSearchModel> (configureCell: { dataSource, collectionView, indexPath, item in
             
-            if indexPath.section == 0 {
+            switch indexPath.section {
+            case 0:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
-                cell.backgroundColor = .red
+                cell.backgroundColor = .systemGray6
                 cell.titleLabel.text = item.title
                 
                 return cell
-            } else {
+            case 1:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
-                cell.backgroundColor = .blue
+                cell.backgroundColor = .systemGray5
                 cell.titleLabel.text = item.title
                 return cell
+            default: return UICollectionViewCell()
             }
+            
         }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
             let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: SearchSectionHeaderView.identifier,
                 for: indexPath
             ) as! SearchSectionHeaderView
-            header.titleLabel.text = dataSource.sectionModels[indexPath.section].name
-            header.backgroundColor = .systemTeal
+            header.titleLabel.text = dataSource.sectionModels[indexPath.section].header
             return header
         })
         
         let sections = Observable.just([
-            SectionModel(name: "search", items: [
-                CellItem(title: "Card 1"), CellItem(title: "Card 2"), CellItem(title: "Card 3"),
-                CellItem(title: "Card 4"), CellItem(title: "Card 5"), CellItem(title: "Card 6"),
-                CellItem(title: "Card 7"), CellItem(title: "Card 8"), CellItem(title: "Card 9"),
-                CellItem(title: "Card 10"), CellItem(title: "Card 11"), CellItem(title: "Card 12"),
-                CellItem(title: "Card 13"), CellItem(title: "Card 14")
+            TrendingSearchModel(header: "인기 검색어", items: [
+                TrendingItem(title: "Card 1"), TrendingItem(title: "Card 2"), TrendingItem(title: "Card 3"),
+                TrendingItem(title: "Card 4"), TrendingItem(title: "Card 5"), TrendingItem(title: "Card 6"),
+                TrendingItem(title: "Card 7"), TrendingItem(title: "Card 8"), TrendingItem(title: "Card 9"),
+                TrendingItem(title: "Card 10"), TrendingItem(title: "Card 11"), TrendingItem(title: "Card 12"),
+                TrendingItem(title: "Card 13"), TrendingItem(title: "Card 14")
             ]),
-            SectionModel(name: "nft", items: [
-                CellItem(title: "Row 1"), CellItem(title: "Row 2"), CellItem(title: "Row 3"),
-                CellItem(title: "Row 4"), CellItem(title: "Row 5"), CellItem(title: "Row 6"),
-                CellItem(title: "Row 7")
+            TrendingSearchModel(header: "인기 NFT", items: [
+                TrendingItem(title: "Row 1"), TrendingItem(title: "Row 2"), TrendingItem(title: "Row 3"),
+                TrendingItem(title: "Row 4"), TrendingItem(title: "Row 5"), TrendingItem(title: "Row 6"),
+                TrendingItem(title: "Row 7")
             ])
         ])
         
@@ -129,76 +130,83 @@ final class SearchViewController: BaseViewController {
     }
     
 
-
+// MARK: CollectionView Layout
 extension SearchViewController {
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
-            
-            
-            if sectionIndex == 0 {
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/7))
-                
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5) // 아이템 간 간격
-                
-                let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
-                
-                let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
-                
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
-                
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
-                
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 10 // 그룹간 간격
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
-                
-                let headerSize = NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1.0),
-                            heightDimension: .absolute(50)
-                        )
-                        let header = NSCollectionLayoutBoundarySupplementaryItem(
-                            layoutSize: headerSize,
-                            elementKind: UICollectionView.elementKindSectionHeader,
-                            alignment: .top
-                        )
-                        
-                        section.boundarySupplementaryItems = [header]
-                
-                return section
-            } else {
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalHeight(1))
-                
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5) // 아이템 간 간격
-                
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.1), heightDimension: .absolute(120))
-                
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                
-                let section = NSCollectionLayoutSection(group: group)
-                //        section.interGroupSpacing = 20 // 그룹간 간격
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
-                section.orthogonalScrollingBehavior = .continuous
-                
-                let headerSize = NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1.0),
-                            heightDimension: .absolute(50)
-                        )
-                        let header = NSCollectionLayoutBoundarySupplementaryItem(
-                            layoutSize: headerSize,
-                            elementKind: UICollectionView.elementKindSectionHeader,
-                            alignment: .top
-                        )
-                        
-                        section.boundarySupplementaryItems = [header]
-                
-                return section
-            }
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            self?.createSection(index: sectionIndex)
         }
         return layout
     }
     
+    // 헤더
+    func createSection(index: Int) -> NSCollectionLayoutSection {
+        let section: NSCollectionLayoutSection
+        switch index {
+        case 0: section = configureSectionOne()
+        case 1: section = configureSectionTwo()
+        default: section = configureSectionOne()
+        }
+        
+        let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(50)
+                )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+                
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+    
+    // 첫번째 섹션
+    private func configureSectionOne() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/7))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10) // 아이템 간 간격
+        
+        let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
+        
+        let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.6))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
+        
+        let section = NSCollectionLayoutSection(group: group)
+//        section.interGroupSpacing = 20 // 그룹간 간격
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+
+        return section
+    }
+    
+    // 두번째 섹션
+    private func configureSectionTwo() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalHeight(1))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5) // 아이템 간 간격
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.1), heightDimension: .absolute(120))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        //        section.interGroupSpacing = 20 // 그룹간 간격
+//                section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = .continuous
+        
+        return section
+    }
+}
+
+
+// MARK: View Layout
+extension SearchViewController {
     private func configureHierarchy() {
         view.addSubviews(searchBar, collectionView)
     }
@@ -208,7 +216,7 @@ extension SearchViewController {
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(20)
+            make.top.equalTo(searchBar.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
