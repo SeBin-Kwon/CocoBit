@@ -22,9 +22,11 @@ enum TrendingSectionModel {
 }
 
 struct CoinItem {
-    let title: String
+    let score: String
     let symbol: String
+    let name: String
     let change: String
+    let image: String
 }
 
 struct NFTItem {
@@ -87,8 +89,9 @@ final class SearchViewController: BaseViewController {
             switch item {
             case .coin(let item):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
-                cell.backgroundColor = .systemGray6
-                cell.titleLabel.text = item.title
+//                cell.backgroundColor = .systemGray6
+                cell.configureData(item)
+//                cell.titleLabel.text = item.title
                 return cell
                 
             case .nft(let item):
@@ -114,7 +117,13 @@ final class SearchViewController: BaseViewController {
         var nftList = [SectionItem]()
         
         mockTrendingCoins.forEach {
-            coinList.append(.coin(model: CoinItem(title: $0.item.name, symbol: $0.item.symbol, change: String($0.item.priceBtc))))
+            coinList.append(.coin(model: CoinItem(
+                score: String($0.item.score),
+                symbol: $0.item.symbol,
+                name: $0.item.name,
+                change: String($0.item.priceBtc),
+                image: $0.item.thumb
+            )))
         }
         coinList.popLast()
         
@@ -129,6 +138,10 @@ final class SearchViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         }
+    
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//    }
 
     }
     
@@ -170,7 +183,7 @@ extension SearchViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/7))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10) // 아이템 간 간격
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15) // 아이템 간 간격
         
         let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
         
@@ -182,7 +195,7 @@ extension SearchViewController {
         
         let section = NSCollectionLayoutSection(group: group)
 //        section.interGroupSpacing = 20 // 그룹간 간격
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
 
         return section
     }
