@@ -11,10 +11,29 @@ import SnapKit
 final class ExchangeSortButton: UIButton {
     
     let title: String
+    var sortState: Bool? {
+        didSet {
+            setNeedsUpdateConfiguration()
+        }
+    }
     
     init(title: String) {
         self.title = title
+        self.sortState = nil
         super.init(frame: .zero)
+        
+        configurationUpdateHandler = { [weak self] _ in
+            guard let self else { return }
+            switch self.sortState {
+            case .none:
+                self.arrowUp.tintColor = .cocoBitGray
+                self.arrowDown.tintColor = .cocoBitGray
+            case let .some(value):
+                self.arrowDown.tintColor = value ? .cocoBitGray : .cocoBitBlack
+                self.arrowUp.tintColor = value ? .cocoBitBlack : .cocoBitGray
+            }
+        }
+        
         configureHierarchy()
         configureLayout()
     }
@@ -34,14 +53,14 @@ final class ExchangeSortButton: UIButton {
     let arrowUp = {
         let image = UIImageView()
         image.image = .setSymbol(.arrowUp)
-        image.tintColor = .cocoBitBlack
+        image.tintColor = .cocoBitGray
         return image
     }()
     
     let arrowDown = {
         let image = UIImageView()
         image.image = .setSymbol(.arrowDown)
-        image.tintColor = .cocoBitBlack
+        image.tintColor = .cocoBitGray
         return image
     }()
 
