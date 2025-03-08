@@ -11,24 +11,50 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-
-struct TrendingSearchModel {
-    var header: String
-    var items: [Item]
+enum SectionItem {
+    case coin(model: CoinItem)
+    case nft(model: NFTItem)
 }
 
-struct TrendingItem {
+enum TrendingSectionModel {
+    case coinSection(header: String, data: [SectionItem])
+    case nftSection(header: String, data: [SectionItem])
+}
+
+struct CoinItem {
     let title: String
+    let symbol: String
+    let change: String
 }
 
-extension TrendingSearchModel: SectionModelType {
-    typealias Item = TrendingItem
+struct NFTItem {
+    let title: String
+    let symbol: String
+    let change: String
+}
+
+extension TrendingSectionModel: SectionModelType {
+    typealias Item = SectionItem
     
-    init(original: TrendingSearchModel, items: [TrendingItem]) {
+    var header: String {
+        switch self {
+        case .coinSection(let header, _): header
+        case .nftSection(let header, _): header
+        }
+    }
+    
+    var items: [SectionItem] {
+        switch self {
+        case .coinSection(_, let items): items
+        case .nftSection(_, let items): items
+        }
+    }
+    
+    init(original: Self, items: [Self.Item]) {
         self = original
-        self.items = items
     }
 }
+
 
 class SearchSectionHeaderView: UICollectionReusableView {
     static let identifier = "SearchSectionHeaderView"
@@ -79,21 +105,20 @@ final class SearchViewController: BaseViewController {
     
     private func bind() {
         
-        let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSearchModel> (configureCell: { dataSource, collectionView, indexPath, item in
-            
-            switch indexPath.section {
-            case 0:
+        let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
+ 
+            switch item {
+            case .coin(let item):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
                 cell.backgroundColor = .systemGray6
                 cell.titleLabel.text = item.title
-                
                 return cell
-            case 1:
+                
+            case .nft(let item):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
                 cell.backgroundColor = .systemGray5
                 cell.titleLabel.text = item.title
                 return cell
-            default: return UICollectionViewCell()
             }
             
         }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -106,20 +131,19 @@ final class SearchViewController: BaseViewController {
             return header
         })
         
-        let sections = Observable.just([
-            TrendingSearchModel(header: "인기 검색어", items: [
-                TrendingItem(title: "Card 1"), TrendingItem(title: "Card 2"), TrendingItem(title: "Card 3"),
-                TrendingItem(title: "Card 4"), TrendingItem(title: "Card 5"), TrendingItem(title: "Card 6"),
-                TrendingItem(title: "Card 7"), TrendingItem(title: "Card 8"), TrendingItem(title: "Card 9"),
-                TrendingItem(title: "Card 10"), TrendingItem(title: "Card 11"), TrendingItem(title: "Card 12"),
-                TrendingItem(title: "Card 13"), TrendingItem(title: "Card 14")
-            ]),
-            TrendingSearchModel(header: "인기 NFT", items: [
-                TrendingItem(title: "Row 1"), TrendingItem(title: "Row 2"), TrendingItem(title: "Row 3"),
-                TrendingItem(title: "Row 4"), TrendingItem(title: "Row 5"), TrendingItem(title: "Row 6"),
-                TrendingItem(title: "Row 7")
-            ])
-        ])
+        var coinList = [SectionItem]()
+        var nftList = [SectionItem]()
+        
+        mockTrendingCoins.forEach {
+            coinList.append(.coin(model: CoinItem(title: $0.item.name, symbol: $0.item.symbol, change: String($0.item.priceBtc))))
+        }
+        coinList.popLast()
+        
+        mockTrendingNFTs.forEach {
+            nftList.append(.nft(model: NFTItem(title: $0.name, symbol: $0.symbol, change: $0.data.floorPriceInUsd24hPercentageChange)))
+        }
+        
+        let sections = BehaviorSubject<[TrendingSectionModel]>(value: [.coinSection(header: "인기 검색어", data: coinList), .nftSection(header: "인기 NFT", data: nftList)])
         
         sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
