@@ -63,56 +63,47 @@ final class SearchViewController: BaseViewController {
     private let searchBar = CocoBitSearchBar()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
+    private let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
+
+        switch item {
+        case .coin(let item):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
+//                cell.backgroundColor = .systemGray6
+            cell.configureData(item)
+//                cell.titleLabel.text = item.title
+            return cell
+            
+        case .nft(let item):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
+//                cell.backgroundColor = .systemGray5
+//                cell.titleLabel.text = item.title
+            return cell
+        }
+        
+    }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: SearchSectionHeaderView.identifier,
+            for: indexPath
+        ) as! SearchSectionHeaderView
+        let sectionHeader = dataSource.sectionModels[indexPath.section].header
+        header.titleLabel.text = sectionHeader.title
+        header.timeLabel.text = sectionHeader.time
+        return header
+    })
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.titleView = NavigationTitleView(title: "가상자산 / 심볼 검색")
-        
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
-        collectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.identifier)
-        collectionView.register(
-            SearchSectionHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SearchSectionHeaderView.identifier
-        )
-        collectionView.isScrollEnabled = false
-        
+ 
         configureHierarchy()
         configureLayout()
+        configureCollectionView()
         bind()
     }
     
-    
     private func bind() {
-        
-        let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
- 
-            switch item {
-            case .coin(let item):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
-//                cell.backgroundColor = .systemGray6
-                cell.configureData(item)
-//                cell.titleLabel.text = item.title
-                return cell
-                
-            case .nft(let item):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
-//                cell.backgroundColor = .systemGray5
-//                cell.titleLabel.text = item.title
-                return cell
-            }
-            
-        }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: SearchSectionHeaderView.identifier,
-                for: indexPath
-            ) as! SearchSectionHeaderView
-            let sectionHeader = dataSource.sectionModels[indexPath.section].header
-            header.titleLabel.text = sectionHeader.title
-            header.timeLabel.text = sectionHeader.time
-            return header
-        })
-        
+
         var coinList = [SectionItem]()
         var nftList = [SectionItem]()
         
@@ -138,11 +129,6 @@ final class SearchViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//    }
-
     }
     
 
@@ -218,6 +204,17 @@ extension SearchViewController {
         section.orthogonalScrollingBehavior = .continuous
         
         return section
+    }
+    
+    private func configureCollectionView() {
+        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
+        collectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.identifier)
+        collectionView.register(
+            SearchSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SearchSectionHeaderView.identifier
+        )
+        collectionView.isScrollEnabled = false
     }
 }
 
