@@ -17,7 +17,7 @@ enum SectionItem {
 }
 
 enum TrendingSectionModel {
-    case coinSection(header: String, data: [SectionItem])
+    case coinSection(header: (String, String), data: [SectionItem])
     case nftSection(header: String, data: [SectionItem])
 }
 
@@ -36,10 +36,10 @@ struct NFTItem {
 extension TrendingSectionModel: SectionModelType {
     typealias Item = SectionItem
     
-    var header: String {
+    var header: (title: String, time: String?) {
         switch self {
         case .coinSection(let header, _): header
-        case .nftSection(let header, _): header
+        case .nftSection(let header, _): (header, nil)
         }
     }
     
@@ -104,7 +104,9 @@ final class SearchViewController: BaseViewController {
                 withReuseIdentifier: SearchSectionHeaderView.identifier,
                 for: indexPath
             ) as! SearchSectionHeaderView
-            header.titleLabel.text = dataSource.sectionModels[indexPath.section].header
+            let sectionHeader = dataSource.sectionModels[indexPath.section].header
+            header.titleLabel.text = sectionHeader.title
+            header.timeLabel.text = sectionHeader.time
             return header
         })
         
@@ -120,7 +122,7 @@ final class SearchViewController: BaseViewController {
             nftList.append(.nft(model: NFTItem(title: $0.name, symbol: $0.symbol, change: $0.data.floorPriceInUsd24hPercentageChange)))
         }
         
-        let sections = BehaviorSubject<[TrendingSectionModel]>(value: [.coinSection(header: "인기 검색어", data: coinList), .nftSection(header: "인기 NFT", data: nftList)])
+        let sections = BehaviorSubject<[TrendingSectionModel]>(value: [.coinSection(header: ("인기 검색어", "02.16 00:30 기준"), data: coinList), .nftSection(header: "인기 NFT", data: nftList)])
         
         sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
