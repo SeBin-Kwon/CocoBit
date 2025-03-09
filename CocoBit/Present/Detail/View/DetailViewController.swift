@@ -18,19 +18,5 @@ class DetailViewController: BaseViewController {
         navigationItem.title = "detail"
         // Do any additional setup after loading the view.
     }
-    
-    
 
-}
-
-
-// MARK: View Layout
-extension SearchResultViewController {
-    private func configureHierarchy() {
-        
-    }
-    
-    private func configureLayout() {
-        
-    }
 }

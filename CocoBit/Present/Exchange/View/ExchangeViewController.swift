@@ -26,7 +26,7 @@ final class ExchangeViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.titleView = NavigationTitleView(title: "거래소")
+        configureNavigationBar()
         configureHierarchy()
         configureLayout()
         bind()
@@ -78,6 +78,11 @@ final class ExchangeViewController: BaseViewController {
 
 
 extension ExchangeViewController {
+    private func configureNavigationBar() {
+        let titleView = UIBarButtonItem(customView: NavigationTitleView(title: "거래소"))
+        navigationItem.leftBarButtonItem = titleView
+    }
+    
     private func configureHierarchy() {
         view.addSubviews(tableView, headerView)
     }

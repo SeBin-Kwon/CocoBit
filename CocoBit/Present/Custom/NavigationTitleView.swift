@@ -16,6 +16,7 @@ final class NavigationTitleView: BaseView {
         let label = UILabel()
         label.text = title
         label.font = .setFont(.navTitle)
+        label.textColor = .cocoBitBlack
         return label
     }()
     
@@ -31,8 +32,8 @@ final class NavigationTitleView: BaseView {
     
     override func configureLayout() {
         titleLable.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(-180)
-            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
     }
     

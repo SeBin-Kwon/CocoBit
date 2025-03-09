@@ -46,8 +46,7 @@ final class SearchViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.titleView = NavigationTitleView(title: "가상자산 / 심볼 검색")
- 
+        configureNavigationBar()
         configureHierarchy()
         configureLayout()
         configureCollectionView()
@@ -58,6 +57,8 @@ final class SearchViewController: BaseViewController {
         
         let input = SearchViewModel.Input()
         let output = viewModel.transform(input: input)
+        
+//        searchBar.rx
         
         collectionView.rx.modelSelected(SectionItem.self)
             .bind(with: self) { owner, value in
@@ -169,6 +170,11 @@ extension SearchViewController {
 
 // MARK: View Layout
 extension SearchViewController {
+    private func configureNavigationBar() {
+        let titleView = UIBarButtonItem(customView: NavigationTitleView(title: "가상자산 / 심볼 검색"))
+        navigationItem.leftBarButtonItem = titleView
+    }
+    
     private func configureHierarchy() {
         view.addSubviews(searchBar, collectionView)
     }
