@@ -6,17 +6,43 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import Tabman
 import Pageboy
 
 class SearchResultTabViewController: TabmanViewController {
     
+    let disposeBag = DisposeBag()
+    
     private var viewControllers = [UIViewController]()
-
+    private let searchText: String
+    private let searchTextField = {
+        let textfield = UITextField()
+        textfield.textColor = .cocoBitBlack
+        textfield.frame = CGRect(x: 0, y: 0, width: 300, height: 30)
+        return textfield
+    }()
+    
+    let vc = SearchResultViewController()
+    
+    init(searchText: String) {
+        self.searchText = searchText
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBaseSetting()
-        viewControllers.append(SearchResultViewController(searchText: "sds"))
+        configureNavigationBar()
+
+        vc.viewModel.searchText.accept(searchText)
+        
+        viewControllers.append(vc)
         viewControllers.append(UIViewController())
         viewControllers.append(UIViewController())
         
@@ -28,18 +54,27 @@ class SearchResultTabViewController: TabmanViewController {
 
         // Add to view
         addBar(bar, dataSource: self, at: .top)
+        
+        bind()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func bind() {
+        
+        searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .withLatestFrom(searchTextField.rx.text)
+            .bind(with: self) { owner, value in
+                owner.vc.viewModel.searchText.accept(value ?? "")
+            }
+            .disposed(by: disposeBag)
+        
     }
-    */
+    
+    private func configureNavigationBar() {
+        searchTextField.text = searchText
+        navigationItem.leftItemsSupplementBackButton = true
+        let textField = UIBarButtonItem(customView: searchTextField)
+        navigationItem.leftBarButtonItem = textField
+    }
 
 }
 extension SearchResultTabViewController: PageboyViewControllerDataSource, TMBarDataSource {

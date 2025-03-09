@@ -13,13 +13,7 @@ import RxDataSources
 
 final class SearchResultViewController: BaseViewController {
     
-    private let searchText: String
-    private let searchTextField = {
-        let textfield = UITextField()
-        textfield.textColor = .cocoBitBlack
-        textfield.frame = CGRect(x: 0, y: 0, width: 300, height: 30)
-        return textfield
-    }()
+//    private let searchText: String
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
@@ -37,15 +31,17 @@ final class SearchResultViewController: BaseViewController {
         }
         
     }
+    
+    let viewModel = SearchResultViewModel()
                                                                                               
-    init(searchText: String) {
-        self.searchText = searchText
-        super.init()
-    }
+//    init(searchText: String) {
+//        self.searchText = searchText
+//        super.init()
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationBar()
+//        configureNavigationBar()
         configureHierarchy()
         configureLayout()
         bind()
@@ -57,6 +53,9 @@ final class SearchResultViewController: BaseViewController {
     
     
     private func bind() {
+        let input = SearchResultViewModel.Input()
+        let output = viewModel.transform(input: input)
+        
         var coinList: [SectionItem] = [SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
                                        SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
                                        SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
@@ -98,13 +97,6 @@ extension SearchResultViewController {
 
 // MARK: View Layout
 extension SearchResultViewController {
-    private func configureNavigationBar() {
-        searchTextField.text = searchText
-        navigationItem.leftItemsSupplementBackButton = true
-        let textField = UIBarButtonItem(customView: searchTextField)
-        navigationItem.leftBarButtonItem = textField
-    }
-    
     private func configureHierarchy() {
         view.addSubviews(collectionView)
     }

@@ -55,6 +55,8 @@ final class SearchViewController: BaseViewController {
     
     private func bind() {
         
+//        let vc =
+        
         let input = SearchViewModel.Input(
             searchButtonTap: searchView.searchBar.rx.searchButtonClicked,
             searchText: searchView.searchBar.rx.text,
@@ -62,10 +64,12 @@ final class SearchViewController: BaseViewController {
         )
         let output = viewModel.transform(input: input)
         
+        
+        
         output.searchText
             .drive(with: self) { owner, value in
                 if !value.isEmpty {
-                    let vc = SearchResultTabViewController()
+                    let vc = SearchResultTabViewController(searchText: value)
                     owner.navigate(.push(vc))
                 }
                 owner.view.endEditing(true)

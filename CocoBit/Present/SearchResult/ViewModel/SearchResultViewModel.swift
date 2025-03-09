@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchResultViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
+    let searchText = BehaviorRelay(value: "")
     
     struct Input {
        
@@ -22,6 +23,14 @@ final class SearchResultViewModel: BaseViewModel {
     }
     
     func transform(input: Input) -> Output {
+        
+        searchText
+            .debug("searchText")
+            .bind {
+                print($0)
+            }
+            .disposed(by: disposeBag)
+        
         return Output()
     }
 }
