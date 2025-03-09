@@ -12,7 +12,7 @@ final class NavigationTitleView: BaseView {
     
     let title: String
     
-    lazy var titleLable = {
+    lazy var titleLabel = {
         let label = UILabel()
         label.text = title
         label.font = .setFont(.navTitle)
@@ -27,11 +27,11 @@ final class NavigationTitleView: BaseView {
     }
     
     override func configureHierarchy() {
-        addSubview(titleLable)
+        addSubview(titleLabel)
     }
     
     override func configureLayout() {
-        titleLable.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
         }
