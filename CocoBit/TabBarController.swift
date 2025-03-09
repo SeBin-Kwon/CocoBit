@@ -27,5 +27,9 @@ final class TabBarController: UITabBarController {
         
         tabBar.tintColor = .cocoBitBlack
         tabBar.unselectedItemTintColor = .lightGray
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = .white
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
     }
 }
