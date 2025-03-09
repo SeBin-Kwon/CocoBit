@@ -28,7 +28,7 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
     
     let imageView = {
         let image = UIImageView()
-        image.backgroundColor = .gray
+        image.backgroundColor = .cocoBitLightGray
         image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 20
         image.clipsToBounds = true

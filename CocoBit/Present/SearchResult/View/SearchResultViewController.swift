@@ -55,15 +55,13 @@ final class SearchResultViewController: BaseViewController {
 
         switch item {
         case .coin(let item):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureData(item)
-            cell.backgroundColor = .lightGray
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCollectionViewCell.identifier, for: indexPath) as? SearchResultCollectionViewCell else { return UICollectionViewCell() }
+//            cell.configureData(item)
+
             return cell
             
         case .nft(let item):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureData(item)
-            return cell
+            return UICollectionViewCell()
         }
         
     }
@@ -80,8 +78,7 @@ final class SearchResultViewController: BaseViewController {
         configureLayout()
         bind()
         
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
-        collectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.identifier)
+        collectionView.register(SearchResultCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultCollectionViewCell.identifier)
     }
     
     private func bind() {

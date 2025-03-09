@@ -34,7 +34,7 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
     
     let imageView = {
         let image = UIImageView()
-        image.backgroundColor = .gray
+        image.backgroundColor = .cocoBitLightGray
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         return image
