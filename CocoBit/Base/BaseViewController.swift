@@ -16,10 +16,12 @@ class BaseViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .white
         let appearance = UINavigationBarAppearance()
+        appearance.setBackIndicatorImage(.setSymbol(.arrowLeft), transitionMaskImage: .setSymbol(.arrowLeft))
         appearance.backgroundColor = .white
-//        appearance.titlePositionAdjustment = UIOffset(horizontal: 10, vertical: 10)
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.backButtonTitle = ""
+        navigationItem.backBarButtonItem?.tintColor = UIColor.cocoBitBlack
     }
     
     @available(*, unavailable)

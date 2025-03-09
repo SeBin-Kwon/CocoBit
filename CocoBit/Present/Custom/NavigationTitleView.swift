@@ -23,7 +23,6 @@ final class NavigationTitleView: BaseView {
     init(title: String) {
         self.title = title
         super.init(frame: .zero)
-        configureLayout()
     }
     
     override func configureHierarchy() {
