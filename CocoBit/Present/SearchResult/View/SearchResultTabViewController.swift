@@ -39,7 +39,7 @@ class SearchResultTabViewController: TabmanViewController {
         super.viewDidLoad()
         configureBaseSetting()
         configureNavigationBar()
-
+        
         vc.viewModel.searchText.accept(searchText)
         
         viewControllers.append(vc)
@@ -47,12 +47,39 @@ class SearchResultTabViewController: TabmanViewController {
         viewControllers.append(UIViewController())
         
         self.dataSource = self
-
-        // Create bar
+        
         let bar = TMBar.ButtonBar()
-        bar.layout.transitionStyle = .snap // Customize
-
-        // Add to view
+        bar.layout.transitionStyle = .snap
+        bar.layout.alignment = .centerDistributed
+        bar.layout.contentMode = .fit
+        //        bar.layout.interButtonSpacing = view.bounds.width / 6
+        
+        bar.backgroundView.style = .clear
+        bar.backgroundColor = .white
+        
+        bar.buttons.customize{
+            (button)
+            in
+            button.tintColor = .cocoBitGray
+            button.selectedTintColor = .cocoBitBlack
+            button.font = UIFont.setFont(.subTitle)
+        }
+        
+        let underLine = UIView()
+        underLine.backgroundColor = .cocoBitGray
+        bar.backgroundView.addSubview(underLine)
+        
+        underLine.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.horizontalEdges.equalTo(bar.backgroundView)
+            make.bottom.equalTo(bar.backgroundView)
+        }
+        
+        bar.indicator.weight = .custom(value: 2)
+        bar.indicator.overscrollBehavior = .bounce
+        bar.indicator.tintColor = .cocoBitBlack
+        //        bar.layout.interButtonSpacing = 35
+        
         addBar(bar, dataSource: self, at: .top)
         
         bind()
@@ -75,25 +102,28 @@ class SearchResultTabViewController: TabmanViewController {
         let textField = UIBarButtonItem(customView: searchTextField)
         navigationItem.leftBarButtonItem = textField
     }
-
+    
 }
+
 extension SearchResultTabViewController: PageboyViewControllerDataSource, TMBarDataSource {
     func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
-        let item = TMBarItem(title: "")
-        item.title = "Page \(index)"
-        
-        return item
+        switch index {
+        case 0: return TMBarItem(title: "코인")
+        case 1: return TMBarItem(title: "NFT")
+        case 2: return TMBarItem(title: "거래소")
+        default: return TMBarItem(title: "Page")
+        }
     }
     
     func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
         return viewControllers.count
     }
-
+    
     func viewController(for pageboyViewController: PageboyViewController,
                         at index: PageboyViewController.PageIndex) -> UIViewController? {
         return viewControllers[index]
     }
-
+    
     func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
         return nil
     }

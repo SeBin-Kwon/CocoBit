@@ -34,3 +34,8 @@ final class SearchResultViewModel: BaseViewModel {
         return Output()
     }
 }
+
+
+final class tampView: BaseView {
+    
+}
