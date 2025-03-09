@@ -47,7 +47,7 @@ final class NetworkManager {
     func fetchResults<T: Decodable>(api: EndPoint, type: T.Type) -> Single<T> {
         return Single<T>.create { value in
             
-            AF.request(api.baseURL, method: api.method, parameters: api.parameter, encoding: URLEncoding(destination: .queryString))
+            AF.request(api.endPoint, method: api.method, parameters: api.parameter, encoding: URLEncoding(destination: .queryString))
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {

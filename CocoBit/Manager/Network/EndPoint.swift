@@ -10,10 +10,14 @@ import Alamofire
 
 enum EndPoint {
     case market(currency: MarketCurrency)
+    case trending
+    case searchResult
+    case detail
     
     var baseURL: String {
         switch self {
-        case .market: "https://api.upbit.com/v1/ticker/all"
+        case .market: "https://api.upbit.com/v1/ticker"
+        case .trending, .searchResult, .detail: "https://api.coingecko.com/api/v3"
         }
     }
     
@@ -21,13 +25,17 @@ enum EndPoint {
     
     var endPoint: String {
         switch self {
-        case .market: ""
+        case .market: baseURL + "/all"
+        case .trending: baseURL + "/search/trending"
+        case .searchResult: baseURL + "/search"
+        case .detail: baseURL + "/coins/markets"
         }
     }
     
     var parameter: Parameters? {
         switch self {
         case .market(let currency): ["quote_currencies" : currency.rawValue]
+        case .trending, .searchResult, .detail: nil
         }
     }
 }

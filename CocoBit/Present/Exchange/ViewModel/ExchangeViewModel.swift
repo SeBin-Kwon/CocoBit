@@ -27,7 +27,7 @@ final class ExchangeViewModel: BaseViewModel {
     }
     
     func transform(input: Input) -> Output {
-        let marketList = PublishSubject<[MarketFormatted]>()
+        let marketList = PublishRelay<[MarketFormatted]>()
         let tradeSorted = PublishRelay<Bool?>()
         let changeSorted = PublishRelay<Bool?>()
         let priceSorted = PublishRelay<Bool?>()
@@ -49,7 +49,7 @@ final class ExchangeViewModel: BaseViewModel {
                 let sortedResult = owner.sortedData(value: value, state: currentSortState.value, type: currentSortType.value)
                 
                 let result = owner.formattedData(sortedResult.0)
-                marketList.onNext(result)
+                marketList.accept(result)
             }
             .disposed(by: disposeBag)
         

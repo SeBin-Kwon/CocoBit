@@ -18,7 +18,7 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let symbolLabel = {
+    let priceLabel = {
         let label = UILabel()
         label.text = "0.66 SYMBOL"
         label.font = .setFont(.small)
@@ -51,7 +51,7 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        contentView.addSubviews(nameLabel, symbolLabel, imageView, changeLabel)
+        contentView.addSubviews(nameLabel, priceLabel, imageView, changeLabel)
     }
     
     override func configureLayout() {
@@ -64,12 +64,12 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(imageView.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
         }
-        symbolLabel.snp.makeConstraints { make in
+        priceLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
         }
         changeLabel.snp.makeConstraints { make in
-            make.top.equalTo(symbolLabel.snp.bottom).offset(3)
+            make.top.equalTo(priceLabel.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
         }
     }
