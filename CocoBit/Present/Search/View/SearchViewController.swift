@@ -59,6 +59,19 @@ final class SearchViewController: BaseViewController {
         let input = SearchViewModel.Input()
         let output = viewModel.transform(input: input)
         
+        collectionView.rx.modelSelected(SectionItem.self)
+            .bind(with: self) { owner, value in
+                let vc = DetailViewController()
+                switch value {
+                case .coin(let item):
+                    vc.navigationItem.title = item.symbol
+                default: break
+                }
+                owner.navigate(.push(vc))
+            }
+            .disposed(by: disposeBag)
+        
+        
         output.sectionModel
             .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
