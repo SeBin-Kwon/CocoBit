@@ -57,7 +57,7 @@ final class SearchViewModel: BaseViewModel {
         let formatter = FormatManager.shared
         
         data.coins.forEach {
-            let changeResult = formatter.roundDecimal($0.item.data.change.krw)
+            let changeResult = formatter.roundDecimal($0.item.data.change.krw, isArrow: true)
             coinList.append(
                 .coin(model: CoinItem(
                     score: "\($0.item.score + 1)",
@@ -72,7 +72,7 @@ final class SearchViewModel: BaseViewModel {
         coinList.removeLast()
         
         data.nfts.forEach {
-            let changeResult = formatter.roundDecimal($0.change)
+            let changeResult = formatter.roundDecimal($0.change, isArrow: true)
             nftList.append(
                 .nft(model: NFTItem(
                     name: $0.name,

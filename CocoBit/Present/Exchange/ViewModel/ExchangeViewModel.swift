@@ -167,8 +167,8 @@ final class ExchangeViewModel: BaseViewModel {
         let formatter = FormatManager.shared
         
         data.forEach { value in
-            let rateResult = formatter.roundDecimal(value.signedChangeRate)
-            let priceResult = formatter.roundDecimal(value.signedChangePrice)
+            let rateResult = formatter.roundDecimal(value.signedChangeRate, isArrow: false)
+            let priceResult = formatter.roundDecimal(value.signedChangePrice, isArrow: false)
             
             let format = MarketFormatted(
                 market: formatter.marketFormatted(value.market),

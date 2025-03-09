@@ -21,7 +21,7 @@ final class FormatManager {
     private init() {}
     
     // 소수점 표기 + 색깔
-    func roundDecimal(_ value: Double) -> (str: String, color: DecimalState) {
+    func roundDecimal(_ value: Double, isArrow: Bool) -> (str: String, color: DecimalState) {
         let state: DecimalState
         
         switch value {
@@ -36,6 +36,10 @@ final class FormatManager {
         
         if result == "0.00" || result == "-0.00" {
             return (result.components(separatedBy: "-").joined(), .zero)
+        }
+        
+        if isArrow && state == .down {
+            return (String(result.dropFirst()), state)
         }
         
         return (result, state)
