@@ -38,23 +38,20 @@ final class SearchViewModel: BaseViewModel {
             }
             .bind(with: self) { owner, value in
                 let result = owner.convertToSectionModel(value)
-                sectionModel.accept(
-                    [.coinSection(header: ("인기 검색어", "02.16 00:30 기준"),
-                                  data: result.coin),
-                     .nftSection(header: "인기 NFT",
-                                 data: result.nft)]
-                )
-                
+                sectionModel.accept(result)
             }
             .disposed(by: disposeBag)
         
         return Output(sectionModel: sectionModel.asDriver(onErrorJustReturn: []))
     }
     
-    private func convertToSectionModel(_ data: Trending) -> (coin: [SectionItem], nft: [SectionItem]) {
+    private func convertToSectionModel(_ data: Trending) -> [TrendingSectionModel] {
+        let formatter = FormatManager.shared
+        
         var coinList = [SectionItem]()
         var nftList = [SectionItem]()
-        let formatter = FormatManager.shared
+        let coinHeader = ("인기 검색어", formatter.trendingDateFormatted())
+        let nftHeader = "인기 NFT"
         
         data.coins.forEach {
             let changeResult = formatter.roundDecimal($0.item.data.change.krw, isArrow: true)
@@ -84,7 +81,8 @@ final class SearchViewModel: BaseViewModel {
             )
         }
         
-        return (coinList, nftList)
+        return [.coinSection(header: coinHeader, data: coinList),
+                .nftSection(header: nftHeader, data: nftList)]
     }
     
     
