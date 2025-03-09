@@ -66,8 +66,11 @@ final class SearchViewController: BaseViewController {
             .drive(with: self) { owner, value in
                 let vc = SearchResultViewController()
 //                vc.viewModel.searchText.accept(value)
+                if !value.isEmpty {
+                    owner.navigate(.push(vc))
+                }
                 owner.view.endEditing(true)
-                owner.navigate(.push(vc))
+                
             }
             .disposed(by: disposeBag)
         

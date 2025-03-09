@@ -50,16 +50,12 @@ final class SearchViewModel: BaseViewModel {
         
         input.searchButtonTap
             .withLatestFrom(input.searchText)
-//            .withUnretained(self)
-//            .map { owner, text in
-//                return owner.validateSearchText(text)
-//            }
             .bind(with: self) { owner, value in
-//                if owner.isValid.value {
-                if let value {
-                    searchText.accept(value)
+                guard let text = value?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                    searchText.accept("")
+                    return
                 }
-//                }
+                searchText.accept(text)
             }
             .disposed(by: disposeBag)
         
