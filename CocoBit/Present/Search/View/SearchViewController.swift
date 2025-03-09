@@ -31,7 +31,7 @@ struct CoinItem {
 
 struct NFTItem {
     let title: String
-    let symbol: String
+    let price: String
     let change: String
 }
 
@@ -108,29 +108,9 @@ final class SearchViewController: BaseViewController {
         
         let input = SearchViewModel.Input()
         let output = viewModel.transform(input: input)
-
-        var coinList = [SectionItem]()
-        var nftList = [SectionItem]()
         
-//        mockTrendingCoins.forEach {
-//            coinList.append(.coin(model: CoinItem(
-//                score: String($0.item.score),
-//                symbol: $0.item.symbol,
-//                name: $0.item.name,
-//                change: String($0.item.priceBtc),
-//                image: $0.item.thumb
-//            )))
-//        }
-//        coinList.popLast()
-        
-//        mockTrendingNFTs.forEach {
-//            nftList.append(.nft(model: NFTItem(title: $0.name, symbol: $0.symbol, change: $0.data.floorPriceInUsd24hPercentageChange)))
-//        }
-        
-        let sections = BehaviorSubject<[TrendingSectionModel]>(value: [.coinSection(header: ("인기 검색어", "02.16 00:30 기준"), data: coinList), .nftSection(header: "인기 NFT", data: nftList)])
-        
-        sections
-            .bind(to: collectionView.rx.items(dataSource: dataSource))
+        output.sectionModel
+            .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         }

@@ -18,41 +18,68 @@ final class SearchViewModel: BaseViewModel {
     }
     
     struct Output {
-        
+        let sectionModel: Driver<[TrendingSectionModel]>
     }
     
     func transform(input: Input) -> Output {
-        let coinList = PublishRelay<[SectionItem]>()
-        let nftList = PublishRelay<[SectionItem]>()
+        let sectionModel = PublishRelay<[TrendingSectionModel]>()
         
         Observable<Int>
             .timer(.microseconds(0), scheduler: MainScheduler.instance)
             .debug("TRENDING")
             .flatMapLatest { _ in
                 NetworkManager.shared.fetchResults(api: EndPoint.trending, type: Trending.self)
-//                    .catch { error in
-//                        let data = [MarketData]()
+                    .catch { error in
+                        let data = Trending(coins: [TrendingCoin](), nfts: [TrendingNFTItem]())
         //                        guard let error = error as? APIError else { return Single.just(data) }
         //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
-//                        return Single.just(data)
-//                    }
+                        return Single.just(data)
+                    }
             }
-            .subscribe(onNext: { value in
-                print("oonNext>>>", value)
-            }, onError: { error in
-                print("onError>>>", error)
-            }, onCompleted: {
-                print("onCompleted")
-            }, onDisposed: {
-                print("onDisposed")
-            })
-//            .bind(with: self) { owner, value in
-//            }
+            .bind(with: self) { owner, value in
+                let result = owner.convertToSectionModel(value)
+                sectionModel.accept(
+                    [.coinSection(header: ("인기 검색어", "02.16 00:30 기준"),
+                                  data: result.coin),
+                     .nftSection(header: "인기 NFT",
+                                 data: result.nft)]
+                )
+                
+            }
             .disposed(by: disposeBag)
         
+        return Output(sectionModel: sectionModel.asDriver(onErrorJustReturn: []))
+    }
     
+    private func convertToSectionModel(_ data: Trending) -> (coin: [SectionItem], nft: [SectionItem]) {
+        var coinList = [SectionItem]()
+        var nftList = [SectionItem]()
+        let formatter = FormatManager.shared
         
-        return Output()
+        data.coins.forEach {
+            coinList.append(
+                .coin(model: CoinItem(
+                    score: "\($0.item.score + 1)",
+                    symbol: $0.item.symbol,
+                    name: $0.item.name,
+                    change: formatter.roundDecimal($0.item.data.change.krw).str,
+                    image: $0.item.thumb)
+                )
+            )
+        }
+        coinList.removeLast()
+        
+        data.nfts.forEach {
+            nftList.append(
+                .nft(model: NFTItem(
+                    title: $0.name,
+                    price: $0.data.price,
+                    change: formatter.roundDecimal($0.change).str)
+                )
+            )
+        }
+        
+        return (coinList, nftList)
     }
     
     
