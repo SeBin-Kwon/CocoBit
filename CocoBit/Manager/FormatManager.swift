@@ -21,7 +21,7 @@ final class FormatManager {
     private init() {}
     
     // 소수점 표기 + 색깔
-    func roundDecimal(_ value: Double) -> (String, DecimalState) {
+    func roundDecimal(_ value: Double) -> (str: String, color: DecimalState) {
         let state: DecimalState
         
         switch value {
