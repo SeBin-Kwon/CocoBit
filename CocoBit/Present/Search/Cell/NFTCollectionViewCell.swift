@@ -13,15 +13,14 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()
-        label.text = "name"
         label.font = .setFont(.smallBold)
         label.textColor = .cocoBitBlack
+        label.textAlignment = .center
         return label
     }()
     
     let priceLabel = {
         let label = UILabel()
-        label.text = "0.66 SYMBOL"
         label.font = .setFont(.small)
         label.textColor = .cocoBitGray
         return label
@@ -38,7 +37,6 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
     
     let changeLabel = {
         let label = UILabel()
-        label.text = "39.82%"
         label.font = .setFont(.smallBold)
         label.textColor = .cocoBitBlack
         return label
@@ -66,6 +64,7 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
+            make.width.equalTo(imageView)
         }
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(3)

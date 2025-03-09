@@ -13,7 +13,6 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
     
     let scoreLabel = {
         let label = UILabel()
-        label.text = "1"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label
@@ -21,7 +20,6 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
     
     let symbolLabel = {
         let label = UILabel()
-        label.text = "SYMBOL"
         label.font = .setFont(.mediumBold)
         label.textColor = .cocoBitBlack
         return label
@@ -29,7 +27,6 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()
-        label.text = "name"
         label.font = .setFont(.small)
         label.textColor = .cocoBitGray
         return label
@@ -45,7 +42,6 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
     
     let changeLabel = {
         let label = UILabel()
-        label.text = "39.82%"
         label.font = .setFont(.smallBold)
         label.textColor = .cocoBitBlack
         return label
@@ -77,10 +73,12 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
         symbolLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView)
             make.leading.equalTo(imageView.snp.trailing).offset(5)
+            make.trailing.equalToSuperview().inset(45)
         }
         nameLabel.snp.makeConstraints { make in
             make.bottom.equalTo(imageView)
             make.leading.equalTo(imageView.snp.trailing).offset(5)
+            make.trailing.equalToSuperview().inset(45)
         }
         changeLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
