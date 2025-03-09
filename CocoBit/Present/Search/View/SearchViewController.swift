@@ -30,9 +30,10 @@ struct CoinItem {
 }
 
 struct NFTItem {
-    let title: String
+    let name: String
     let price: String
     let change: String
+    let image: String
 }
 
 extension TrendingSectionModel: SectionModelType {
@@ -68,15 +69,12 @@ final class SearchViewController: BaseViewController {
         switch item {
         case .coin(let item):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as? SearchCollectionViewCell else { return UICollectionViewCell() }
-//                cell.backgroundColor = .systemGray6
             cell.configureData(item)
-//                cell.titleLabel.text = item.title
             return cell
             
         case .nft(let item):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.identifier, for: indexPath) as? NFTCollectionViewCell else { return UICollectionViewCell() }
-//                cell.backgroundColor = .systemGray5
-//                cell.titleLabel.text = item.title
+            cell.configureData(item)
             return cell
         }
         

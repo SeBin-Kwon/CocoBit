@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class SearchCollectionViewCell: BaseCollectionViewCell {
     
@@ -54,7 +55,9 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
         scoreLabel.text = item.score
         symbolLabel.text = item.symbol
         nameLabel.text = item.name
-//        changeLabel.text = item.change
+        changeLabel.text = item.change
+        let url = URL(string: item.image)
+        imageView.kf.setImage(with: url)
     }
     
     override func configureHierarchy() {

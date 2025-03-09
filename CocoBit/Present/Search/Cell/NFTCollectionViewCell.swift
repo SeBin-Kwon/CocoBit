@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class NFTCollectionViewCell: BaseCollectionViewCell {
     
@@ -44,10 +45,12 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
     }()
     
     func configureData(_ item: NFTItem) {
-//        scoreLabel.text = item.score
-//        symbolLabel.text = item.symbol
-//        nameLabel.text = item.name
-//        changeLabel.text = item.change
+        nameLabel.text = item.name
+        priceLabel.text = item.price
+        changeLabel.text = item.change
+        let url = URL(string: item.image)
+        imageView.kf.setImage(with: url)
+        
     }
     
     override func configureHierarchy() {

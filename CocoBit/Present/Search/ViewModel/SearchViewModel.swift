@@ -72,9 +72,10 @@ final class SearchViewModel: BaseViewModel {
         data.nfts.forEach {
             nftList.append(
                 .nft(model: NFTItem(
-                    title: $0.name,
+                    name: $0.name,
                     price: $0.data.price,
-                    change: formatter.roundDecimal($0.change).str)
+                    change: formatter.roundDecimal($0.change).str,
+                    image: $0.thumb)
                 )
             )
         }
