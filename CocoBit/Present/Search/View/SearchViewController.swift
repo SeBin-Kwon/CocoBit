@@ -65,7 +65,7 @@ final class SearchViewController: BaseViewController {
         output.searchText
             .drive(with: self) { owner, value in
                 if !value.isEmpty {
-                    let vc = SearchResultViewController(searchText: value)
+                    let vc = SearchResultTabViewController()
                     owner.navigate(.push(vc))
                 }
                 owner.view.endEditing(true)

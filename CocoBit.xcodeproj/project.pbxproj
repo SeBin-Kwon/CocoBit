@@ -17,6 +17,7 @@
 		AE9CF39A2D7AAEA000FD5075 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = AE9CF2EA2D79819D00FD5075 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AE9F497B2D7C2818008E13E4 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F497A2D7C2818008E13E4 /* Differentiator */; };
 		AE9F497D2D7C2818008E13E4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F497C2D7C2818008E13E4 /* RxDataSources */; };
+		AE9F4D162D7E03AC008E13E4 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F4D152D7E03AC008E13E4 /* Tabman */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +70,7 @@
 				AE9CF2F62D79824100FD5075 /* Alamofire in Frameworks */,
 				AE9CF2F02D7981B800FD5075 /* RxSwift in Frameworks */,
 				AE9CF2F32D7981CF00FD5075 /* SnapKit in Frameworks */,
+				AE9F4D162D7E03AC008E13E4 /* Tabman in Frameworks */,
 				AE9F497D2D7C2818008E13E4 /* RxDataSources in Frameworks */,
 				AE9CF2EE2D7981B800FD5075 /* RxCocoa in Frameworks */,
 				AE9CF2EB2D79819D00FD5075 /* RealmSwift in Frameworks */,
@@ -124,6 +126,7 @@
 				AE9CF2F82D79826100FD5075 /* Kingfisher */,
 				AE9F497A2D7C2818008E13E4 /* Differentiator */,
 				AE9F497C2D7C2818008E13E4 /* RxDataSources */,
+				AE9F4D152D7E03AC008E13E4 /* Tabman */,
 			);
 			productName = CocoBit;
 			productReference = AE9CF2562D797D0500FD5075 /* CocoBit.app */;
@@ -160,6 +163,7 @@
 				AE9CF2F42D79824100FD5075 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				AE9CF2F72D79826100FD5075 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				AE9F49792D7C2818008E13E4 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AE9CF2572D797D0500FD5075 /* Products */;
@@ -450,6 +454,14 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -492,6 +504,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE9F49792D7C2818008E13E4 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		AE9F4D152D7E03AC008E13E4 /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -13,10 +13,6 @@ final class SearchResultViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
     
-    
-    
-    
-    
     struct Input {
        
     }
