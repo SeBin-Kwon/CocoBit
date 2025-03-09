@@ -26,6 +26,7 @@ struct CoinItem {
     let symbol: String
     let name: String
     let change: String
+    let changeColor: DecimalState
     let image: String
 }
 
@@ -33,6 +34,7 @@ struct NFTItem {
     let name: String
     let price: String
     let change: String
+    let changeColor: DecimalState
     let image: String
 }
 

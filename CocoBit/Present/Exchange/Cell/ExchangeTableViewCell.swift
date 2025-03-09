@@ -13,7 +13,6 @@ class ExchangeTableViewCell: BaseTableViewCell {
     
     let coinLabel = {
         let label = UILabel()
-        label.text = "XRP/KRW"
         label.font = .setFont(.mediumBold)
         label.textColor = .cocoBitBlack
         return label
@@ -21,7 +20,6 @@ class ExchangeTableViewCell: BaseTableViewCell {
     
     let tradeLabel = {
         let label = UILabel()
-        label.text = "3,868"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label
@@ -29,7 +27,6 @@ class ExchangeTableViewCell: BaseTableViewCell {
     
     let changeRateLabel = {
         let label = UILabel()
-        label.text = "3,868"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label
@@ -37,7 +34,6 @@ class ExchangeTableViewCell: BaseTableViewCell {
     
     let changePriceLabel = {
         let label = UILabel()
-        label.text = "3,868"
         label.font = .setFont(.small)
         label.textColor = .cocoBitBlack
         return label
@@ -45,7 +41,6 @@ class ExchangeTableViewCell: BaseTableViewCell {
     
     let priceLabel = {
         let label = UILabel()
-        label.text = "3,868"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitBlack
         return label

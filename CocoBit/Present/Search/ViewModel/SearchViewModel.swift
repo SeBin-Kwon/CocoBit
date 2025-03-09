@@ -57,12 +57,14 @@ final class SearchViewModel: BaseViewModel {
         let formatter = FormatManager.shared
         
         data.coins.forEach {
+            let changeResult = formatter.roundDecimal($0.item.data.change.krw)
             coinList.append(
                 .coin(model: CoinItem(
                     score: "\($0.item.score + 1)",
                     symbol: $0.item.symbol,
                     name: $0.item.name,
-                    change: formatter.roundDecimal($0.item.data.change.krw).str,
+                    change: changeResult.str + "%",
+                    changeColor: changeResult.color,
                     image: $0.item.thumb)
                 )
             )
@@ -70,11 +72,13 @@ final class SearchViewModel: BaseViewModel {
         coinList.removeLast()
         
         data.nfts.forEach {
+            let changeResult = formatter.roundDecimal($0.change)
             nftList.append(
                 .nft(model: NFTItem(
                     name: $0.name,
                     price: $0.data.price,
-                    change: formatter.roundDecimal($0.change).str,
+                    change: changeResult.str + "%",
+                    changeColor: changeResult.color,
                     image: $0.thumb)
                 )
             )

@@ -40,24 +40,28 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
         return image
     }()
     
-    let changeLabel = {
-        let label = UILabel()
-        label.font = .setFont(.smallBold)
-        label.textColor = .cocoBitBlack
-        return label
-    }()
+    let changeView = TrendingChangeLableView()
     
     func configureData(_ item: CoinItem) {
         scoreLabel.text = item.score
         symbolLabel.text = item.symbol
         nameLabel.text = item.name
-        changeLabel.text = item.change
+        changeView.changeLabel.text = item.change
+        changeView.changeLabel.textColor = item.changeColor.color
+        changeView.arrowImage.tintColor = item.changeColor.color
+        
         let url = URL(string: item.image)
         imageView.kf.setImage(with: url)
+        
+        switch item.changeColor {
+        case .down: changeView.arrowImage.image = .setSymbol(.arrowDown)
+        case .up: changeView.arrowImage.image = .setSymbol(.arrowUp)
+        default: break
+        }
     }
     
     override func configureHierarchy() {
-        contentView.addSubviews(scoreLabel, symbolLabel, nameLabel, imageView, changeLabel)
+        contentView.addSubviews(scoreLabel, symbolLabel, nameLabel, imageView, changeView)
     }
     
     override func configureLayout() {
@@ -80,10 +84,11 @@ class SearchCollectionViewCell: BaseCollectionViewCell {
             make.leading.equalTo(imageView.snp.trailing).offset(5)
             make.trailing.equalToSuperview().inset(45)
         }
-        changeLabel.snp.makeConstraints { make in
+        changeView.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
         }
+
         DispatchQueue.main.async {
             self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
         }

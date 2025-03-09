@@ -35,24 +35,28 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
         return image
     }()
     
-    let changeLabel = {
-        let label = UILabel()
-        label.font = .setFont(.smallBold)
-        label.textColor = .cocoBitBlack
-        return label
-    }()
+    let changeView = TrendingChangeLableView()
+    
     
     func configureData(_ item: NFTItem) {
         nameLabel.text = item.name
         priceLabel.text = item.price
-        changeLabel.text = item.change
+        changeView.changeLabel.text = item.change
+        changeView.changeLabel.textColor = item.changeColor.color
+        changeView.arrowImage.tintColor = item.changeColor.color
+        
         let url = URL(string: item.image)
         imageView.kf.setImage(with: url)
         
+        switch item.changeColor {
+        case .down: changeView.arrowImage.image = .setSymbol(.arrowDown)
+        case .up: changeView.arrowImage.image = .setSymbol(.arrowUp)
+        default: break
+        }
     }
     
     override func configureHierarchy() {
-        contentView.addSubviews(nameLabel, priceLabel, imageView, changeLabel)
+        contentView.addSubviews(nameLabel, priceLabel, imageView, changeView)
     }
     
     override func configureLayout() {
@@ -70,7 +74,7 @@ class NFTCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(nameLabel.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
         }
-        changeLabel.snp.makeConstraints { make in
+        changeView.snp.makeConstraints { make in
             make.top.equalTo(priceLabel.snp.bottom).offset(3)
             make.centerX.equalToSuperview()
         }
