@@ -17,6 +17,7 @@ struct TrendingCoin: Decodable {
 }
 
 struct TrendingCoinItem: Decodable {
+    let score: Int
     let symbol: String
     let name: String
     let thumb: String
@@ -24,7 +25,11 @@ struct TrendingCoinItem: Decodable {
 }
 
 struct TrendingCoinData: Decodable {
-    let price_change_percentage_24h: coinChangeData
+    let change: coinChangeData
+    
+    enum CodingKeys: String, CodingKey {
+        case change = "price_change_percentage_24h"
+    }
 }
 
 struct coinChangeData: Decodable {
@@ -35,10 +40,22 @@ struct TrendingNFTItem: Decodable {
     let symbol: String
     let name: String
     let thumb: String
-    let floor_price_24h_percentage_change: Double
+    let change: Double
     let data: TrendingNFTData
+    
+    enum CodingKeys: String, CodingKey {
+        case symbol
+        case name
+        case thumb
+        case change = "floor_price_24h_percentage_change"
+        case data
+    }
 }
 
 struct TrendingNFTData: Decodable {
-    let floor_price: String
+    let price: String
+    
+    enum CodingKeys: String, CodingKey {
+        case price = "floor_price"
+    }
 }
