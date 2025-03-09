@@ -40,7 +40,7 @@ final class ExchangeViewModel: BaseViewModel {
 //            .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
         
         Observable.combineLatest(timer, currentSortType)
-            .debug("TIMER")
+            .debug("ExchangeTimer")
             .withUnretained(self)
             .flatMapLatest { owner, _ in
                 owner.callRequest()

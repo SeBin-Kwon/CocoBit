@@ -25,8 +25,8 @@ final class SearchViewModel: BaseViewModel {
         let sectionModel = PublishRelay<[TrendingSectionModel]>()
         
         Observable<Int>
-            .timer(.microseconds(0), scheduler: MainScheduler.instance)
-            .debug("TRENDING")
+            .timer(.microseconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
+            .debug("TrendingTimer")
             .flatMapLatest { _ in
                 NetworkManager.shared.fetchResults(api: EndPoint.trending, type: Trending.self)
                     .catch { error in
