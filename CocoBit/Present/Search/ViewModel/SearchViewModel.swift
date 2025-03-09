@@ -14,15 +14,21 @@ final class SearchViewModel: BaseViewModel {
     var disposeBag = DisposeBag()
     
     struct Input {
-        
+        let searchButtonTap: ControlEvent<Void>
+        let searchText: ControlProperty<String?>
+        let coinCellTap: ControlEvent<SectionItem>
     }
     
     struct Output {
         let sectionModel: Driver<[TrendingSectionModel]>
+        let searchText: Driver<String>
+        let detailValue: Driver<SectionItem>
     }
     
     func transform(input: Input) -> Output {
         let sectionModel = PublishRelay<[TrendingSectionModel]>()
+        let searchText = PublishRelay<String>()
+        let detailValue = PublishRelay<SectionItem>()
         
         Observable<Int>
             .timer(.microseconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
@@ -42,7 +48,29 @@ final class SearchViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        return Output(sectionModel: sectionModel.asDriver(onErrorJustReturn: []))
+        input.searchButtonTap
+            .withLatestFrom(input.searchText)
+//            .withUnretained(self)
+//            .map { owner, text in
+//                return owner.validateSearchText(text)
+//            }
+            .bind(with: self) { owner, value in
+//                if owner.isValid.value {
+                if let value {
+                    searchText.accept(value)
+                }
+//                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.coinCellTap
+            .bind(to: detailValue)
+            .disposed(by: disposeBag)
+        
+        
+        return Output(sectionModel: sectionModel.asDriver(onErrorJustReturn: []),
+                      searchText: searchText.asDriver(onErrorJustReturn: ""),
+                      detailValue: input.coinCellTap.asDriver())
     }
     
     private func convertToSectionModel(_ data: Trending) -> [TrendingSectionModel] {

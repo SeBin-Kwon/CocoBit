@@ -13,7 +13,7 @@ import RxDataSources
 
 final class SearchViewController: BaseViewController {
     
-    private let searchBar = CocoBitSearchBar()
+    private let searchView = CocoBitSearchBar()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
@@ -55,19 +55,32 @@ final class SearchViewController: BaseViewController {
     
     private func bind() {
         
-        let input = SearchViewModel.Input()
+        let input = SearchViewModel.Input(
+            searchButtonTap: searchView.searchBar.rx.searchButtonClicked,
+            searchText: searchView.searchBar.rx.text,
+            coinCellTap: collectionView.rx.modelSelected(SectionItem.self)
+        )
         let output = viewModel.transform(input: input)
         
-//        searchBar.rx
+        output.searchText
+            .drive(with: self) { owner, value in
+                let vc = SearchResultViewController()
+//                vc.viewModel.searchText.accept(value)
+                owner.view.endEditing(true)
+                owner.navigate(.push(vc))
+            }
+            .disposed(by: disposeBag)
         
-        collectionView.rx.modelSelected(SectionItem.self)
-            .bind(with: self) { owner, value in
+        
+        output.detailValue
+            .drive(with: self) { owner, value in
                 let vc = DetailViewController()
                 switch value {
                 case .coin(let item):
                     vc.navigationItem.title = item.symbol
                 default: break
                 }
+                owner.view.endEditing(true)
                 owner.navigate(.push(vc))
             }
             .disposed(by: disposeBag)
@@ -176,15 +189,15 @@ extension SearchViewController {
     }
     
     private func configureHierarchy() {
-        view.addSubviews(searchBar, collectionView)
+        view.addSubviews(searchView, collectionView)
     }
     
     private func configureLayout() {
-        searchBar.snp.makeConstraints { make in
+        searchView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(10)
+            make.top.equalTo(searchView.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }

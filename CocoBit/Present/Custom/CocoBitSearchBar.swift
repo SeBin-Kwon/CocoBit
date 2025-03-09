@@ -18,7 +18,7 @@ final class CocoBitSearchBar: BaseView {
         return view
     }()
     
-    private let searchBar = {
+    let searchBar = {
         let search = UISearchBar()
         
         search.searchBarStyle = .minimal
