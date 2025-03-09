@@ -9,6 +9,8 @@ import Foundation
 
 final class FormatManager {
     static let shared = FormatManager()
+
+    private init() {}
     
     // 소수점 2자리 표기 + 콤마
     private let numberFormatter = {
@@ -18,7 +20,20 @@ final class FormatManager {
         format.minimumFractionDigits = 2
         return format
     }()
-    private init() {}
+    
+    // 인기검색어 날짜
+    private let trendingDateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "MM.dd HH:mm 기준"
+        return format
+    }()
+    
+    // 상세화면 날짜
+    private let detailDateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "M/dd HH:mm:ss 업데이트"
+        return format
+    }()
     
     // 소수점 표기 + 색깔
     func roundDecimal(_ value: Double, isArrow: Bool) -> (str: String, color: DecimalState) {
@@ -67,6 +82,16 @@ final class FormatManager {
     func marketFormatted(_ value: String) -> String {
         let splitString = value.components(separatedBy: "-")
         return splitString[1] + "/" + splitString[0]
+    }
+    
+    // 인기검색어 날짜 표기
+    func trendingDateFormatted() -> String {
+        trendingDateFormatter.string(from: Date())
+    }
+    
+    // 상세화면 날짜 표기
+    func detailDateFormatted() -> String {
+        detailDateFormatter.string(from: Date())
     }
     
 }
