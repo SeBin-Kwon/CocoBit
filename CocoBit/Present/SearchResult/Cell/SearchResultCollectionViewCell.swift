@@ -76,6 +76,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         symbolLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
+            make.trailing.lessThanOrEqualToSuperview().inset(45)
         }
         
         nameLabel.snp.makeConstraints { make in
