@@ -29,8 +29,9 @@ struct ChartItem {
 }
 
 struct StockItem {
-    let high24h: String
-    let row24h: String
+    let title: String
+    let value: String
+    let date: String
 }
 
 struct InvestmentItem {
@@ -79,7 +80,9 @@ final class DetailViewController: BaseViewController {
         case .chart(let item):
             return UICollectionViewCell()
         case .stock(let item):
-            cell.nameLabel.text = item.high24h
+            cell.nameLabel.text = item.title
+            cell.valueLabel.text = item.value
+            cell.dateLabel.text = item.date
 //            cell.backgroundColor = .gray
             cell.layer.cornerRadius = 20
 //            cell.configureData(item)
@@ -117,21 +120,21 @@ final class DetailViewController: BaseViewController {
         let input = DetailViewModel.Input()
         let output = viewModel.transform(input: input)
         
-        let list = BehaviorRelay<[DetailSectionModel]>(value: [
-            .stockSection(header: "종목정보",
-                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
-                         ),
-            .investmentSection(header: "투자지표",
-                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
-                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
-                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
-        ])
+//        let list = BehaviorRelay<[DetailSectionModel]>(value: [
+//            .stockSection(header: "종목정보",
+//                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
+//                         ),
+//            .investmentSection(header: "투자지표",
+//                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
+//                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
+//                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
+//        ])
         
-        list
-            .bind(to:collectionView.rx.items(dataSource: dataSource))
+        output.detailList
+            .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         output.titleView

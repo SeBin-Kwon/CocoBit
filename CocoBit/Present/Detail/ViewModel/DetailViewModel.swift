@@ -12,12 +12,6 @@ import RxCocoa
 final class DetailViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
-    
-//    let id: String
-//    
-//    init(id: String) {
-//        self.id = id
-//    }
     let id = PublishRelay<String>()
     
     struct Input {
@@ -26,16 +20,12 @@ final class DetailViewModel: BaseViewModel {
     
     struct Output {
         let titleView: Driver<(String, String)>
-//        let image:
-        let name: Driver<String>
+        let detailList: Driver<[DetailSectionModel]>
     }
     
     func transform(input: Input) -> Output {
-//        let id = BehaviorRelay(value: id)
         let detailList = PublishRelay<[DetailSectionModel]>()
         let titleView = PublishRelay<(String, String)>()
-//        let image = PublishRelay<String>()
-        let name = PublishRelay<String>()
         
         id
             .debug("Detail ID")
@@ -48,20 +38,40 @@ final class DetailViewModel: BaseViewModel {
                         return Single.just(data)
                     }
             }
-            .bind { value in
+            .bind(with: self) { owner, value in
                 guard let value = value.first else { return }
                 titleView.accept((value.image, value.symbol))
-                name.accept(value.symbol)
-//                image.accept(value.image)
-//                name.accept(value.symbol)
+                let result = owner.convertToSectionModel(value)
+                detailList.accept(result)
             }
             .disposed(by: disposeBag)
-        
-        
 
         return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","")),
-                      name: name.asDriver(onErrorJustReturn: ""))
+                      detailList: detailList.asDriver(onErrorJustReturn: []))
     }
+    
+    private func convertToSectionModel(_ data: DetailData) -> [DetailSectionModel] {
+        let formatter = FormatManager.shared
+        
+        var stockList = [DetailSectionItem]()
+        var investmentList = [DetailSectionItem]()
+        let stockHeader = "종목정보"
+        let investmentHeader = "투자지표"
+        
+        stockList.append(contentsOf:
+            [.stock(model:
+                        StockItem(title: "24시간 고가", value: String(data.high24h), date: "")),
+             .stock(model:
+                        StockItem(title: "24시간 저가", value: String(data.low24h), date: "")),
+             .stock(model:
+                        StockItem(title: "역대 최고가", value: String(data.ath), date: data.athDate)),
+             .stock(model:
+                     StockItem(title: "역대 최저가", value: String(data.atl), date: data.atlDate))
+            ])
+        return [.stockSection(header: stockHeader, data: stockList)]
+        
+    }
+    
 }
 
 //struct Detail: Decodable {
