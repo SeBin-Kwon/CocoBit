@@ -26,6 +26,7 @@ enum DetailSectionModel {
 struct ChartItem {
     let crrentPrice: String
     let change24h: String
+    let lastUpdated: String
 }
 
 struct StockItem {
@@ -78,7 +79,10 @@ final class DetailViewController: BaseViewController {
         
         switch item {
         case .chart(let item):
-            return UICollectionViewCell()
+            guard let chartCell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
+            
+            return chartCell
+            
         case .stock(let item):
             cell.nameLabel.text = item.title
             cell.valueLabel.text = item.value
@@ -118,19 +122,6 @@ final class DetailViewController: BaseViewController {
     private func bind() {
         let input = DetailViewModel.Input()
         let output = viewModel.transform(input: input)
-        
-//        let list = BehaviorRelay<[DetailSectionModel]>(value: [
-//            .stockSection(header: "종목정보",
-//                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-//                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
-//                         ),
-//            .investmentSection(header: "투자지표",
-//                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
-//                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
-//                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
-//        ])
         
         output.detailList
             .drive(collectionView.rx.items(dataSource: dataSource))
