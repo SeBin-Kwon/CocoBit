@@ -83,7 +83,8 @@ final class DetailViewController: BaseViewController {
             cell.nameLabel.text = item.title
             cell.valueLabel.text = item.value
             cell.dateLabel.text = item.date
-//            cell.backgroundColor = .gray
+//            cell.layer.borderColor = UIColor.red.cgColor
+//            cell.layer.borderWidth = 1
             cell.layer.cornerRadius = 20
 //            cell.configureData(item)
             return cell
@@ -196,13 +197,13 @@ extension DetailViewController {
         
         let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/10))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/11))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
         
         let section = NSCollectionLayoutSection(group: group)
 //        section.interGroupSpacing = 20 // 그룹간 간격
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
 
         return section
     }

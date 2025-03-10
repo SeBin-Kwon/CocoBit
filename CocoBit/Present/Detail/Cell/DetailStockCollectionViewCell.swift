@@ -34,31 +34,28 @@ class DetailStockCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let containerView = UIView()
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 3
+        stack.alignment = .leading
+        stack.distribution = .fillProportionally
+        return stack
+    }()
     
     
     override func configureHierarchy() {
-        contentView.addSubview(containerView)
-        containerView.addSubviews(nameLabel, valueLabel, dateLabel)
+        contentView.addSubview(stackView)
+        [nameLabel, valueLabel, dateLabel].forEach {
+            stackView.addArrangedSubview($0)
+        }
     }
     
     override func configureLayout() {
-        containerView.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel)
-            make.bottom.equalTo(valueLabel)
-            make.horizontalEdges.equalToSuperview().inset(10)
-            make.centerY.equalToSuperview().offset(-10)
-        }
-        nameLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
-        }
-        valueLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(3)
-            make.bottom.leading.equalToSuperview()
-        }
-        dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(valueLabel.snp.bottom).offset(3)
+        
+        stackView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
     }
