@@ -18,6 +18,7 @@
 		AE9F497B2D7C2818008E13E4 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F497A2D7C2818008E13E4 /* Differentiator */; };
 		AE9F497D2D7C2818008E13E4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F497C2D7C2818008E13E4 /* RxDataSources */; };
 		AE9F4D162D7E03AC008E13E4 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F4D152D7E03AC008E13E4 /* Tabman */; };
+		AECFF20E2D7F68B700F8D038 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = AECFF20D2D7F68B700F8D038 /* DGCharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +68,7 @@
 			files = (
 				AE9F497B2D7C2818008E13E4 /* Differentiator in Frameworks */,
 				AE9CF2F92D79826100FD5075 /* Kingfisher in Frameworks */,
+				AECFF20E2D7F68B700F8D038 /* DGCharts in Frameworks */,
 				AE9CF2F62D79824100FD5075 /* Alamofire in Frameworks */,
 				AE9CF2F02D7981B800FD5075 /* RxSwift in Frameworks */,
 				AE9CF2F32D7981CF00FD5075 /* SnapKit in Frameworks */,
@@ -127,6 +129,7 @@
 				AE9F497A2D7C2818008E13E4 /* Differentiator */,
 				AE9F497C2D7C2818008E13E4 /* RxDataSources */,
 				AE9F4D152D7E03AC008E13E4 /* Tabman */,
+				AECFF20D2D7F68B700F8D038 /* DGCharts */,
 			);
 			productName = CocoBit;
 			productReference = AE9CF2562D797D0500FD5075 /* CocoBit.app */;
@@ -164,6 +167,7 @@
 				AE9CF2F72D79826100FD5075 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				AE9F49792D7C2818008E13E4 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */,
+				AECFF20C2D7F68B700F8D038 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AE9CF2572D797D0500FD5075 /* Products */;
@@ -462,6 +466,14 @@
 				minimumVersion = 3.2.0;
 			};
 		};
+		AECFF20C2D7F68B700F8D038 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ChartsOrg/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -509,6 +521,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */;
 			productName = Tabman;
+		};
+		AECFF20D2D7F68B700F8D038 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AECFF20C2D7F68B700F8D038 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
