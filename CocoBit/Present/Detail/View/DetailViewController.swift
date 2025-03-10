@@ -35,8 +35,8 @@ struct StockItem {
 }
 
 struct InvestmentItem {
-    let marketCap: String
-    let valuation: String
+    let title: String
+    let value: String
 }
 
 extension DetailSectionModel: SectionModelType {
@@ -83,29 +83,27 @@ final class DetailViewController: BaseViewController {
             cell.nameLabel.text = item.title
             cell.valueLabel.text = item.value
             cell.dateLabel.text = item.date
-//            cell.layer.borderColor = UIColor.red.cgColor
-//            cell.layer.borderWidth = 1
             cell.layer.cornerRadius = 20
 //            cell.configureData(item)
             return cell
             
         case .investment(let item):
-            cell.nameLabel.text = item.marketCap
+            cell.nameLabel.text = item.title
+            cell.valueLabel.text = item.value
 //            cell.backgroundColor = .cocoBitLightGray
             cell.layer.cornerRadius = 20
-//            cell.backgroundColor = .gray
-//            cell.configureData(item)
             return cell
         }
         
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
-            withReuseIdentifier: SearchSectionHeaderView.identifier,
+            withReuseIdentifier: DetailSectionHeaderView.identifier,
             for: indexPath
-        ) as! SearchSectionHeaderView
+        ) as! DetailSectionHeaderView
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
+//        header.ti
         return header
     })
 
@@ -171,7 +169,7 @@ extension DetailViewController {
         
         let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(45)
+                    heightDimension: .absolute(50)
                 )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -181,7 +179,7 @@ extension DetailViewController {
                 
         section.boundarySupplementaryItems = [header]
         let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
-        sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 45, leading: 20, bottom: 0, trailing: 20)
+        sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 20, bottom: 0, trailing: 20)
         section.decorationItems = [sectionBackgroundDecoration]
         return section
     }
@@ -215,14 +213,14 @@ extension DetailViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/5))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/6))
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         //        section.interGroupSpacing = 20 // 그룹간 간격
 //                section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
 //        section.orthogonalScrollingBehavior = .continuous
         
         return section
@@ -232,9 +230,9 @@ extension DetailViewController {
         collectionView.register(DetailStockCollectionViewCell.self, forCellWithReuseIdentifier: DetailStockCollectionViewCell.identifier)
     
         collectionView.register(
-            SearchSectionHeaderView.self,
+            DetailSectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SearchSectionHeaderView.identifier
+            withReuseIdentifier: DetailSectionHeaderView.identifier
         )
 //        collectionView.backgroundColor = .clear
     }

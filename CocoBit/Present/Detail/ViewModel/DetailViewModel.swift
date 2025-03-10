@@ -15,7 +15,7 @@ final class DetailViewModel: BaseViewModel {
     let id = PublishRelay<String>()
     
     struct Input {
-//        let moreButtonTap: ControlEvent<Void>
+        //        let moreButtonTap: ControlEvent<Void>
     }
     
     struct Output {
@@ -33,8 +33,8 @@ final class DetailViewModel: BaseViewModel {
                 NetworkManager.shared.fetchResults(api: .detail(currency: .KRW, id: id), type: [DetailData].self)
                     .catch { error in
                         let data = [DetailData]()
-        //                        guard let error = error as? APIError else { return Single.just(data) }
-        //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                        //                        guard let error = error as? APIError else { return Single.just(data) }
+                        //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
                         return Single.just(data)
                     }
             }
@@ -45,7 +45,7 @@ final class DetailViewModel: BaseViewModel {
                 detailList.accept(result)
             }
             .disposed(by: disposeBag)
-
+        
         return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","")),
                       detailList: detailList.asDriver(onErrorJustReturn: []))
     }
@@ -59,23 +59,28 @@ final class DetailViewModel: BaseViewModel {
         let investmentHeader = "투자지표"
         
         stockList.append(contentsOf:
-            [.stock(model:
-                        StockItem(title: "24시간 고가", value: String(data.high24h), date: "")),
-             .stock(model:
-                        StockItem(title: "24시간 저가", value: String(data.low24h), date: "")),
-             .stock(model:
-                        StockItem(title: "역대 최고가", value: String(data.ath), date: data.athDate)),
-             .stock(model:
-                     StockItem(title: "역대 최저가", value: String(data.atl), date: data.atlDate))
-            ])
-        return [.stockSection(header: stockHeader, data: stockList)]
+                            [.stock(model:
+                                        StockItem(title: "24시간 고가", value: String(data.high24h), date: "")),
+                             .stock(model:
+                                        StockItem(title: "24시간 저가", value: String(data.low24h), date: "")),
+                             .stock(model:
+                                        StockItem(title: "역대 최고가", value: String(data.ath), date: data.athDate)),
+                             .stock(model:
+                                        StockItem(title: "역대 최저가", value: String(data.atl), date: data.atlDate))
+                            ])
+        
+        investmentList.append(contentsOf:
+                                [.investment(model:
+                                                InvestmentItem(title: "시가총액", value: String(data.marketCap))),
+                                 .investment(model:
+                                                InvestmentItem(title: "완전 희석 가치(FDV)", value: String(data.fullyValuation))),
+                                 .investment(model:
+                                                InvestmentItem(title: "총 거래량", value: String(data.totalVolum)))
+                                ])
+        return [.stockSection(header: stockHeader, data: stockList),
+                .stockSection(header: investmentHeader, data: investmentList)]
         
     }
     
 }
-
-//struct Detail: Decodable {
-//    let detailArray: [DetailData]
-//}
-
 

@@ -12,7 +12,6 @@ class DetailStockCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()
-        label.text = "sdfsdafesfsfd"
         label.font = .setFont(.medium)
         label.textColor = .cocoBitGray
         return label
@@ -20,7 +19,6 @@ class DetailStockCollectionViewCell: BaseCollectionViewCell {
     
     let valueLabel = {
         let label = UILabel()
-        label.text = "32341484191"
         label.font = .systemFont(ofSize: 13, weight: .bold)
         label.textColor = .cocoBitBlack
         return label
@@ -28,7 +26,6 @@ class DetailStockCollectionViewCell: BaseCollectionViewCell {
     
     let dateLabel = {
         let label = UILabel()
-        label.text = "12년 3월 30일"
         label.font = .setFont(.small)
         label.textColor = .cocoBitGray
         return label
