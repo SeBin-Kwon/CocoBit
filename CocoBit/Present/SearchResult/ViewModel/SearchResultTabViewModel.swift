@@ -14,7 +14,8 @@ final class SearchResultTabViewModel: BaseViewModel {
     var disposeBag = DisposeBag()
     
     struct Input {
-       
+        let searchButtonTap: ControlEvent<Void>
+        let searchText: ControlProperty<String?>
     }
     
     struct Output {
@@ -23,13 +24,16 @@ final class SearchResultTabViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         
-//        searchText
-//            .debug("searchText")
-//            .bind {
-//                print($0)
-//            }
-//            .disposed(by: disposeBag)
         
+        input.searchButtonTap
+            .withLatestFrom(input.searchText)
+            .bind(with: self) { owner, value in
+                guard let text = value?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+                guard !text.isEmpty else { return }
+                SearchState.shared.searchText.accept(text)
+            }
+            .disposed(by: disposeBag)
+
         return Output()
     }
 }

@@ -25,7 +25,6 @@ final class SearchResultViewModel: BaseViewModel {
         let searchList = PublishRelay<[SearchData]>()
         
         SearchState.shared.searchText
-            .debug("searchText")
             .flatMapLatest { query in
                 NetworkManager.shared.fetchResults(api: .searchResult(query: query), type: SearchResult.self)
                     .catch { error in

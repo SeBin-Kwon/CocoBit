@@ -13,7 +13,7 @@ import Pageboy
 
 class SearchResultTabViewController: TabmanViewController {
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     private var viewControllers = [UIViewController]()
 
@@ -23,7 +23,7 @@ class SearchResultTabViewController: TabmanViewController {
         textfield.frame = CGRect(x: 0, y: 0, width: 300, height: 30)
         return textfield
     }()
-    
+    private let viewModel = SearchResultTabViewModel()
     let vc = SearchResultViewController()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -84,13 +84,11 @@ class SearchResultTabViewController: TabmanViewController {
     
     private func bind() {
         
-        searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .withLatestFrom(searchTextField.rx.text)
-            .bind(with: self) { owner, value in
-                guard let value else { return }
-                SearchState.shared.searchText.accept(value)
-            }
-            .disposed(by: disposeBag)
+        let input = SearchResultTabViewModel.Input(
+            searchButtonTap: searchTextField.rx.controlEvent(.editingDidEndOnExit),
+            searchText: searchTextField.rx.text
+        )
+        let output = viewModel.transform(input: input)
         
         SearchState.shared.searchText
             .bind(with: self) { owner, value in
