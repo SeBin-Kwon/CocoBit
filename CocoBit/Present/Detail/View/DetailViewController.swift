@@ -12,13 +12,20 @@ import RxCocoa
 import RxDataSources
 
 enum DetailSectionItem {
+    case chart(model: ChartItem)
     case stock(model: StockItem)
     case investment(model: InvestmentItem)
 }
 
 enum DetailSectionModel {
+    case chartSection(data: [DetailSectionItem])
     case stockSection(header: String, data: [DetailSectionItem])
-    case investment(header: String, data: [DetailSectionItem])
+    case investmentSection(header: String, data: [DetailSectionItem])
+}
+
+struct ChartItem {
+    let crrentPrice: String
+    let change24h: String
 }
 
 struct StockItem {
@@ -37,14 +44,16 @@ extension DetailSectionModel: SectionModelType {
     var header: String {
         switch self {
         case .stockSection(let header, _): header
-        case .investment(let header, _): header
+        case .investmentSection(let header, _): header
+        default: ""
         }
     }
     
     var items: [DetailSectionItem] {
         switch self {
+        case .chartSection(let items): items
         case .stockSection(_, let items): items
-        case .investment(_, let items): items
+        case .investmentSection(_, let items): items
         }
     }
     
@@ -60,19 +69,26 @@ final class DetailViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
+    private let titleView = DetailTitleView()
+    
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
         
         switch item {
+        case .chart(let item):
+            return UICollectionViewCell()
         case .stock(let item):
             cell.nameLabel.text = item.high24h
-//            cell.backgroundColor = .cocoBitLightGray
+            cell.backgroundColor = .cocoBitLightGray
+            cell.layer.cornerRadius = 20
 //            cell.configureData(item)
             return cell
             
         case .investment(let item):
             cell.nameLabel.text = item.marketCap
+            cell.backgroundColor = .cocoBitLightGray
+            cell.layer.cornerRadius = 20
 //            cell.backgroundColor = .lightGray
 //            cell.configureData(item)
             return cell
@@ -91,7 +107,6 @@ final class DetailViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "detail"
         configureHierarchy()
         configureLayout()
         configureCollectionView()
@@ -104,19 +119,20 @@ final class DetailViewController: BaseViewController {
         
         let list = BehaviorRelay<[DetailSectionModel]>(value: [
             .stockSection(header: "종목정보",
-                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
-                                .stock(model: StockItem(high24h: "높은 가격2", row24h: "234")),
-                                 .stock(model: StockItem(high24h: "높은 가격3", row24h: "234")),
-                                 .stock(model: StockItem(high24h: "높은 가격4", row24h: "234"))]
+                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
                          ),
-            .investment(header: "투자지표",
-                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
-                            .investment(model: InvestmentItem(marketCap: "시가총액2", valuation: "23")),
-                            .investment(model: InvestmentItem(marketCap: "시가총액3", valuation: "23"))])
+            .investmentSection(header: "투자지표",
+                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
         ])
         
         list
             .bind(to:collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        output.titleView
+            .drive(with: self) { owner, value in
+                owner.titleView.configureData(value)
+            }
             .disposed(by: disposeBag)
     }
 
@@ -139,9 +155,9 @@ extension DetailViewController {
     func createSection(index: Int) -> NSCollectionLayoutSection {
         let section: NSCollectionLayoutSection
         switch index {
-        case 0: section = configureSectionOne()
-        case 1: section = configureSectionTwo()
-        default: section = configureSectionOne()
+        case 0: section = configureStockSection()
+        case 1: section = configureInvestmentSection()
+        default: section = configureStockSection()
         }
         
         let headerSize = NSCollectionLayoutSize(
@@ -155,25 +171,25 @@ extension DetailViewController {
         )
                 
         section.boundarySupplementaryItems = [header]
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
-        section.decorationItems = [sectionBackgroundDecoration]
+//        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
+//        section.decorationItems = [sectionBackgroundDecoration]
         return section
     }
     
     // 첫번째 섹션
-    private func configureSectionOne() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
+    private func configureStockSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 //        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15) // 아이템 간 간격
         
-        let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
-        
-        let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
+//        let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
+//        
+//        let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/5))
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
 //        section.interGroupSpacing = 20 // 그룹간 간격
@@ -183,8 +199,8 @@ extension DetailViewController {
     }
     
     // 두번째 섹션
-    private func configureSectionTwo() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
+    private func configureInvestmentSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 //        item.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3) // 아이템 간 간격
@@ -210,14 +226,14 @@ extension DetailViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: SearchSectionHeaderView.identifier
         )
-        collectionView.backgroundColor = .clear
+//        collectionView.backgroundColor = .clear
     }
 }
 
 extension DetailViewController {
     private func configureHierarchy() {
         view.addSubviews(collectionView)
-        navigationItem.titleView = DetailTitleView()
+        navigationItem.titleView = titleView
     }
     
     private func configureLayout() {
