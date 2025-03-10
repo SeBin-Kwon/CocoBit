@@ -27,6 +27,7 @@ struct ChartItem {
     let crrentPrice: String
     let change24h: String
     let lastUpdated: String
+    let chartArray: [Double]
 }
 
 struct StockItem {
@@ -75,15 +76,18 @@ final class DetailViewController: BaseViewController {
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
-        
         switch item {
         case .chart(let item):
-            guard let chartCell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
-            
-            return chartCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else { return UICollectionViewCell() }
+            cell.priceLabel.text = item.crrentPrice
+            cell.changeLabel.text = item.change24h
+            cell.updateLabel.text = item.lastUpdated
+            cell.priceData = item.chartArray
+            cell.backgroundColor = .cocoBitLightGray
+            return cell
             
         case .stock(let item):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
             cell.nameLabel.text = item.title
             cell.valueLabel.text = item.value
             cell.dateLabel.text = item.date
@@ -92,6 +96,7 @@ final class DetailViewController: BaseViewController {
             return cell
             
         case .investment(let item):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
             cell.nameLabel.text = item.title
             cell.valueLabel.text = item.value
 //            cell.backgroundColor = .cocoBitLightGray
@@ -107,7 +112,6 @@ final class DetailViewController: BaseViewController {
         ) as! DetailSectionHeaderView
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
-//        header.ti
         return header
     })
 
@@ -153,8 +157,9 @@ extension DetailViewController {
     func createSection(index: Int) -> NSCollectionLayoutSection {
         let section: NSCollectionLayoutSection
         switch index {
-        case 0: section = configureStockSection()
-        case 1: section = configureInvestmentSection()
+        case 0: section = configureChartSection()
+        case 1: section = configureStockSection()
+        case 2: section = configureInvestmentSection()
         default: section = configureStockSection()
         }
         
@@ -167,15 +172,34 @@ extension DetailViewController {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-                
-        section.boundarySupplementaryItems = [header]
-        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
-        sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 20, bottom: 0, trailing: 20)
-        section.decorationItems = [sectionBackgroundDecoration]
+        if index != 0 {
+            section.boundarySupplementaryItems = [header]
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
+            sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 20, bottom: 0, trailing: 20)
+            section.decorationItems = [sectionBackgroundDecoration]
+        }
         return section
     }
     
-    // 첫번째 섹션
+    private func configureChartSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/4))
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        //        section.interGroupSpacing = 20 // 그룹간 간격
+//                section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
+//        section.orthogonalScrollingBehavior = .continuous
+        
+        return section
+    }
+
     private func configureStockSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
@@ -197,7 +221,6 @@ extension DetailViewController {
         return section
     }
     
-    // 두번째 섹션
     private func configureInvestmentSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
@@ -219,6 +242,7 @@ extension DetailViewController {
     
     private func configureCollectionView() {
         collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
+        collectionView.register(ChartCollectionViewCell.self, forCellWithReuseIdentifier: ChartCollectionViewCell.identifier)
     
         collectionView.register(
             DetailSectionHeaderView.self,

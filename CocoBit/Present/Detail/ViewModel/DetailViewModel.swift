@@ -53,6 +53,7 @@ final class DetailViewModel: BaseViewModel {
     private func convertToSectionModel(_ data: DetailData) -> [DetailSectionModel] {
         let formatter = FormatManager.shared
         
+        var chartList = [DetailSectionItem]()
         var stockList = [DetailSectionItem]()
         var investmentList = [DetailSectionItem]()
         let stockHeader = "종목정보"
@@ -77,8 +78,13 @@ final class DetailViewModel: BaseViewModel {
                                  .investment(model:
                                                 InvestmentItem(title: "총 거래량", value: String(data.totalVolum)))
                                 ])
-        return [.stockSection(header: stockHeader, data: stockList),
-                .stockSection(header: investmentHeader, data: investmentList)]
+        chartList.append(contentsOf:
+                            [.chart(model:
+                                        ChartItem(crrentPrice: String(data.crrentPrice), change24h: String(data.change24h), lastUpdated: data.lastUpdated, chartArray: data.sparklineIn7d.price))])
+        
+        return [.chartSection(data: chartList),
+            .stockSection(header: stockHeader, data: stockList),
+                .investmentSection(header: investmentHeader, data: investmentList)]
         
     }
     
