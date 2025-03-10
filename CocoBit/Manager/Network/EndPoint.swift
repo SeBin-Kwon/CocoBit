@@ -11,7 +11,7 @@ import Alamofire
 enum EndPoint {
     case market(currency: MarketCurrency)
     case trending
-    case searchResult
+    case searchResult(query: String)
     case detail
     
     var baseURL: String {
@@ -35,7 +35,8 @@ enum EndPoint {
     var parameter: Parameters? {
         switch self {
         case .market(let currency): ["quote_currencies" : currency.rawValue]
-        case .trending, .searchResult, .detail: nil
+        case .searchResult(let query): ["query" : query]
+        case .trending, .detail: nil
         }
     }
 }

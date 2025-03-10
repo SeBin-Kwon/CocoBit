@@ -12,7 +12,6 @@ import RxCocoa
 final class SearchResultViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
-    let searchText = BehaviorRelay(value: "")
     
     struct Input {
        
@@ -23,14 +22,28 @@ final class SearchResultViewModel: BaseViewModel {
     }
     
     func transform(input: Input) -> Output {
+//        let searchList = PublishRelay<
         
         SearchState.shared.searchText
             .debug("searchText")
-            .bind {
-                print($0)
+            .flatMapLatest { query in
+                NetworkManager.shared.fetchResults(api: .searchResult(query: query), type: SearchResult.self)
             }
+            .subscribe(onNext: { value in
+                dump(value)
+            }, onError: { error in
+                print("Error", error)
+            }, onCompleted: {
+                print("onCompleted")
+            }, onDisposed: {
+                print("onDisposed")
+            })
+//            .bind {
+//                print($0)
+//            }
             .disposed(by: disposeBag)
         
         return Output()
     }
 }
+
