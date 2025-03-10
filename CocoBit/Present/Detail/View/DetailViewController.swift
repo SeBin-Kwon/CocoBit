@@ -56,6 +56,8 @@ extension DetailSectionModel: SectionModelType {
 
 final class DetailViewController: BaseViewController {
     
+    lazy var viewModel = DetailViewModel()
+    
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
@@ -65,13 +67,13 @@ final class DetailViewController: BaseViewController {
         switch item {
         case .stock(let item):
             cell.nameLabel.text = item.high24h
-            cell.backgroundColor = .cocoBitLightGray
+//            cell.backgroundColor = .cocoBitLightGray
 //            cell.configureData(item)
             return cell
             
         case .investment(let item):
             cell.nameLabel.text = item.marketCap
-            cell.backgroundColor = .lightGray
+//            cell.backgroundColor = .lightGray
 //            cell.configureData(item)
             return cell
         }
@@ -97,6 +99,9 @@ final class DetailViewController: BaseViewController {
     }
     
     private func bind() {
+        let input = DetailViewModel.Input()
+        let output = viewModel.transform(input: input)
+        
         let list = BehaviorRelay<[DetailSectionModel]>(value: [
             .stockSection(header: "종목정보",
                           data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
@@ -124,6 +129,9 @@ extension DetailViewController {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
             self?.createSection(index: sectionIndex)
         }
+        
+        layout.register(DetailSectionBackgroundView.self,
+                        forDecorationViewOfKind: DetailSectionBackgroundView.identifier)
         return layout
     }
     
@@ -147,6 +155,8 @@ extension DetailViewController {
         )
                 
         section.boundarySupplementaryItems = [header]
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
+        section.decorationItems = [sectionBackgroundDecoration]
         return section
     }
     
@@ -200,12 +210,14 @@ extension DetailViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: SearchSectionHeaderView.identifier
         )
+        collectionView.backgroundColor = .clear
     }
 }
 
 extension DetailViewController {
     private func configureHierarchy() {
         view.addSubviews(collectionView)
+        navigationItem.titleView = DetailTitleView()
     }
     
     private func configureLayout() {
