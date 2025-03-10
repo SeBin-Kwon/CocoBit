@@ -24,7 +24,7 @@ final class SearchResultViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         
-        searchText
+        SearchState.shared.searchText
             .debug("searchText")
             .bind {
                 print($0)
@@ -33,9 +33,4 @@ final class SearchResultViewModel: BaseViewModel {
         
         return Output()
     }
-}
-
-
-final class tampView: BaseView {
-    
 }

@@ -16,7 +16,7 @@ class SearchResultTabViewController: TabmanViewController {
     let disposeBag = DisposeBag()
     
     private var viewControllers = [UIViewController]()
-    private let searchText: String
+
     private let searchTextField = {
         let textfield = UITextField()
         textfield.textColor = .cocoBitBlack
@@ -26,9 +26,8 @@ class SearchResultTabViewController: TabmanViewController {
     
     let vc = SearchResultViewController()
     
-    init(searchText: String) {
-        self.searchText = searchText
-        super.init(nibName: nil, bundle: nil)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     @MainActor required init?(coder aDecoder: NSCoder) {
@@ -39,8 +38,6 @@ class SearchResultTabViewController: TabmanViewController {
         super.viewDidLoad()
         configureBaseSetting()
         configureNavigationBar()
-        
-        vc.viewModel.searchText.accept(searchText)
         
         viewControllers.append(vc)
         viewControllers.append(UIViewController())
@@ -90,14 +87,20 @@ class SearchResultTabViewController: TabmanViewController {
         searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .withLatestFrom(searchTextField.rx.text)
             .bind(with: self) { owner, value in
-                owner.vc.viewModel.searchText.accept(value ?? "")
+                guard let value else { return }
+                SearchState.shared.searchText.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        SearchState.shared.searchText
+            .bind(with: self) { owner, value in
+                owner.searchTextField.text = value
             }
             .disposed(by: disposeBag)
         
     }
     
     private func configureNavigationBar() {
-        searchTextField.text = searchText
         navigationItem.leftItemsSupplementBackButton = true
         let textField = UIBarButtonItem(customView: searchTextField)
         navigationItem.leftBarButtonItem = textField
