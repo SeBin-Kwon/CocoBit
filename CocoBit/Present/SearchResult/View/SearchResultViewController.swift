@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import RxDataSources
+//import RxDataSources
 
 final class SearchResultViewController: BaseViewController {
     
@@ -17,31 +17,25 @@ final class SearchResultViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
-    private let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> { dataSource, collectionView, indexPath, item in
-
-        switch item {
-        case .coin(let item):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCollectionViewCell.identifier, for: indexPath) as? SearchResultCollectionViewCell else { return UICollectionViewCell() }
-//            cell.configureData(item)
-
-            return cell
-            
-        case .nft(let item):
-            return UICollectionViewCell()
-        }
-        
-    }
+//    private let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> { dataSource, collectionView, indexPath, item in
+//
+//        switch item {
+//        case .coin(let item):
+//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCollectionViewCell.identifier, for: indexPath) as? SearchResultCollectionViewCell else { return UICollectionViewCell() }
+////            cell.configureData(item)
+//
+//            return cell
+//            
+//        case .nft(let item):
+//            return UICollectionViewCell()
+//        }
+//        
+//    }
     
     let viewModel = SearchResultViewModel()
-                                                                                              
-//    init(searchText: String) {
-//        self.searchText = searchText
-//        super.init()
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        configureNavigationBar()
         configureHierarchy()
         configureLayout()
         bind()
@@ -56,16 +50,19 @@ final class SearchResultViewController: BaseViewController {
         let input = SearchResultViewModel.Input()
         let output = viewModel.transform(input: input)
         
-        var coinList: [SectionItem] = [SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
-                                       SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
-                                       SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6")),
-                                       SectionItem.coin(model: CoinItem(score: "2", symbol: "3", name: "4", change: "5", changeColor: .down, image: "6"))]
         
-        
-        let sections = BehaviorSubject<[TrendingSectionModel]>(value: [.coinSection(header: ("인기 검색어", "ss"), data: coinList)])
+        let sections = Observable.just(["1", "2", "3", "5"])
         
         sections
-            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .bind(to: collectionView.rx.items(cellIdentifier: SearchResultCollectionViewCell.identifier, cellType: SearchResultCollectionViewCell.self)) { item, element, cell in
+                cell.nameLabel.text = element
+//                cell.id = element.id
+//                cell.item = element
+//                cell.configureData(image: element.image,
+//                                   mallName: element.mallName,
+//                                   title: element.title,
+//                                   price: element.price)
+            }
             .disposed(by: disposeBag)
         
         
