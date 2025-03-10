@@ -16,19 +16,19 @@ final class SearchViewModel: BaseViewModel {
     struct Input {
         let searchButtonTap: ControlEvent<Void>
         let searchText: ControlProperty<String?>
-        let coinCellTap: ControlEvent<SectionItem>
+        let coinCellTap: ControlEvent<TrendingSectionItem>
     }
     
     struct Output {
         let sectionModel: Driver<[TrendingSectionModel]>
         let searchText: Driver<String>
-        let detailValue: Driver<SectionItem>
+        let detailValue: Driver<TrendingSectionItem>
     }
     
     func transform(input: Input) -> Output {
         let sectionModel = PublishRelay<[TrendingSectionModel]>()
         let searchText = PublishRelay<String>()
-        let detailValue = PublishRelay<SectionItem>()
+        let detailValue = PublishRelay<TrendingSectionItem>()
         
         Observable<Int>
             .timer(.microseconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
@@ -72,8 +72,8 @@ final class SearchViewModel: BaseViewModel {
     private func convertToSectionModel(_ data: Trending) -> [TrendingSectionModel] {
         let formatter = FormatManager.shared
         
-        var coinList = [SectionItem]()
-        var nftList = [SectionItem]()
+        var coinList = [TrendingSectionItem]()
+        var nftList = [TrendingSectionItem]()
         let coinHeader = ("인기 검색어", formatter.trendingDateFormatted())
         let nftHeader = "인기 NFT"
         

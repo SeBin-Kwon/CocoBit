@@ -58,7 +58,7 @@ final class SearchViewController: BaseViewController {
         let input = SearchViewModel.Input(
             searchButtonTap: searchView.searchBar.rx.searchButtonClicked,
             searchText: searchView.searchBar.rx.text,
-            coinCellTap: collectionView.rx.modelSelected(SectionItem.self)
+            coinCellTap: collectionView.rx.modelSelected(TrendingSectionItem.self)
         )
         let output = viewModel.transform(input: input)
         
