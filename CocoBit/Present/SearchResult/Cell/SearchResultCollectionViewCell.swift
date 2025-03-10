@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
@@ -34,7 +35,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let scoreLabel = {
+    let rankLabel = {
         let label = UILabel()
         label.text = "372333"
         label.font = .setFont(.smallBold)
@@ -49,8 +50,19 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         return view
     }()
     
+    func configureData(_ item: SearchData) {
+        symbolLabel.text = item.symbol
+        nameLabel.text = item.name
+        
+        let url = URL(string: item.thumb)
+        imageView.kf.setImage(with: url)
+        
+        guard let rank = item.rank else { return }
+        rankLabel.text = "\(rank)"
+    }
+    
     override func configureHierarchy() {
-        addSubviews(imageView, symbolLabel, nameLabel, scoreBackgroundView, scoreLabel)
+        addSubviews(imageView, symbolLabel, nameLabel, scoreBackgroundView, rankLabel)
     }
     
     override func configureLayout() {
@@ -73,13 +85,13 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         }
         
         scoreBackgroundView.snp.makeConstraints { make in
-            make.width.equalTo(scoreLabel).offset(6)
-            make.height.equalTo(scoreLabel).offset(4)
+            make.width.equalTo(rankLabel).offset(6)
+            make.height.equalTo(rankLabel).offset(4)
             make.leading.equalTo(symbolLabel.snp.trailing).offset(5)
             make.centerY.equalTo(symbolLabel)
         }
         
-        scoreLabel.snp.makeConstraints { make in
+        rankLabel.snp.makeConstraints { make in
             make.center.equalTo(scoreBackgroundView)
         }
         

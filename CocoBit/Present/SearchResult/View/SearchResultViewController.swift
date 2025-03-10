@@ -53,15 +53,9 @@ final class SearchResultViewController: BaseViewController {
         
         let sections = Observable.just(["1", "2", "3", "5"])
         
-        sections
-            .bind(to: collectionView.rx.items(cellIdentifier: SearchResultCollectionViewCell.identifier, cellType: SearchResultCollectionViewCell.self)) { item, element, cell in
-                cell.nameLabel.text = element
-//                cell.id = element.id
-//                cell.item = element
-//                cell.configureData(image: element.image,
-//                                   mallName: element.mallName,
-//                                   title: element.title,
-//                                   price: element.price)
+        output.searchList
+            .drive(collectionView.rx.items(cellIdentifier: SearchResultCollectionViewCell.identifier, cellType: SearchResultCollectionViewCell.self)) { item, element, cell in
+                cell.configureData(element)
             }
             .disposed(by: disposeBag)
         
