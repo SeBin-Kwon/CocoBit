@@ -26,17 +26,26 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    let containerView = UIView()
+    
     override func configureHierarchy() {
-        contentView.addSubviews(nameLabel, valueLabel)
+        contentView.addSubview(containerView)
+        containerView.addSubviews(nameLabel, valueLabel)
     }
     
     override func configureLayout() {
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel)
+            make.bottom.equalTo(valueLabel)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.centerY.equalToSuperview()
+        }
         nameLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
         }
         valueLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            make.leading.equalToSuperview()
+            make.top.equalTo(nameLabel.snp.bottom).offset(3)
+            make.bottom.leading.equalToSuperview()
         }
     }
 }

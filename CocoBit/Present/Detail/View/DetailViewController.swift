@@ -99,14 +99,15 @@ final class DetailViewController: BaseViewController {
     private func bind() {
         let list = BehaviorRelay<[DetailSectionModel]>(value: [
             .stockSection(header: "종목정보",
-                          data: [.stock(model: StockItem(high24h: "높은 가격", row24h: "낮은 가격")),
-                                .stock(model: StockItem(high24h: "높은 가격", row24h: "낮은 가격")),
-                                 .stock(model: StockItem(high24h: "높은 가격", row24h: "낮은 가격"))]
+                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+                                .stock(model: StockItem(high24h: "높은 가격2", row24h: "234")),
+                                 .stock(model: StockItem(high24h: "높은 가격3", row24h: "234")),
+                                 .stock(model: StockItem(high24h: "높은 가격4", row24h: "234"))]
                          ),
             .investment(header: "투자지표",
-                        data: [.investment(model: InvestmentItem(marketCap: "시가총액", valuation: "가치")),
-                            .investment(model: InvestmentItem(marketCap: "시가총액", valuation: "가치")),
-                            .investment(model: InvestmentItem(marketCap: "시가총액", valuation: "가치"))])
+                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
+                            .investment(model: InvestmentItem(marketCap: "시가총액2", valuation: "23")),
+                            .investment(model: InvestmentItem(marketCap: "시가총액3", valuation: "23"))])
         ])
         
         list
@@ -151,42 +152,42 @@ extension DetailViewController {
     
     // 첫번째 섹션
     private func configureSectionOne() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/7))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15) // 아이템 간 간격
+//        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15) // 아이템 간 간격
         
         let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
         
         let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.55))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/5))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
         
         let section = NSCollectionLayoutSection(group: group)
 //        section.interGroupSpacing = 20 // 그룹간 간격
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
 
         return section
     }
     
     // 두번째 섹션
     private func configureSectionTwo() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 3, bottom: 0, trailing: 3) // 아이템 간 간격
+//        item.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3) // 아이템 간 간격
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.1), heightDimension: .absolute(125))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/2))
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         //        section.interGroupSpacing = 20 // 그룹간 간격
 //                section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+//        section.orthogonalScrollingBehavior = .continuous
         
         return section
     }
