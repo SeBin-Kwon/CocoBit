@@ -8,14 +8,14 @@
 import Foundation
 import RxDataSources
 
-enum SectionItem {
+enum TrendingSectionItem {
     case coin(model: CoinItem)
     case nft(model: NFTItem)
 }
 
 enum TrendingSectionModel {
-    case coinSection(header: (String, String), data: [SectionItem])
-    case nftSection(header: String, data: [SectionItem])
+    case coinSection(header: (String, String), data: [TrendingSectionItem])
+    case nftSection(header: String, data: [TrendingSectionItem])
 }
 
 struct CoinItem {
@@ -36,7 +36,7 @@ struct NFTItem {
 }
 
 extension TrendingSectionModel: SectionModelType {
-    typealias Item = SectionItem
+    typealias Item = TrendingSectionItem
     
     var header: (title: String, time: String?) {
         switch self {
@@ -45,7 +45,7 @@ extension TrendingSectionModel: SectionModelType {
         }
     }
     
-    var items: [SectionItem] {
+    var items: [TrendingSectionItem] {
         switch self {
         case .coinSection(_, let items): items
         case .nftSection(_, let items): items
