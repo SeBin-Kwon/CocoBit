@@ -74,7 +74,7 @@ final class DetailViewController: BaseViewController {
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailStockCollectionViewCell.identifier, for: indexPath) as? DetailStockCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
         
         switch item {
         case .chart(let item):
@@ -227,7 +227,7 @@ extension DetailViewController {
     }
     
     private func configureCollectionView() {
-        collectionView.register(DetailStockCollectionViewCell.self, forCellWithReuseIdentifier: DetailStockCollectionViewCell.identifier)
+        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
     
         collectionView.register(
             DetailSectionHeaderView.self,
