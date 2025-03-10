@@ -12,7 +12,7 @@ enum EndPoint {
     case market(currency: MarketCurrency)
     case trending
     case searchResult(query: String)
-    case detail
+    case detail(currency: MarketCurrency, id: String)
     
     var baseURL: String {
         switch self {
@@ -36,11 +36,17 @@ enum EndPoint {
         switch self {
         case .market(let currency): ["quote_currencies" : currency.rawValue]
         case .searchResult(let query): ["query" : query]
-        case .trending, .detail: nil
+        case .detail(let currency, let id): ["vs_currency": currency.detail, "ids": id, "sparkline": true]
+        case .trending: nil
         }
     }
 }
 
 enum MarketCurrency: String {
     case KRW
+    var detail: String {
+        switch self {
+        case .KRW: "krw"
+        }
+    }
 }
