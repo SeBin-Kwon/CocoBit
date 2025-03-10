@@ -84,7 +84,8 @@ final class SearchViewController: BaseViewController {
                 let vc = DetailViewController()
                 switch value {
                 case .coin(let item):
-                    vc.navigationItem.title = item.symbol
+//                    vc.navigationItem.title = item.symbol
+                    vc.viewModel.id.accept(item.id)
                 default: break
                 }
                 owner.view.endEditing(true)

@@ -17,6 +17,7 @@ struct TrendingCoin: Decodable {
 }
 
 struct TrendingCoinItem: Decodable {
+    let id: String
     let score: Int
     let symbol: String
     let name: String

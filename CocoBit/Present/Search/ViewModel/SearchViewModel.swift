@@ -81,6 +81,7 @@ final class SearchViewModel: BaseViewModel {
             let changeResult = formatter.roundDecimal($0.item.data.change.krw, isArrow: true)
             coinList.append(
                 .coin(model: CoinItem(
+                    id: $0.item.id,
                     score: "\($0.item.score + 1)",
                     symbol: $0.item.symbol,
                     name: $0.item.name,

@@ -19,6 +19,7 @@ enum TrendingSectionModel {
 }
 
 struct CoinItem {
+    let id: String
     let score: String
     let symbol: String
     let name: String
