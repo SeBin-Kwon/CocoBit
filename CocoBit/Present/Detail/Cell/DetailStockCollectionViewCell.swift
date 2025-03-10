@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class DetailCollectionViewCell: BaseCollectionViewCell {
+class DetailStockCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()
@@ -26,11 +26,20 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    let dateLabel = {
+        let label = UILabel()
+        label.text = "12년 3월 30일"
+        label.font = .setFont(.small)
+        label.textColor = .cocoBitGray
+        return label
+    }()
+    
     let containerView = UIView()
+    
     
     override func configureHierarchy() {
         contentView.addSubview(containerView)
-        containerView.addSubviews(nameLabel, valueLabel)
+        containerView.addSubviews(nameLabel, valueLabel, dateLabel)
     }
     
     override func configureLayout() {
@@ -38,7 +47,7 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(nameLabel)
             make.bottom.equalTo(valueLabel)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.centerY.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-10)
         }
         nameLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
@@ -47,5 +56,10 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(nameLabel.snp.bottom).offset(3)
             make.bottom.leading.equalToSuperview()
         }
+        dateLabel.snp.makeConstraints { make in
+            make.top.equalTo(valueLabel.snp.bottom).offset(3)
+            make.leading.equalToSuperview()
+        }
+        
     }
 }

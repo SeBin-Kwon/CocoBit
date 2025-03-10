@@ -73,23 +73,23 @@ final class DetailViewController: BaseViewController {
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailStockCollectionViewCell.identifier, for: indexPath) as? DetailStockCollectionViewCell else { return UICollectionViewCell() }
         
         switch item {
         case .chart(let item):
             return UICollectionViewCell()
         case .stock(let item):
             cell.nameLabel.text = item.high24h
-            cell.backgroundColor = .cocoBitLightGray
+//            cell.backgroundColor = .gray
             cell.layer.cornerRadius = 20
 //            cell.configureData(item)
             return cell
             
         case .investment(let item):
             cell.nameLabel.text = item.marketCap
-            cell.backgroundColor = .cocoBitLightGray
+//            cell.backgroundColor = .cocoBitLightGray
             cell.layer.cornerRadius = 20
-//            cell.backgroundColor = .lightGray
+//            cell.backgroundColor = .gray
 //            cell.configureData(item)
             return cell
         }
@@ -119,10 +119,15 @@ final class DetailViewController: BaseViewController {
         
         let list = BehaviorRelay<[DetailSectionModel]>(value: [
             .stockSection(header: "종목정보",
-                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
+                          data: [.stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234")),
+                                 .stock(model: StockItem(high24h: "높은 가격1", row24h: "234"))]
                          ),
             .investmentSection(header: "투자지표",
-                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
+                        data: [.investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
+                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234")),
+                               .investment(model: InvestmentItem(marketCap: "시가총액1", valuation: "234"))])
         ])
         
         list
@@ -171,8 +176,9 @@ extension DetailViewController {
         )
                 
         section.boundarySupplementaryItems = [header]
-//        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
-//        section.decorationItems = [sectionBackgroundDecoration]
+        let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(elementKind: DetailSectionBackgroundView.identifier)
+        sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 45, leading: 20, bottom: 0, trailing: 20)
+        section.decorationItems = [sectionBackgroundDecoration]
         return section
     }
     
@@ -181,15 +187,15 @@ extension DetailViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15) // 아이템 간 간격
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15) // 아이템 간 간격
         
-//        let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
-//        
-//        let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
+        let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/5))
+        let innerGroup = NSCollectionLayoutGroup.vertical(layoutSize: innerSize, subitems: [item])
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/10))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
         
         let section = NSCollectionLayoutSection(group: group)
 //        section.interGroupSpacing = 20 // 그룹간 간격
@@ -203,9 +209,9 @@ extension DetailViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3) // 아이템 간 간격
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/2))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/5))
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
@@ -219,7 +225,7 @@ extension DetailViewController {
     }
     
     private func configureCollectionView() {
-        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
+        collectionView.register(DetailStockCollectionViewCell.self, forCellWithReuseIdentifier: DetailStockCollectionViewCell.identifier)
     
         collectionView.register(
             SearchSectionHeaderView.self,
