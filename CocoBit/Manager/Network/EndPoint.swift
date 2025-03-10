@@ -36,7 +36,7 @@ enum EndPoint {
         switch self {
         case .market(let currency): ["quote_currencies" : currency.rawValue]
         case .searchResult(let query): ["query" : query]
-        case .detail(let currency, let id): ["vs_currency": currency.detail, "ids": id, "sparkline": true]
+        case .detail(let currency, let id): ["vs_currency": currency.detail, "ids": id, "sparkline": "true"]
         case .trending: nil
         }
     }
