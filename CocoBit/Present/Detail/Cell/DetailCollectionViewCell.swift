@@ -12,19 +12,31 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()
-        label.font = .setFont(.smallBold)
+        label.text = "sdfsdafesfsfd"
+        label.font = .setFont(.medium)
+        label.textColor = .cocoBitGray
+        return label
+    }()
+    
+    let valueLabel = {
+        let label = UILabel()
+        label.text = "32341484191"
+        label.font = .systemFont(ofSize: 13, weight: .bold)
         label.textColor = .cocoBitBlack
-        label.textAlignment = .center
         return label
     }()
     
     override func configureHierarchy() {
-        contentView.addSubviews(nameLabel)
+        contentView.addSubviews(nameLabel, valueLabel)
     }
     
     override func configureLayout() {
         nameLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.equalToSuperview()
+        }
+        valueLabel.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview()
         }
     }
 }
