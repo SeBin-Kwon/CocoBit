@@ -20,7 +20,6 @@ final class DetailTitleView: BaseView {
     
     let nameLabel = {
         let label = UILabel()
-        label.text = "BTC"
         label.font = .setFont(.subTitle)
         label.textColor = .cocoBitBlack
         return label
@@ -31,9 +30,15 @@ final class DetailTitleView: BaseView {
         view.axis = .horizontal
         view.spacing = 5
         view.alignment = .center
-        view.distribution = .fillProportionally
+        view.distribution = .fill
         return view
     }()
+    
+    func configureData(_ item: (image: String, name: String)) {
+        let url = URL(string: item.image)
+        imageView.kf.setImage(with: url)
+        nameLabel.text = item.name
+    }
     
     override func configureHierarchy() {
         stackView.addArrangedSubview(imageView)
@@ -44,10 +49,15 @@ final class DetailTitleView: BaseView {
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(26)
+            make.centerY.equalToSuperview()
+        }
+        
+        nameLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
         }
         
         stackView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         DispatchQueue.main.async {
