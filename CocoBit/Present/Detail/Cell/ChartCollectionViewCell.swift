@@ -81,9 +81,14 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    
+}
+
+// MARK: Chart
+extension ChartCollectionViewCell {
     func configureChart() {
         chart.noDataText = "출력 데이터가 없습니다."
-        chart.noDataFont = .systemFont(ofSize: 20)
+        chart.noDataFont = .systemFont(ofSize: 14)
         chart.noDataTextColor = .lightGray
         chart.backgroundColor = .white
 
@@ -106,6 +111,11 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
     }
     
     func setLineData(lineChartView: LineChartView, lineChartDataEntries: [ChartDataEntry]) {
+        guard !lineChartDataEntries.isEmpty else {
+                lineChartView.data = nil
+                return
+            }
+        
         let lineChartdataSet = LineChartDataSet(entries: lineChartDataEntries, label: "")
         
         lineChartdataSet.mode = .cubicBezier
@@ -117,7 +127,7 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
         lineChartdataSet.colors = [.cocoBitBlue]
         
         
-        let fillColors = [UIColor.cocoBitBlue.withAlphaComponent(0.3).cgColor, UIColor.cocoBitBlue.cgColor]
+        let fillColors = [UIColor.white.cgColor, UIColor.cocoBitBlue.cgColor]
         let locations:[CGFloat] = [0.0, 1.0]
         let colorspace = CGColorSpaceCreateDeviceRGB()
                     
