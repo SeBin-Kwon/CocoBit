@@ -23,6 +23,7 @@ final class DetailViewModel: BaseViewModel {
         let detailList: Driver<[DetailSectionModel]>
         let likeState: Driver<Bool>
         let isButtonTap: Driver<Bool>
+        let errorAlert: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -31,6 +32,7 @@ final class DetailViewModel: BaseViewModel {
         let titleView = PublishRelay<(String, String,String)>()
         let state = BehaviorRelay(value: false)
         let isButtonTap = BehaviorRelay(value: false)
+        let errorAlert = PublishRelay<String>()
         
         id
             .debug("Detail ID")
@@ -38,8 +40,8 @@ final class DetailViewModel: BaseViewModel {
                 NetworkManager.shared.fetchResults(api: .detail(currency: .KRW, id: id), type: [DetailData].self)
                     .catch { error in
                         let data = [DetailData]()
-                        //                        guard let error = error as? APIError else { return Single.just(data) }
-                        //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                        guard let error = error as? APIError else { return Single.just(data) }
+                        errorAlert.accept( error.localizedDescription)
                         return Single.just(data)
                     }
             }
@@ -77,7 +79,8 @@ final class DetailViewModel: BaseViewModel {
         return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","","")),
                       detailList: detailList.asDriver(onErrorJustReturn: []),
                       likeState: state.asDriver(),
-                      isButtonTap: isButtonTap.asDriver())
+                      isButtonTap: isButtonTap.asDriver(),
+                      errorAlert: errorAlert.asDriver(onErrorJustReturn: ""))
     }
     
     private func convertToSectionModel(_ data: DetailData) -> [DetailSectionModel] {
@@ -119,7 +122,7 @@ final class DetailViewModel: BaseViewModel {
                                             chartArray: data.sparklineIn7d.price))])
         
         return [.chartSection(data: chartList),
-            .stockSection(header: stockHeader, data: stockList),
+                .stockSection(header: stockHeader, data: stockList),
                 .investmentSection(header: investmentHeader, data: investmentList)]
         
     }

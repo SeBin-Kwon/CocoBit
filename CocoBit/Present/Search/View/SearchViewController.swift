@@ -135,19 +135,6 @@ final class SearchViewController: BaseViewController {
                 owner.navigate(.present(vc))
             }
             .disposed(by: disposeBag)
-        
-        NetworkMonitor.shared.isPopUp
-            .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, value in
-                if !value {
-                    let vc = PopUpViewController()
-                    vc.modalPresentationStyle = .overFullScreen
-                    vc.isNetwork = value
-                    owner.navigate(.present(vc))
-                }
-            }
-            .disposed(by: disposeBag)
-        
         }
     }
     

@@ -56,6 +56,11 @@ final class DetailViewController: BaseViewController {
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
 //        header.moreButton.rx.tap
+//            .withUnretained(self)
+//            .bind {
+//                
+//            }
+//            .disposed(by: disposeBag)
         return header
     })
 
@@ -99,7 +104,14 @@ final class DetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
+        output.errorAlert
+            .drive(with: self) { owner, value in
+                let vc = PopUpViewController()
+                vc.text = value
+                vc.modalPresentationStyle = .overFullScreen
+                owner.navigate(.present(vc))
+            }
+            .disposed(by: disposeBag)
     }
 
 }

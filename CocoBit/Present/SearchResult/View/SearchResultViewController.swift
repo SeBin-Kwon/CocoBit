@@ -75,6 +75,15 @@ final class SearchResultViewController: BaseViewController {
                 owner.navigate(.push(vc))
             }
             .disposed(by: disposeBag)
+        
+        output.errorAlert
+            .drive(with: self) { owner, value in
+                let vc = PopUpViewController()
+                vc.text = value
+                vc.modalPresentationStyle = .overFullScreen
+                owner.navigate(.present(vc))
+            }
+            .disposed(by: disposeBag)
     }
     
 }

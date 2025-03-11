@@ -20,19 +20,21 @@ final class SearchResultViewModel: BaseViewModel {
     struct Output {
         let searchList: Driver<[SearchData]>
         let detailValue: Driver<SearchData>
+        let errorAlert: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let searchList = PublishRelay<[SearchData]>()
         let detailValue = PublishRelay<SearchData>()
+        let errorAlert = PublishRelay<String>()
         
         SearchState.shared.searchText
             .flatMapLatest { query in
                 NetworkManager.shared.fetchResults(api: .searchResult(query: query), type: SearchResult.self)
                     .catch { error in
                         let data = SearchResult(coins: [SearchData]())
-                        //                        guard let error = error as? APIError else { return Single.just(data) }
-                        //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                        guard let error = error as? APIError else { return Single.just(data) }
+                        errorAlert.accept(error.localizedDescription)
                         return Single.just(data)
                     }
             }
@@ -46,7 +48,8 @@ final class SearchResultViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         return Output(searchList: searchList.asDriver(onErrorJustReturn: []),
-                      detailValue: input.cellTap.asDriver())
+                      detailValue: input.cellTap.asDriver(),
+                      errorAlert: errorAlert.asDriver(onErrorJustReturn: ""))
     }
 }
 
