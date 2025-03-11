@@ -55,6 +55,7 @@ final class DetailViewController: BaseViewController {
         ) as! DetailSectionHeaderView
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
+//        header.moreButton.rx.tap
         return header
     })
 
@@ -88,17 +89,17 @@ final class DetailViewController: BaseViewController {
         output.likeState
             .drive(with: self) { owner, value in
                 owner.likeButton.isSelected = value
-//                owner.toast(value, name.value)
             }
             .disposed(by: disposeBag)
         
         output.isButtonTap
             .withLatestFrom(output.likeState)
-            .debug("tap")
             .drive(with: self) { owner, value in
                 owner.toast(value, name.value)
             }
             .disposed(by: disposeBag)
+        
+        
     }
 
 }

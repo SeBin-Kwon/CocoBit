@@ -52,6 +52,7 @@ final class DetailViewModel: BaseViewModel {
                 if let item = RealmManager.findData(FavoriteTable.self, key: value.id) {
                     state.accept(true)
                 }
+                detailItem.accept(value)
             }
             .disposed(by: disposeBag)
         
