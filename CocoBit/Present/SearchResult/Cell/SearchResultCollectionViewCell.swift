@@ -8,6 +8,8 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
@@ -50,6 +52,8 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         return view
     }()
     
+    let likeButton = LikeButton()
+    
     func configureData(_ item: SearchData) {
         symbolLabel.text = item.symbol
         nameLabel.text = item.name
@@ -62,7 +66,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        addSubviews(imageView, symbolLabel, nameLabel, scoreBackgroundView, rankLabel)
+        addSubviews(imageView, symbolLabel, nameLabel, scoreBackgroundView, rankLabel, likeButton)
     }
     
     override func configureLayout() {
@@ -94,6 +98,11 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         
         rankLabel.snp.makeConstraints { make in
             make.center.equalTo(scoreBackgroundView)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(10)
         }
         
         DispatchQueue.main.async {

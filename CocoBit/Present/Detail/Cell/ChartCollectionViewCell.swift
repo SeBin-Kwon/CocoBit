@@ -72,7 +72,7 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
         }
         chart.snp.makeConstraints { make in
             make.top.equalTo(changeLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(-5)
+            make.horizontalEdges.equalToSuperview().inset(-10)
             make.height.equalToSuperview().inset(40)
         }
         updateLabel.snp.makeConstraints { make in
@@ -130,6 +130,7 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
 
     func entryData(values: [Double]) -> [ChartDataEntry] {
         var lineDataEntries: [ChartDataEntry] = []
+        
         for i in 0 ..< values.count {
             let lineDataEntry = ChartDataEntry(x: Double(i), y: values[i])
             lineDataEntries.append(lineDataEntry)
