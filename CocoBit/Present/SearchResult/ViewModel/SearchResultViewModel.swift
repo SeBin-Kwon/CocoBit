@@ -14,15 +14,17 @@ final class SearchResultViewModel: BaseViewModel {
     var disposeBag = DisposeBag()
     
     struct Input {
-        
+        let cellTap: ControlEvent<SearchData>
     }
     
     struct Output {
         let searchList: Driver<[SearchData]>
+        let detailValue: Driver<SearchData>
     }
     
     func transform(input: Input) -> Output {
         let searchList = PublishRelay<[SearchData]>()
+        let detailValue = PublishRelay<SearchData>()
         
         SearchState.shared.searchText
             .flatMapLatest { query in
@@ -39,7 +41,12 @@ final class SearchResultViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        return Output(searchList: searchList.asDriver(onErrorJustReturn: []))
+        input.cellTap
+            .bind(to: detailValue)
+            .disposed(by: disposeBag)
+        
+        return Output(searchList: searchList.asDriver(onErrorJustReturn: []),
+                      detailValue: input.cellTap.asDriver())
     }
 }
 

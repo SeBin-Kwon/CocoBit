@@ -15,7 +15,7 @@ final class SearchResultViewController: BaseViewController {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
     let viewModel = SearchResultViewModel()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
@@ -26,7 +26,9 @@ final class SearchResultViewController: BaseViewController {
     }
     
     private func bind() {
-        let input = SearchResultViewModel.Input()
+        let input = SearchResultViewModel.Input(
+            cellTap: collectionView.rx.modelSelected(SearchData.self)
+        )
         let output = viewModel.transform(input: input)
         
         output.searchList
@@ -62,8 +64,18 @@ final class SearchResultViewController: BaseViewController {
                 
             }
             .disposed(by: disposeBag)
+        
+        output.detailValue
+            .drive(with: self) { owner, value in
+                let vc = DetailViewController()
+                vc.viewModel.id.accept(value.id)
+                owner.view.endEditing(true)
+                owner.navigate(.push(vc))
+            }
+            .disposed(by: disposeBag)
+        
     }
-
+    
 }
 
 // MARK: CollectionView Layout
@@ -71,7 +83,7 @@ extension SearchResultViewController {
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/10))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0) // 아이템 간 간격
+        //        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0) // 아이템 간 간격
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
