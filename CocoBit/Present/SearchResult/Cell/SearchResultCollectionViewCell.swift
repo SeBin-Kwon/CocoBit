@@ -58,7 +58,6 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
     var item: SearchData?
     
-    private let viewModel = SearchResultCellViewModel()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -117,7 +116,6 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         
         guard let rank = item.rank else { return }
         rankLabel.text = "\(rank)"
-        viewModel.item = item
 //        bind(item)
     }
     
