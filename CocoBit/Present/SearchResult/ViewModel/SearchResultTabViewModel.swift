@@ -26,6 +26,10 @@ final class SearchResultTabViewModel: BaseViewModel {
         input.searchButtonTap
             .withLatestFrom(input.searchText)
             .bind(with: self) { owner, value in
+                LoadingIndicator.showLoading()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    LoadingIndicator.hideLoading()
+                }
                 guard let text = value?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
                 guard !text.isEmpty else { return }
                 SearchState.shared.searchText.accept(text)

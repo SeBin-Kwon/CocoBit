@@ -52,6 +52,11 @@ final class SearchViewModel: BaseViewModel {
         input.searchButtonTap
             .withLatestFrom(input.searchText)
             .bind(with: self) { owner, value in
+                LoadingIndicator.showLoading()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    LoadingIndicator.hideLoading()
+                }
+                
                 guard let text = value?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                     searchText.accept("")
                     return
@@ -61,7 +66,13 @@ final class SearchViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.coinCellTap
-            .bind(to: detailValue)
+            .bind {
+                LoadingIndicator.showLoading()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    LoadingIndicator.hideLoading()
+                }
+                detailValue.accept($0)
+            }
             .disposed(by: disposeBag)
         
         

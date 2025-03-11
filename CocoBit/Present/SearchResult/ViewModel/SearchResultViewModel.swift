@@ -44,7 +44,13 @@ final class SearchResultViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.cellTap
-            .bind(to: detailValue)
+            .bind {
+                LoadingIndicator.showLoading()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    LoadingIndicator.hideLoading()
+                }
+                detailValue.accept($0)
+            }
             .disposed(by: disposeBag)
         
         return Output(searchList: searchList.asDriver(onErrorJustReturn: []),
