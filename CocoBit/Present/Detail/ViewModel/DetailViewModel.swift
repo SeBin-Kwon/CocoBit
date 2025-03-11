@@ -58,6 +58,7 @@ final class DetailViewModel: BaseViewModel {
         var investmentList = [DetailSectionItem]()
         let stockHeader = "종목정보"
         let investmentHeader = "투자지표"
+        let changeResult = formatter.roundDecimal(data.change24h, isArrow: true)
         
         stockList.append(contentsOf:
                             [.stock(model:
@@ -80,7 +81,7 @@ final class DetailViewModel: BaseViewModel {
                                 ])
         chartList.append(contentsOf:
                             [.chart(model:
-                                        ChartItem(crrentPrice: String(data.crrentPrice), change24h: String(data.change24h), lastUpdated: data.lastUpdated, chartArray: data.sparklineIn7d.price))])
+                                        ChartItem(crrentPrice: String(data.crrentPrice), change24h: changeResult.str + "%", changeColor: changeResult.color, lastUpdated: data.lastUpdated, chartArray: data.sparklineIn7d.price))])
         
         return [.chartSection(data: chartList),
             .stockSection(header: stockHeader, data: stockList),

@@ -26,6 +26,7 @@ enum DetailSectionModel {
 struct ChartItem {
     let crrentPrice: String
     let change24h: String
+    let changeColor: DecimalState
     let lastUpdated: String
     let chartArray: [Double]
 }
@@ -79,11 +80,7 @@ final class DetailViewController: BaseViewController {
         switch item {
         case .chart(let item):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else { return UICollectionViewCell() }
-            cell.priceLabel.text = item.crrentPrice
-            cell.changeLabel.text = item.change24h
-            cell.updateLabel.text = item.lastUpdated
-            cell.priceData = item.chartArray
-            cell.backgroundColor = .cocoBitLightGray
+            cell.configureData(item)
             return cell
             
         case .stock(let item):
@@ -185,9 +182,9 @@ extension DetailViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/4))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.45))
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
