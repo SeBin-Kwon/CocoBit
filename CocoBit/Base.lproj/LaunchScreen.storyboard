@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,10 +15,43 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P6y-8c-4Rv">
+                                <rect key="frame" x="75.666666666666686" y="361.66666666666669" width="242" height="128.66666666666669"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="권세빈" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4n-Hc-9RY">
+                                        <rect key="frame" x="97.999999999999986" y="86" width="47.000000000000014" height="21.666666666666671"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <color key="textColor" name="CocoBitBlack"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COCOBIT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s39-vo-u6a">
+                                        <rect key="frame" x="26" y="21" width="190" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="40"/>
+                                        <color key="textColor" name="CocoBitRed"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="s39-vo-u6a" secondAttribute="trailing" constant="26" id="5fA-S7-DX7"/>
+                                    <constraint firstAttribute="trailing" secondItem="x4n-Hc-9RY" secondAttribute="trailing" constant="97" id="8eC-kv-h2X"/>
+                                    <constraint firstItem="x4n-Hc-9RY" firstAttribute="top" secondItem="s39-vo-u6a" secondAttribute="bottom" constant="17" id="Fpa-1k-ixV"/>
+                                    <constraint firstItem="x4n-Hc-9RY" firstAttribute="leading" secondItem="P6y-8c-4Rv" secondAttribute="leading" constant="98" id="GIC-1O-lbn"/>
+                                    <constraint firstItem="s39-vo-u6a" firstAttribute="leading" secondItem="P6y-8c-4Rv" secondAttribute="leading" constant="26" id="OYh-gO-awZ"/>
+                                    <constraint firstAttribute="bottom" secondItem="x4n-Hc-9RY" secondAttribute="bottom" constant="21" id="sz7-4U-f5C"/>
+                                    <constraint firstItem="s39-vo-u6a" firstAttribute="top" secondItem="P6y-8c-4Rv" secondAttribute="top" constant="21" id="vgu-AR-1oB"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="P6y-8c-4Rv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8Li-m4-cwe"/>
+                            <constraint firstItem="P6y-8c-4Rv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="W9r-G8-UhO"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -22,4 +59,15 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="CocoBitBlack">
+            <color red="0.20000000000000001" green="0.25490196078431371" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="CocoBitRed">
+            <color red="0.94117647058823528" green="0.26666666666666666" blue="0.32156862745098042" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
