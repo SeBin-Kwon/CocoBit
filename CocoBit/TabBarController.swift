@@ -26,7 +26,7 @@ final class TabBarController: UITabBarController {
         setViewControllers([exchangeNav, searchNav, emptyNav], animated: true)
         
         tabBar.tintColor = .cocoBitBlack
-        tabBar.unselectedItemTintColor = .lightGray
+        tabBar.unselectedItemTintColor = .cocoBitLightGray
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = .white
         tabBar.standardAppearance = appearance

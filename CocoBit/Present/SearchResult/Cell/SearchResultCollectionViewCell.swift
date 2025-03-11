@@ -158,9 +158,11 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(10)
         }
-        
-        DispatchQueue.main.async {
-            self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
-        }
+
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.layer.cornerRadius = imageView.frame.height / 2
     }
 }
