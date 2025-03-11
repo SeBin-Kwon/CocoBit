@@ -23,22 +23,23 @@ final class SearchViewModel: BaseViewModel {
         let sectionModel: Driver<[TrendingSectionModel]>
         let searchText: Driver<String>
         let detailValue: Driver<TrendingSectionItem>
+        let errorAlert: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let sectionModel = PublishRelay<[TrendingSectionModel]>()
         let searchText = PublishRelay<String>()
         let detailValue = PublishRelay<TrendingSectionItem>()
+        let errorAlert = PublishRelay<String>()
         
         Observable<Int>
             .timer(.microseconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
-            .debug("TrendingTimer")
             .flatMapLatest { _ in
                 NetworkManager.shared.fetchResults(api: EndPoint.trending, type: Trending.self)
                     .catch { error in
                         let data = Trending(coins: [TrendingCoin](), nfts: [TrendingNFTItem]())
-        //                        guard let error = error as? APIError else { return Single.just(data) }
-        //                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                            guard let error = error as? APIError else { return Single.just(data) }
+                            errorAlert.accept(error.localizedDescription)
                         return Single.just(data)
                     }
             }
@@ -66,7 +67,9 @@ final class SearchViewModel: BaseViewModel {
         
         return Output(sectionModel: sectionModel.asDriver(onErrorJustReturn: []),
                       searchText: searchText.asDriver(onErrorJustReturn: ""),
-                      detailValue: input.coinCellTap.asDriver())
+                      detailValue: input.coinCellTap.asDriver(),
+                      errorAlert: errorAlert.asDriver(onErrorJustReturn: "")
+        )
     }
     
     private func convertToSectionModel(_ data: Trending) -> [TrendingSectionModel] {

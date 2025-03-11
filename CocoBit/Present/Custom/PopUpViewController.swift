@@ -35,6 +35,12 @@ final class PopUpViewController: UIViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        popupView.retryButton.rx.tap
+            .bind(with: self) { owner, value in
+                    owner.navigate(.dismiss)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func configureView() {
