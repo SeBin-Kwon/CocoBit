@@ -86,7 +86,7 @@ class SearchResultTabViewController: TabmanViewController {
             searchButtonTap: searchTextField.rx.controlEvent(.editingDidEndOnExit),
             searchText: searchTextField.rx.text
         )
-        let output = viewModel.transform(input: input)
+        _ = viewModel.transform(input: input)
         
         SearchState.shared.searchText
             .bind(to:searchTextField.rx.text)

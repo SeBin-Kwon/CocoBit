@@ -51,7 +51,7 @@ final class DetailViewModel: BaseViewModel {
                 titleView.accept((value.image, symbol, value.name))
                 let result = owner.convertToSectionModel(value)
                 detailList.accept(result)
-                if let item = RealmManager.findData(FavoriteTable.self, key: value.id) {
+                if RealmManager.findData(FavoriteTable.self, key: value.id) != nil {
                     state.accept(true)
                 }
                 detailItem.accept(value)

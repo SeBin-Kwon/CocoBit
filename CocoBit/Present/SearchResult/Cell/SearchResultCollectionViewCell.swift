@@ -61,7 +61,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        guard let item else { return }
+        guard item != nil else { return }
         likeButton.isSelected = false
         disposeBag = DisposeBag()
         

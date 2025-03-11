@@ -46,7 +46,7 @@ final class PopUpViewController: UIViewController {
     private func configureView() {
         view.backgroundColor = .black.withAlphaComponent(0.3)
         popupView.backgroundColor = .white
-        if let isNetwork {
+        if isNetwork != nil {
             popupView.messageLabel.text = networkMessage
         } else {
             popupView.messageLabel.text = text
