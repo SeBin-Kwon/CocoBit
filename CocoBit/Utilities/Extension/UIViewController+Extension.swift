@@ -20,9 +20,9 @@ extension UIViewController {
     
     func toast(_ value: Bool, _ name: String) {
         if value {
-            view.makeToast("\(name)(이/가) 즐겨찾기되었습니다.")
+            view.makeToast("\(name)(이/가) 즐겨찾기되었습니다.", position: .top)
         } else {
-            view.makeToast("\(name)(이/가) 즐겨찾기에서 제거되었습니다.")
+            view.makeToast("\(name)(이/가) 즐겨찾기에서 제거되었습니다.", position: .top)
         }
     }
 }
