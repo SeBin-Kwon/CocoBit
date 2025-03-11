@@ -68,9 +68,11 @@ final class SearchViewController: BaseViewController {
         
         output.searchText
             .drive(with: self) { owner, value in
+                let currentText = owner.searchView.searchBar.text ?? ""
+                guard !currentText.isEmpty else { return }
                 if !value.isEmpty {
                     let vc = SearchResultTabViewController()
-                    SearchState.shared.searchText.accept(value) // 검색
+                    SearchState.shared.searchText.accept(currentText)
                     owner.navigate(.push(vc))
                 }
                 owner.view.endEditing(true)
