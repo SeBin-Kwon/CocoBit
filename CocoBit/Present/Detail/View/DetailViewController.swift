@@ -11,69 +11,14 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-enum DetailSectionItem {
-    case chart(model: ChartItem)
-    case stock(model: StockItem)
-    case investment(model: InvestmentItem)
-}
-
-enum DetailSectionModel {
-    case chartSection(data: [DetailSectionItem])
-    case stockSection(header: String, data: [DetailSectionItem])
-    case investmentSection(header: String, data: [DetailSectionItem])
-}
-
-struct ChartItem {
-    let crrentPrice: String
-    let change24h: String
-    let changeColor: DecimalState
-    let lastUpdated: String
-    let chartArray: [Double]
-}
-
-struct StockItem {
-    let title: String
-    let value: String
-    let date: String
-}
-
-struct InvestmentItem {
-    let title: String
-    let value: String
-}
-
-extension DetailSectionModel: SectionModelType {
-    typealias Item = DetailSectionItem
-    
-    var header: String {
-        switch self {
-        case .stockSection(let header, _): header
-        case .investmentSection(let header, _): header
-        default: ""
-        }
-    }
-    
-    var items: [DetailSectionItem] {
-        switch self {
-        case .chartSection(let items): items
-        case .stockSection(_, let items): items
-        case .investmentSection(_, let items): items
-        }
-    }
-    
-    init(original: Self, items: [Self.Item]) {
-        self = original
-    }
-}
-
-
 final class DetailViewController: BaseViewController {
     
     lazy var viewModel = DetailViewModel()
+    private let titleView = DetailTitleView()
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
-    private let titleView = DetailTitleView()
+    private let likeButton = LikeButton()
     
     private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
@@ -131,6 +76,23 @@ final class DetailViewController: BaseViewController {
         output.titleView
             .drive(with: self) { owner, value in
                 owner.titleView.configureData(value)
+            }
+            .disposed(by: disposeBag)
+        
+        likeButton.rx.tap
+            .bind(with: self) { owner, btn in
+                owner.likeButton.isSelected.toggle()
+                print(owner.likeButton.isSelected)
+//                switch owner.likeBtn.isSelected {
+//                case true:
+//                    guard let item = owner.item else { return }
+//                    let data = MarketTable(link: item.link, image: item.image, mallName: item.mallName, title: item.title, price: item.price, id: item.id, likeState: owner.likeBtn.isSelected)
+//                    RealmManager.add(data)
+//                case false:
+//                    guard let id = owner.id else { return }
+//                    guard let likeItem = RealmManager.findData(MarketTable.self, key: id) else { return }
+//                    RealmManager.delete(likeItem)
+//                }
             }
             .disposed(by: disposeBag)
     }
@@ -254,6 +216,7 @@ extension DetailViewController {
     private func configureHierarchy() {
         view.addSubviews(collectionView)
         navigationItem.titleView = titleView
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
     }
     
     private func configureLayout() {

@@ -13,6 +13,8 @@ import RxCocoa
 
 class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
+    var disposeBag = DisposeBag()
+    
     let imageView = {
         let image = UIImageView()
         image.backgroundColor = .cocoBitLightGray
@@ -54,6 +56,30 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
     let likeButton = LikeButton()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        likeButton.isSelected = false
+    }
+    
+    private func bind() {
+        likeButton.rx.tap
+            .bind(with: self) { owner, btn in
+                owner.likeButton.isSelected.toggle()
+                print(owner.likeButton.isSelected)
+//                switch owner.likeBtn.isSelected {
+//                case true:
+//                    guard let item = owner.item else { return }
+//                    let data = MarketTable(link: item.link, image: item.image, mallName: item.mallName, title: item.title, price: item.price, id: item.id, likeState: owner.likeBtn.isSelected)
+//                    RealmManager.add(data)
+//                case false:
+//                    guard let id = owner.id else { return }
+//                    guard let likeItem = RealmManager.findData(MarketTable.self, key: id) else { return }
+//                    RealmManager.delete(likeItem)
+//                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
     func configureData(_ item: SearchData) {
         symbolLabel.text = item.symbol
         nameLabel.text = item.name
@@ -63,6 +89,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         
         guard let rank = item.rank else { return }
         rankLabel.text = "\(rank)"
+        bind()
     }
     
     override func configureHierarchy() {
