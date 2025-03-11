@@ -50,9 +50,6 @@ final class SearchResultViewController: BaseViewController {
         let input = SearchResultViewModel.Input()
         let output = viewModel.transform(input: input)
         
-        
-        let sections = Observable.just(["1", "2", "3", "5"])
-        
         output.searchList
             .drive(collectionView.rx.items(cellIdentifier: SearchResultCollectionViewCell.identifier, cellType: SearchResultCollectionViewCell.self)) { item, element, cell in
                 cell.configureData(element)
