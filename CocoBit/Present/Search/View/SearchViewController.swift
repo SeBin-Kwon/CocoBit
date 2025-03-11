@@ -159,7 +159,7 @@ extension SearchViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
         
         let section = NSCollectionLayoutSection(group: group)
-//        section.interGroupSpacing = 20 // 그룹간 간격
+
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
 
         return section
@@ -170,15 +170,14 @@ extension SearchViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 3, bottom: 0, trailing: 3) // 아이템 간 간격
+
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.1), heightDimension: .absolute(125))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        //        section.interGroupSpacing = 20 // 그룹간 간격
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
+
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
         section.orthogonalScrollingBehavior = .continuous
         

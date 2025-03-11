@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ExchangeTableViewCell: BaseTableViewCell {
+final class ExchangeTableViewCell: BaseTableViewCell {
     
     let coinLabel = {
         let label = UILabel()

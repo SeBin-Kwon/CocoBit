@@ -16,7 +16,7 @@ final class DetailSectionHeaderView: UICollectionReusableView {
         String(describing: self)
     }
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     let titleLabel: UILabel = {
         let label = UILabel()

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class NFTCollectionViewCell: BaseCollectionViewCell {
+final class NFTCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()

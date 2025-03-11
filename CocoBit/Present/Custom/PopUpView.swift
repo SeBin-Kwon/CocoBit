@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PopUpView: BaseView {
+final class PopUpView: BaseView {
     
     let titleLabel = {
         let label = UILabel()

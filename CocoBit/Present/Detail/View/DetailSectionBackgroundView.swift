@@ -25,9 +25,6 @@ final class DetailSectionBackgroundView: UICollectionReusableView {
         backgroundColor = .clear
         addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in
-//            make.top.equalToSuperview().inset(40)
-//            make.horizontalEdges.equalToSuperview().inset(20)
-//            make.bottom.equalToSuperview()
             make.edges.equalToSuperview()
         }
     }

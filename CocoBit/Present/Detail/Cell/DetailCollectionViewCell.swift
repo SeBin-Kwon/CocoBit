@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class DetailCollectionViewCell: BaseCollectionViewCell {
+final class DetailCollectionViewCell: BaseCollectionViewCell {
     
     let nameLabel = {
         let label = UILabel()

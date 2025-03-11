@@ -12,7 +12,7 @@ import RxCocoa
 final class ExchangeViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
-    let errorAlert = PublishRelay<String>()
+    private let errorAlert = PublishRelay<String>()
     
     struct Input {
         let tradeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)

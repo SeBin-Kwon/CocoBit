@@ -12,7 +12,7 @@ import RxCocoa
 
 final class ExchangeViewController: BaseViewController {
     
-    let tableView = {
+    private let tableView = {
        let view = UITableView()
         view.register(ExchangeTableViewCell.self, forCellReuseIdentifier: ExchangeTableViewCell.identifier)
         view.backgroundColor = .cocoBitLightGray
@@ -21,8 +21,8 @@ final class ExchangeViewController: BaseViewController {
         return view
     }()
     
-    let headerView = ExchangeTableHeaderView()
-    let viewModel = ExchangeViewModel()
+    private let headerView = ExchangeTableHeaderView()
+    private let viewModel = ExchangeViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()

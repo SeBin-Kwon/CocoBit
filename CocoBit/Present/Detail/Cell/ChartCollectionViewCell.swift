@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import DGCharts
 
-class ChartCollectionViewCell: BaseCollectionViewCell {
+final class ChartCollectionViewCell: BaseCollectionViewCell {
     let priceLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25, weight: .bold)
@@ -33,7 +33,7 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let chart = LineChartView()
+    private let chart = LineChartView()
     
     func configureData(_ item: ChartItem) {
         priceLabel.text = item.crrentPrice
@@ -86,12 +86,12 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
 
 // MARK: Chart
 extension ChartCollectionViewCell {
-    func configureChart() {
+    private func configureChart() {
         chart.noDataText = "출력 데이터가 없습니다."
         chart.noDataFont = .systemFont(ofSize: 14)
         chart.noDataTextColor = .lightGray
         chart.backgroundColor = .white
-
+        
         chart.drawGridBackgroundEnabled = false
         chart.chartDescription.enabled = false
         
@@ -110,11 +110,11 @@ extension ChartCollectionViewCell {
         chart.animate(xAxisDuration: 0.5)
     }
     
-    func setLineData(lineChartView: LineChartView, lineChartDataEntries: [ChartDataEntry]) {
+    private func setLineData(lineChartView: LineChartView, lineChartDataEntries: [ChartDataEntry]) {
         guard !lineChartDataEntries.isEmpty else {
-                lineChartView.data = nil
-                return
-            }
+            lineChartView.data = nil
+            return
+        }
         
         let lineChartdataSet = LineChartDataSet(entries: lineChartDataEntries, label: "")
         
@@ -130,15 +130,15 @@ extension ChartCollectionViewCell {
         let fillColors = [UIColor.white.cgColor, UIColor.cocoBitBlue.cgColor]
         let locations:[CGFloat] = [0.0, 1.0]
         let colorspace = CGColorSpaceCreateDeviceRGB()
-                    
+        
         let gradient = CGGradient(colorsSpace: colorspace, colors: fillColors as CFArray, locations: locations)!
         lineChartdataSet.fill = LinearGradientFill(gradient: gradient, angle: 90)
         
         let lineChartData = LineChartData(dataSet: lineChartdataSet)
         lineChartView.data = lineChartData
     }
-
-    func entryData(values: [Double]) -> [ChartDataEntry] {
+    
+    private func entryData(values: [Double]) -> [ChartDataEntry] {
         var lineDataEntries: [ChartDataEntry] = []
         
         for i in 0 ..< values.count {

@@ -11,7 +11,7 @@ import RxCocoa
 import Tabman
 import Pageboy
 
-class SearchResultTabViewController: TabmanViewController {
+final class SearchResultTabViewController: TabmanViewController {
     
     private let disposeBag = DisposeBag()
     
