@@ -57,10 +57,8 @@ final class NetworkManager {
                     case .success(let result):
                         value(.success(result))
                     case .failure(let error):
-                        print(error)
                         guard let code = error.responseCode else { return }
                         let apiError = APIError(rawValue: code) ?? APIError.server
-                        print(error.localizedDescription)
                         value(.failure(apiError))
                     }
                 }

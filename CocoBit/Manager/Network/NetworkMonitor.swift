@@ -20,18 +20,18 @@ final class NetworkMonitor {
     
     public private(set) var isPopUp = BehaviorRelay(value: false)
     
-    enum ConnectionType{
+    enum ConnectionType {
         case wifi
         case cellular
         case ethernet
         case unknown
     }
     
-    private init(){
+    private init() {
         monitor = NWPathMonitor()
     }
     
-    public func startMonitoring(){
+    public func startMonitoring() {
         monitor.start(queue: queue)
         monitor.pathUpdateHandler = { [weak self] path in
             
@@ -39,26 +39,24 @@ final class NetworkMonitor {
             self?.getConnectionType(path)
             
             if self?.isConnected == true {
-                print("네트워크연결됨")
                 self?.isPopUp.accept(true)
             } else {
-                print("네트워크 연결 오류")
                 self?.isPopUp.accept(false)
             }
             
         }
     }
     
-    public func stopMonitoring(){
+    public func stopMonitoring() {
         monitor.cancel()
     }
     
-    private func getConnectionType(_ path: NWPath){
-        if path.usesInterfaceType(.wifi){
+    private func getConnectionType(_ path: NWPath) {
+        if path.usesInterfaceType(.wifi) {
             connectionType = .wifi
-        } else if path.usesInterfaceType(.cellular){
+        } else if path.usesInterfaceType(.cellular) {
             connectionType = .cellular
-        } else if path.usesInterfaceType(.wiredEthernet){
+        } else if path.usesInterfaceType(.wiredEthernet) {
             connectionType = .ethernet
         } else {
             connectionType = .unknown

@@ -35,7 +35,6 @@ final class DetailViewModel: BaseViewModel {
         let errorAlert = PublishRelay<String>()
         
         id
-            .debug("Detail ID")
             .flatMapLatest { id in
                 NetworkManager.shared.fetchResults(api: .detail(currency: .KRW, id: id), type: [DetailData].self)
                     .catch { error in

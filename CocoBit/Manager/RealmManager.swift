@@ -83,10 +83,9 @@ enum RealmManager {
         do {
             try realm.write {
                 realm.add(item, update: .modified)
-                print("렘 저장 완료")
             }
         } catch let error {
-            print("렘에서 저장이 실패한 경우", error)
+            print(error)
         }
     }
     
@@ -94,10 +93,9 @@ enum RealmManager {
         do {
             try realm.write {
                 realm.delete(item)
-                print("렘 삭제 완료")
             }
         } catch let error {
-            print("렘 데이터 삭제 실패", error)
+            print(error)
         }
     }
 

@@ -43,7 +43,6 @@ final class ExchangeViewModel: BaseViewModel {
             .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
         
         Observable.combineLatest(timer, currentSortType)
-            .debug("ExchangeTimer")
             .withUnretained(self)
             .flatMapLatest { owner, _ in
                 owner.callRequest()
@@ -58,7 +57,6 @@ final class ExchangeViewModel: BaseViewModel {
         
         input.tradeButtonTap.tap
             .withLatestFrom(timer)
-            .debug("tradeButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.trade)
                 let newState = owner.changeState(input.tradeButtonTap.state.value)
@@ -71,7 +69,6 @@ final class ExchangeViewModel: BaseViewModel {
 
         input.changeButtonTap.tap
             .withLatestFrom(timer)
-            .debug("changeButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.change)
                 let newState = owner.changeState(input.changeButtonTap.state.value)
@@ -84,7 +81,6 @@ final class ExchangeViewModel: BaseViewModel {
         
         input.priceButtonTap.tap
             .withLatestFrom(timer)
-            .debug("priceButtonTap")
             .bind(with: self) { owner, _ in
                 currentSortType.accept(.price)
                 let newState = owner.changeState(input.priceButtonTap.state.value)
