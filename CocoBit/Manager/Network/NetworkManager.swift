@@ -13,7 +13,7 @@ enum APIError: Int, Error {
     case badRequest = 400
     case unauthorized = 401
     case forbidden = 403
-    case notFound = 404
+    case tooManyRequests = 429
     case server = 500
 }
 
@@ -24,7 +24,7 @@ extension APIError: LocalizedError {
         case .badRequest: return "잘못된 요청"
         case .unauthorized: return "인증 실패"
         case .forbidden: return "금지됨"
-        case .notFound: return "찾을 수 없음"
+        case .tooManyRequests: return "과호출"
         case .server: return "시스템 에러"
         }
     }
@@ -33,8 +33,8 @@ extension APIError: LocalizedError {
         switch self {
         case .badRequest: return "잘못된 매개변수입니다."
         case .unauthorized: return "서비스에 액세스할 수 있는 권한이 없습니다."
-        case .forbidden: return "검색 API 권한이 없습니다."
-        case .notFound: return "요청하신 리소스를 찾을 수 없습니다."
+        case .forbidden: return "귀하의 엑세스가 차단되어 요청을 승인할 수 없습니다."
+        case .tooManyRequests: return "API 요금 한도에 도달하였습니다.\n서비스 플랜을 확장해 주세요."
         case .server: return "서버 내부에 오류가 발생했습니다.\n개발자 포럼에 오류를 신고해 주십시오."
         }
     }
@@ -52,7 +52,8 @@ final class NetworkManager {
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let result):
-                        value(.success(result))
+                        value(.failure(APIError(rawValue: 429)!))
+//                        value(.success(result))
                     case .failure(let error):
                         print(error)
                         guard let code = error.responseCode else { return }
