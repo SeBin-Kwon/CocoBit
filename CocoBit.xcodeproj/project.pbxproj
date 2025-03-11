@@ -19,6 +19,7 @@
 		AE9F497D2D7C2818008E13E4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F497C2D7C2818008E13E4 /* RxDataSources */; };
 		AE9F4D162D7E03AC008E13E4 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = AE9F4D152D7E03AC008E13E4 /* Tabman */; };
 		AECFF20E2D7F68B700F8D038 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = AECFF20D2D7F68B700F8D038 /* DGCharts */; };
+		AECFF3132D8005A200F8D038 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = AECFF3122D8005A200F8D038 /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AECFF3132D8005A200F8D038 /* Toast in Frameworks */,
 				AE9F497B2D7C2818008E13E4 /* Differentiator in Frameworks */,
 				AE9CF2F92D79826100FD5075 /* Kingfisher in Frameworks */,
 				AECFF20E2D7F68B700F8D038 /* DGCharts in Frameworks */,
@@ -130,6 +132,7 @@
 				AE9F497C2D7C2818008E13E4 /* RxDataSources */,
 				AE9F4D152D7E03AC008E13E4 /* Tabman */,
 				AECFF20D2D7F68B700F8D038 /* DGCharts */,
+				AECFF3122D8005A200F8D038 /* Toast */,
 			);
 			productName = CocoBit;
 			productReference = AE9CF2562D797D0500FD5075 /* CocoBit.app */;
@@ -168,6 +171,7 @@
 				AE9F49792D7C2818008E13E4 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				AE9F4D142D7E03AC008E13E4 /* XCRemoteSwiftPackageReference "Tabman" */,
 				AECFF20C2D7F68B700F8D038 /* XCRemoteSwiftPackageReference "Charts" */,
+				AECFF3112D8005A200F8D038 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AE9CF2572D797D0500FD5075 /* Products */;
@@ -474,6 +478,14 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		AECFF3112D8005A200F8D038 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -526,6 +538,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AECFF20C2D7F68B700F8D038 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
+		};
+		AECFF3122D8005A200F8D038 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AECFF3112D8005A200F8D038 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
