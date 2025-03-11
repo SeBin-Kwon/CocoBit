@@ -79,10 +79,10 @@ final class DetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        likeButton.rx.tap
-            .bind(with: self) { owner, btn in
-                owner.likeButton.isSelected.toggle()
-                print(owner.likeButton.isSelected)
+//        likeButton.rx.tap
+//            .bind(with: self) { owner, btn in
+//                owner.likeButton.isSelected.toggle()
+//                print(owner.likeButton.isSelected)
 //                switch owner.likeBtn.isSelected {
 //                case true:
 //                    guard let item = owner.item else { return }
@@ -93,8 +93,8 @@ final class DetailViewController: BaseViewController {
 //                    guard let likeItem = RealmManager.findData(MarketTable.self, key: id) else { return }
 //                    RealmManager.delete(likeItem)
 //                }
-            }
-            .disposed(by: disposeBag)
+//            }
+//            .disposed(by: disposeBag)
     }
 
 }

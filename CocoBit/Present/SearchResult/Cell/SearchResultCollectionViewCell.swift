@@ -56,25 +56,57 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
     
     let likeButton = LikeButton()
     
+    var item: SearchData?
+    
     private let viewModel = SearchResultCellViewModel()
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        guard let item else { return }
         likeButton.isSelected = false
+        disposeBag = DisposeBag()
+        
     }
     
-    private func bind() {
-        let input = SearchResultCellViewModel.Input(
-            likeButtonTap: likeButton.rx.tap,
-            likeState: likeButton.rx.isSelected
-        )
-        let output = viewModel.transform(input: input)
+//    private func bind(_ item: SearchData) {
+//        let input = SearchResultCellViewModel.Input(
+//            likeButtonTap: likeButton.rx.tap,
+//            likeState: likeButton.rx.isSelected
+//        )
+//        let output = viewModel.transform(input: input)
+//        
+//        output.likeState
+//            .drive(likeButton.rx.isSelected)
+//            .disposed(by: disposeBag)
         
-        output.likeState
-            .drive(likeButton.rx.isSelected)
-            .disposed(by: disposeBag)
+//        likeButton.rx.tap
+//            .bind(with: self) { owner, state in
+//                owner.likeButton.isSelected.toggle()
+//                guard let item = owner.item else { return }
+//                switch owner.likeButton.isSelected {
+//                case true:
+//                    let data = FavoriteTable(id: item.id, name: item.name, symbol: item.symbol, image: item.thumb)
+//                    RealmManager.add(data)
+//                case false:
+//                    guard let likeItem = RealmManager.findData(FavoriteTable.self, key: item.id) else { return }
+//                    RealmManager.delete(likeItem)
+//                }
+//            }
+//            .disposed(by: disposeBag)
+        
+//        RealmManager.$favoriteTable
+//            .bind(with: self) { owner, value in
+//                guard let item = owner.item else { return }
+//                if let _ = RealmManager.findData(FavoriteTable.self, key: item.id) {
+//                    owner.likeButton.isSelected = true
+//                } else {
+//                    owner.likeButton.isSelected = false
+//                }
+//            }
+//            .disposed(by: disposeBag)
+        
             
-    }
+//    }
     
     func configureData(_ item: SearchData) {
         symbolLabel.text = item.symbol
@@ -86,7 +118,7 @@ class SearchResultCollectionViewCell: BaseCollectionViewCell {
         guard let rank = item.rank else { return }
         rankLabel.text = "\(rank)"
         viewModel.item = item
-        bind()
+//        bind(item)
     }
     
     override func configureHierarchy() {

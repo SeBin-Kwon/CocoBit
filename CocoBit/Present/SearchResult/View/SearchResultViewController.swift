@@ -9,28 +9,10 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-//import RxDataSources
 
 final class SearchResultViewController: BaseViewController {
     
-//    private let searchText: String
-    
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-    
-//    private let dataSource = RxCollectionViewSectionedReloadDataSource<TrendingSectionModel> { dataSource, collectionView, indexPath, item in
-//
-//        switch item {
-//        case .coin(let item):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCollectionViewCell.identifier, for: indexPath) as? SearchResultCollectionViewCell else { return UICollectionViewCell() }
-////            cell.configureData(item)
-//
-//            return cell
-//            
-//        case .nft(let item):
-//            return UICollectionViewCell()
-//        }
-//        
-//    }
     
     let viewModel = SearchResultViewModel()
 
@@ -41,10 +23,7 @@ final class SearchResultViewController: BaseViewController {
         bind()
         
         collectionView.register(SearchResultCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultCollectionViewCell.identifier)
-
     }
-    
-    
     
     private func bind() {
         let input = SearchResultViewModel.Input()
@@ -53,11 +32,36 @@ final class SearchResultViewController: BaseViewController {
         output.searchList
             .drive(collectionView.rx.items(cellIdentifier: SearchResultCollectionViewCell.identifier, cellType: SearchResultCollectionViewCell.self)) { item, element, cell in
                 cell.configureData(element)
+                cell.item = element
+                
+                cell.likeButton.rx.tap
+                    .bind(with: self) { owner, state in
+                        cell.likeButton.isSelected.toggle()
+                        let item = element
+                        switch cell.likeButton.isSelected {
+                        case true:
+                            let data = FavoriteTable(id: item.id, name: item.name, symbol: item.symbol, image: item.thumb)
+                            RealmManager.add(data)
+                        case false:
+                            guard let likeItem = RealmManager.findData(FavoriteTable.self, key: item.id) else { return }
+                            RealmManager.delete(likeItem)
+                        }
+                    }
+                    .disposed(by: cell.disposeBag)
+                
+                RealmManager.$favoriteTable
+                    .bind(with: self) { owner, value in
+                        let item = element
+                        if let _ = RealmManager.findData(FavoriteTable.self, key: item.id) {
+                            cell.likeButton.isSelected = true
+                        } else {
+                            cell.likeButton.isSelected = false
+                        }
+                    }
+                    .disposed(by: cell.disposeBag)
+                
             }
             .disposed(by: disposeBag)
-        
-        
-        
     }
 
 }
