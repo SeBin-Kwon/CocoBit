@@ -76,7 +76,7 @@ class ChartCollectionViewCell: BaseCollectionViewCell {
             make.height.equalToSuperview().inset(40)
         }
         updateLabel.snp.makeConstraints { make in
-            make.top.equalTo(chart.snp.bottom).offset(5)
+            make.top.equalTo(chart.snp.bottom)
             make.leading.equalToSuperview()
         }
     }

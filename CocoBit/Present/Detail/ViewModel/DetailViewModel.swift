@@ -16,20 +16,21 @@ final class DetailViewModel: BaseViewModel {
     
     struct Input {
         let likeButtonTap: ControlEvent<Void>
-
     }
     
     struct Output {
-        let titleView: Driver<(String, String)>
+        let titleView: Driver<(String, String,String)>
         let detailList: Driver<[DetailSectionModel]>
         let likeState: Driver<Bool>
+        let isButtonTap: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let detailList = PublishRelay<[DetailSectionModel]>()
         let detailItem = BehaviorRelay<DetailData?>(value: nil)
-        let titleView = PublishRelay<(String, String)>()
+        let titleView = PublishRelay<(String, String,String)>()
         let state = BehaviorRelay(value: false)
+        let isButtonTap = BehaviorRelay(value: false)
         
         id
             .debug("Detail ID")
@@ -44,8 +45,8 @@ final class DetailViewModel: BaseViewModel {
             }
             .bind(with: self) { owner, value in
                 guard let value = value.first else { return }
-                titleView.accept((value.image, value.symbol))
-                detailItem.accept(value)
+                let symbol = value.symbol.uppercased()
+                titleView.accept((value.image, symbol, value.name))
                 let result = owner.convertToSectionModel(value)
                 detailList.accept(result)
                 if let item = RealmManager.findData(FavoriteTable.self, key: value.id) {
@@ -67,13 +68,15 @@ final class DetailViewModel: BaseViewModel {
                     guard let likeItem = RealmManager.findData(FavoriteTable.self, key: item.id) else { return }
                     RealmManager.delete(likeItem)
                 }
+                isButtonTap.accept(true)
             }
             .disposed(by: disposeBag)
         
         
-        return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","")),
+        return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","","")),
                       detailList: detailList.asDriver(onErrorJustReturn: []),
-                      likeState: state.asDriver())
+                      likeState: state.asDriver(),
+                      isButtonTap: isButtonTap.asDriver())
     }
     
     private func convertToSectionModel(_ data: DetailData) -> [DetailSectionModel] {
@@ -88,26 +91,31 @@ final class DetailViewModel: BaseViewModel {
         
         stockList.append(contentsOf:
                             [.stock(model:
-                                        StockItem(title: "24시간 고가", value: String(data.high24h), date: "")),
+                                        StockItem(title: "24시간 고가", value: formatter.detailPriceFormatted(data.high24h), date: "")),
                              .stock(model:
-                                        StockItem(title: "24시간 저가", value: String(data.low24h), date: "")),
+                                        StockItem(title: "24시간 저가", value: formatter.detailPriceFormatted(data.low24h), date: "")),
                              .stock(model:
-                                        StockItem(title: "역대 최고가", value: String(data.ath), date: data.athDate)),
+                                        StockItem(title: "역대 최고가", value: formatter.detailPriceFormatted(data.ath), date: formatter.detailDateFormatted(data.athDate))),
                              .stock(model:
-                                        StockItem(title: "역대 최저가", value: String(data.atl), date: data.atlDate))
+                                        StockItem(title: "역대 최저가", value: formatter.detailPriceFormatted(data.atl), date: formatter.detailDateFormatted(data.atlDate)))
                             ])
         
         investmentList.append(contentsOf:
                                 [.investment(model:
-                                                InvestmentItem(title: "시가총액", value: String(data.marketCap))),
+                                                InvestmentItem(title: "시가총액", value: formatter.detailPriceFormatted(data.marketCap))),
                                  .investment(model:
-                                                InvestmentItem(title: "완전 희석 가치(FDV)", value: String(data.fullyValuation))),
+                                                InvestmentItem(title: "완전 희석 가치(FDV)", value: formatter.detailPriceFormatted(data.fullyValuation))),
                                  .investment(model:
-                                                InvestmentItem(title: "총 거래량", value: String(data.totalVolum)))
+                                                InvestmentItem(title: "총 거래량", value: formatter.detailPriceFormatted(data.totalVolum)))
                                 ])
         chartList.append(contentsOf:
                             [.chart(model:
-                                        ChartItem(crrentPrice: String(data.crrentPrice), change24h: changeResult.str + "%", changeColor: changeResult.color, lastUpdated: data.lastUpdated, chartArray: data.sparklineIn7d.price))])
+                                        ChartItem(
+                                            crrentPrice: formatter.detailPriceFormatted(data.crrentPrice),
+                                            change24h: changeResult.str + "%",
+                                            changeColor: changeResult.color,
+                                            lastUpdated: formatter.detailUpdateFormatted(data.lastUpdated),
+                                            chartArray: data.sparklineIn7d.price))])
         
         return [.chartSection(data: chartList),
             .stockSection(header: stockHeader, data: stockList),

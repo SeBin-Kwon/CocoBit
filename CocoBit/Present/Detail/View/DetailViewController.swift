@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Toast
 
 final class DetailViewController: BaseViewController {
     
@@ -66,6 +67,8 @@ final class DetailViewController: BaseViewController {
     }
     
     private func bind() {
+        let name = BehaviorRelay(value: "")
+        
         let input = DetailViewModel.Input(
             likeButtonTap: likeButton.rx.tap
         )
@@ -77,12 +80,24 @@ final class DetailViewController: BaseViewController {
         
         output.titleView
             .drive(with: self) { owner, value in
-                owner.titleView.configureData(value)
+                owner.titleView.configureData((value.0, value.1))
+                name.accept(value.2)
             }
             .disposed(by: disposeBag)
         
         output.likeState
-            .drive(likeButton.rx.isSelected)
+            .drive(with: self) { owner, value in
+                owner.likeButton.isSelected = value
+//                owner.toast(value, name.value)
+            }
+            .disposed(by: disposeBag)
+        
+        output.isButtonTap
+            .withLatestFrom(output.likeState)
+            .debug("tap")
+            .drive(with: self) { owner, value in
+                owner.toast(value, name.value)
+            }
             .disposed(by: disposeBag)
     }
 
