@@ -12,7 +12,6 @@ final class DetailTitleView: BaseView {
     
     let imageView = {
         let image = UIImageView()
-        image.backgroundColor = .cocoBitLightGray
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         return image
