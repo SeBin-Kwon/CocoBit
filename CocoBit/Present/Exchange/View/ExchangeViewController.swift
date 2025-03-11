@@ -72,7 +72,15 @@ final class ExchangeViewController: BaseViewController {
                 priceSortState.accept(value)
             }
             .disposed(by: disposeBag)
-
+        
+        output.errorAlert
+            .drive(with: self) { owner, value in
+                let vc = PopUpViewController()
+                vc.text = value[1]
+                vc.modalPresentationStyle = .overFullScreen
+                owner.navigate(.present(vc))
+            }
+            .disposed(by: disposeBag)
     }
 }
 

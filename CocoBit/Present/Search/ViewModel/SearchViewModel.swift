@@ -91,7 +91,7 @@ final class SearchViewModel: BaseViewModel {
                 )
             )
         }
-        coinList.removeLast()
+        coinList.popLast()
         
         data.nfts.forEach {
             let changeResult = formatter.roundDecimal($0.change, isArrow: true)

@@ -19,11 +19,9 @@ final class SearchResultTabViewModel: BaseViewModel {
     }
     
     struct Output {
-        
     }
     
     func transform(input: Input) -> Output {
-        
         
         input.searchButtonTap
             .withLatestFrom(input.searchText)

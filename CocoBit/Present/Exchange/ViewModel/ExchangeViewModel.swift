@@ -12,6 +12,7 @@ import RxCocoa
 final class ExchangeViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
+    let errorAlert = PublishRelay<[String]>()
     
     struct Input {
         let tradeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
@@ -24,6 +25,7 @@ final class ExchangeViewModel: BaseViewModel {
         let tradeSorted: Driver<Bool?>
         let changeSorted: Driver<Bool?>
         let priceSorted: Driver<Bool?>
+        let errorAlert: Driver<[String]>
     }
     
     func transform(input: Input) -> Output {
@@ -34,6 +36,8 @@ final class ExchangeViewModel: BaseViewModel {
         
         let currentSortType = BehaviorRelay(value: SortType.price)
         let currentSortState = BehaviorRelay<Bool?>(value: nil)
+        
+        
         
         let timer = Observable<Int>
             .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
@@ -96,19 +100,18 @@ final class ExchangeViewModel: BaseViewModel {
             marketList: marketList.asDriver(onErrorJustReturn: []),
             tradeSorted: tradeSorted.asDriver(onErrorJustReturn: nil),
             changeSorted: changeSorted.asDriver(onErrorJustReturn: nil),
-            priceSorted: priceSorted.asDriver(onErrorJustReturn: nil)
+            priceSorted: priceSorted.asDriver(onErrorJustReturn: nil),
+            errorAlert: errorAlert.asDriver(onErrorJustReturn: [])
         )
     }
     
-    
-    
-    
+
     private func callRequest() -> Single<[MarketData]> {
         NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
-            .catch { error in
+            .catch { [weak self] error in
                 let data = [MarketData]()
-//                        guard let error = error as? APIError else { return Single.just(data) }
-//                        self?.errorAlert.accept([String(error.rawValue), error.title, error.localizedDescription])
+                        guard let error = error as? APIError else { return Single.just(data) }
+                        self?.errorAlert.accept([error.title, error.localizedDescription])
                 return Single.just(data)
             }
     }

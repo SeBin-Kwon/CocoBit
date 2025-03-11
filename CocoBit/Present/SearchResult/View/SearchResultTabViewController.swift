@@ -49,7 +49,6 @@ class SearchResultTabViewController: TabmanViewController {
         bar.layout.transitionStyle = .snap
         bar.layout.alignment = .centerDistributed
         bar.layout.contentMode = .fit
-        //        bar.layout.interButtonSpacing = view.bounds.width / 6
         
         bar.backgroundView.style = .clear
         bar.backgroundColor = .white
@@ -75,7 +74,6 @@ class SearchResultTabViewController: TabmanViewController {
         bar.indicator.weight = .custom(value: 2)
         bar.indicator.overscrollBehavior = .bounce
         bar.indicator.tintColor = .cocoBitBlack
-        //        bar.layout.interButtonSpacing = 35
         
         addBar(bar, dataSource: self, at: .top)
         
@@ -91,9 +89,7 @@ class SearchResultTabViewController: TabmanViewController {
         let output = viewModel.transform(input: input)
         
         SearchState.shared.searchText
-            .bind(with: self) { owner, value in
-                owner.searchTextField.text = value
-            }
+            .bind(to:searchTextField.rx.text)
             .disposed(by: disposeBag)
         
     }
