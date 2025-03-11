@@ -15,6 +15,15 @@ final class SearchResultViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     
+    private let noResultLable = {
+        let label = UILabel()
+        label.text = "검색 결과가 없습니다."
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .cocoBitGray
+        label.isHidden = true
+        return label
+    }()
+    
     let viewModel = SearchResultViewModel()
     
     override func viewDidLoad() {
@@ -84,6 +93,10 @@ final class SearchResultViewController: BaseViewController {
                 owner.navigate(.present(vc))
             }
             .disposed(by: disposeBag)
+        
+        output.isNoResult
+            .drive(noResultLable.rx.isHidden)
+            .disposed(by: disposeBag)
     }
     
 }
@@ -109,12 +122,15 @@ extension SearchResultViewController {
 // MARK: View Layout
 extension SearchResultViewController {
     private func configureHierarchy() {
-        view.addSubviews(collectionView)
+        view.addSubviews(collectionView, noResultLable)
     }
     
     private func configureLayout() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        noResultLable.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
 }

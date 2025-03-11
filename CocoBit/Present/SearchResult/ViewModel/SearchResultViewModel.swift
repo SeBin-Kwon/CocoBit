@@ -21,12 +21,14 @@ final class SearchResultViewModel: BaseViewModel {
         let searchList: Driver<[SearchData]>
         let detailValue: Driver<SearchData>
         let errorAlert: Driver<String>
+        let isNoResult: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let searchList = PublishRelay<[SearchData]>()
         let detailValue = PublishRelay<SearchData>()
         let errorAlert = PublishRelay<String>()
+        let isNoResult = PublishRelay<Bool>()
         
         SearchState.shared.searchText
             .flatMapLatest { query in
@@ -40,6 +42,7 @@ final class SearchResultViewModel: BaseViewModel {
             }
             .bind {
                 searchList.accept($0.coins)
+                isNoResult.accept($0.coins.isEmpty ? false : true)
             }
             .disposed(by: disposeBag)
         
@@ -55,7 +58,8 @@ final class SearchResultViewModel: BaseViewModel {
         
         return Output(searchList: searchList.asDriver(onErrorJustReturn: []),
                       detailValue: input.cellTap.asDriver(),
-                      errorAlert: errorAlert.asDriver(onErrorJustReturn: ""))
+                      errorAlert: errorAlert.asDriver(onErrorJustReturn: ""),
+                      isNoResult: isNoResult.asDriver(onErrorJustReturn: true))
     }
 }
 
