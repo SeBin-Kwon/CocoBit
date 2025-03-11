@@ -52,8 +52,8 @@ final class NetworkManager {
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let result):
-                        value(.failure(APIError(rawValue: 429)!))
-//                        value(.success(result))
+//                        value(.failure(APIError(rawValue: 429)!))
+                        value(.success(result))
                     case .failure(let error):
                         print(error)
                         guard let code = error.responseCode else { return }

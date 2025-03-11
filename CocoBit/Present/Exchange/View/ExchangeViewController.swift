@@ -76,9 +76,21 @@ final class ExchangeViewController: BaseViewController {
         output.errorAlert
             .drive(with: self) { owner, value in
                 let vc = PopUpViewController()
-                vc.text = value[1]
+                vc.text = value
                 vc.modalPresentationStyle = .overFullScreen
                 owner.navigate(.present(vc))
+            }
+            .disposed(by: disposeBag)
+        
+        NetworkMonitor.shared.isPopUp
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, value in
+                if !value {
+                    let vc = PopUpViewController()
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.isNetwork = value
+                    owner.navigate(.present(vc))
+                }
             }
             .disposed(by: disposeBag)
     }

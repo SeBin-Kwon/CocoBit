@@ -12,7 +12,7 @@ import RxCocoa
 final class ExchangeViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
-    let errorAlert = PublishRelay<[String]>()
+    let errorAlert = PublishRelay<String>()
     
     struct Input {
         let tradeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
@@ -25,7 +25,7 @@ final class ExchangeViewModel: BaseViewModel {
         let tradeSorted: Driver<Bool?>
         let changeSorted: Driver<Bool?>
         let priceSorted: Driver<Bool?>
-        let errorAlert: Driver<[String]>
+        let errorAlert: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -101,7 +101,7 @@ final class ExchangeViewModel: BaseViewModel {
             tradeSorted: tradeSorted.asDriver(onErrorJustReturn: nil),
             changeSorted: changeSorted.asDriver(onErrorJustReturn: nil),
             priceSorted: priceSorted.asDriver(onErrorJustReturn: nil),
-            errorAlert: errorAlert.asDriver(onErrorJustReturn: [])
+            errorAlert: errorAlert.asDriver(onErrorJustReturn: "")
         )
     }
     
@@ -111,7 +111,7 @@ final class ExchangeViewModel: BaseViewModel {
             .catch { [weak self] error in
                 let data = [MarketData]()
                         guard let error = error as? APIError else { return Single.just(data) }
-                        self?.errorAlert.accept([error.title, error.localizedDescription])
+                        self?.errorAlert.accept(error.localizedDescription)
                 return Single.just(data)
             }
     }
