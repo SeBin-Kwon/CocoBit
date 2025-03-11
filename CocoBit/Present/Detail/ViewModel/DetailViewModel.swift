@@ -15,17 +15,21 @@ final class DetailViewModel: BaseViewModel {
     let id = PublishRelay<String>()
     
     struct Input {
-        //        let moreButtonTap: ControlEvent<Void>
+        let likeButtonTap: ControlEvent<Void>
+
     }
     
     struct Output {
         let titleView: Driver<(String, String)>
         let detailList: Driver<[DetailSectionModel]>
+        let likeState: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let detailList = PublishRelay<[DetailSectionModel]>()
+        let detailItem = BehaviorRelay<DetailData?>(value: nil)
         let titleView = PublishRelay<(String, String)>()
+        let state = BehaviorRelay(value: false)
         
         id
             .debug("Detail ID")
@@ -41,13 +45,35 @@ final class DetailViewModel: BaseViewModel {
             .bind(with: self) { owner, value in
                 guard let value = value.first else { return }
                 titleView.accept((value.image, value.symbol))
+                detailItem.accept(value)
                 let result = owner.convertToSectionModel(value)
                 detailList.accept(result)
+                if let item = RealmManager.findData(FavoriteTable.self, key: value.id) {
+                    state.accept(true)
+                }
             }
             .disposed(by: disposeBag)
         
+        input.likeButtonTap
+            .withLatestFrom(state)
+            .bind(with: self) { owner, value in
+                state.accept(!value)
+                guard let item = detailItem.value else { return }
+                switch !value {
+                case true:
+                    let data = FavoriteTable(id: item.id, name: item.name, symbol: item.symbol, image: item.image)
+                    RealmManager.add(data)
+                case false:
+                    guard let likeItem = RealmManager.findData(FavoriteTable.self, key: item.id) else { return }
+                    RealmManager.delete(likeItem)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
         return Output(titleView: titleView.asDriver(onErrorJustReturn: ("","")),
-                      detailList: detailList.asDriver(onErrorJustReturn: []))
+                      detailList: detailList.asDriver(onErrorJustReturn: []),
+                      likeState: state.asDriver())
     }
     
     private func convertToSectionModel(_ data: DetailData) -> [DetailSectionModel] {

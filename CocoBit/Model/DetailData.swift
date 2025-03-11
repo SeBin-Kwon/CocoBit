@@ -8,7 +8,9 @@
 import Foundation
 
 struct DetailData: Decodable {
+    let id: String
     let image: String
+    let name: String
     let symbol: String
     let crrentPrice: Double
     let change24h: Double
@@ -25,7 +27,9 @@ struct DetailData: Decodable {
     let sparklineIn7d: Sparkline
     
     enum CodingKeys: String, CodingKey {
+        case id
         case image
+        case name
         case symbol
         case crrentPrice = "current_price"
         case change24h = "price_change_percentage_24h"

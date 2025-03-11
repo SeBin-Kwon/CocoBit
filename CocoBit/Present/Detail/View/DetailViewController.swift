@@ -66,7 +66,9 @@ final class DetailViewController: BaseViewController {
     }
     
     private func bind() {
-        let input = DetailViewModel.Input()
+        let input = DetailViewModel.Input(
+            likeButtonTap: likeButton.rx.tap
+        )
         let output = viewModel.transform(input: input)
         
         output.detailList
@@ -79,22 +81,9 @@ final class DetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-//        likeButton.rx.tap
-//            .bind(with: self) { owner, btn in
-//                owner.likeButton.isSelected.toggle()
-//                print(owner.likeButton.isSelected)
-//                switch owner.likeBtn.isSelected {
-//                case true:
-//                    guard let item = owner.item else { return }
-//                    let data = MarketTable(link: item.link, image: item.image, mallName: item.mallName, title: item.title, price: item.price, id: item.id, likeState: owner.likeBtn.isSelected)
-//                    RealmManager.add(data)
-//                case false:
-//                    guard let id = owner.id else { return }
-//                    guard let likeItem = RealmManager.findData(MarketTable.self, key: id) else { return }
-//                    RealmManager.delete(likeItem)
-//                }
-//            }
-//            .disposed(by: disposeBag)
+        output.likeState
+            .drive(likeButton.rx.isSelected)
+            .disposed(by: disposeBag)
     }
 
 }
