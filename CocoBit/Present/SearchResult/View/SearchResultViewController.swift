@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class SearchResultViewController: BaseViewController {
     
@@ -48,6 +49,7 @@ final class SearchResultViewController: BaseViewController {
                             guard let likeItem = RealmManager.findData(FavoriteTable.self, key: item.id) else { return }
                             RealmManager.delete(likeItem)
                         }
+                        owner.toast(cell.likeButton.isSelected, item.name)
                     }
                     .disposed(by: cell.disposeBag)
                 
@@ -73,7 +75,6 @@ final class SearchResultViewController: BaseViewController {
                 owner.navigate(.push(vc))
             }
             .disposed(by: disposeBag)
-        
     }
     
 }
@@ -83,7 +84,6 @@ extension SearchResultViewController {
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/10))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        //        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0) // 아이템 간 간격
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
