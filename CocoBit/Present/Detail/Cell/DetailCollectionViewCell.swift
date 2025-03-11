@@ -40,6 +40,16 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
         return stack
     }()
     
+    func configureStockData(_ item: StockItem) {
+        nameLabel.text = item.title
+        valueLabel.text = item.value
+        dateLabel.text = item.date
+    }
+    
+    func configureInvestmentData(_ item: InvestmentItem) {
+        nameLabel.text = item.title
+        valueLabel.text = item.value
+    }
     
     override func configureHierarchy() {
         contentView.addSubview(stackView)
@@ -49,7 +59,7 @@ class DetailCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureLayout() {
-        
+        layer.cornerRadius = 20
         stackView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()

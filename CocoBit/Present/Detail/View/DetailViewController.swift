@@ -31,21 +31,15 @@ final class DetailViewController: BaseViewController {
             
         case .stock(let item):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
-            cell.nameLabel.text = item.title
-            cell.valueLabel.text = item.value
-            cell.dateLabel.text = item.date
-            cell.layer.cornerRadius = 20
-//            cell.configureData(item)
+            cell.configureStockData(item)
             return cell
             
         case .investment(let item):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as? DetailCollectionViewCell else { return UICollectionViewCell() }
-            cell.nameLabel.text = item.title
-            cell.valueLabel.text = item.value
-//            cell.backgroundColor = .cocoBitLightGray
-            cell.layer.cornerRadius = 20
+            cell.configureInvestmentData(item)
             return cell
         }
+
         
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
         let header = collectionView.dequeueReusableSupplementaryView(
@@ -55,12 +49,6 @@ final class DetailViewController: BaseViewController {
         ) as! DetailSectionHeaderView
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
-//        header.moreButton.rx.tap
-//            .withUnretained(self)
-//            .bind {
-//                
-//            }
-//            .disposed(by: disposeBag)
         return header
     })
 
@@ -129,7 +117,6 @@ extension DetailViewController {
         return layout
     }
     
-    // 헤더
     func createSection(index: Int) -> NSCollectionLayoutSection {
         let section: NSCollectionLayoutSection
         switch index {
@@ -168,11 +155,9 @@ extension DetailViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        //        section.interGroupSpacing = 20 // 그룹간 간격
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
+
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
-//        section.orthogonalScrollingBehavior = .continuous
-        
+
         return section
     }
 
@@ -180,7 +165,7 @@ extension DetailViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15) // 아이템 간 간격
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
         
         let innerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
         
@@ -191,7 +176,7 @@ extension DetailViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [innerGroup])
         
         let section = NSCollectionLayoutSection(group: group)
-//        section.interGroupSpacing = 20 // 그룹간 간격
+
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
 
         return section
@@ -208,10 +193,8 @@ extension DetailViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        //        section.interGroupSpacing = 20 // 그룹간 간격
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
+
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25)
-//        section.orthogonalScrollingBehavior = .continuous
         
         return section
     }
@@ -225,7 +208,6 @@ extension DetailViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: DetailSectionHeaderView.identifier
         )
-//        collectionView.backgroundColor = .clear
     }
 }
 
