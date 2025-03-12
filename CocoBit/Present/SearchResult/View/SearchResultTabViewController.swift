@@ -38,10 +38,38 @@ final class SearchResultTabViewController: TabmanViewController {
         super.viewDidLoad()
         configureBaseSetting()
         configureNavigationBar()
+        configureTabView()
+        bind()
+    }
+    
+    private func bind() {
         
-        viewControllers.append(vc)
-        viewControllers.append(UIViewController())
-        viewControllers.append(UIViewController())
+        let input = SearchResultTabViewModel.Input(
+            searchButtonTap: searchTextField.rx.controlEvent(.editingDidEndOnExit),
+            searchText: searchTextField.rx.text
+        )
+        _ = viewModel.transform(input: input)
+        
+        SearchState.shared.searchText
+            .bind(to:searchTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.leftItemsSupplementBackButton = true
+        let textField = UIBarButtonItem(customView: searchTextField)
+        navigationItem.leftBarButtonItem = textField
+    }
+    
+}
+
+// MARK: TabView
+extension SearchResultTabViewController {
+    private func configureTabView() {
+        [vc, UIViewController(), UIViewController()].forEach {
+            viewControllers.append($0)
+        }
         
         self.dataSource = self
         
@@ -76,30 +104,7 @@ final class SearchResultTabViewController: TabmanViewController {
         bar.indicator.tintColor = .cocoBitBlack
         
         addBar(bar, dataSource: self, at: .top)
-        
-        bind()
     }
-    
-    private func bind() {
-        
-        let input = SearchResultTabViewModel.Input(
-            searchButtonTap: searchTextField.rx.controlEvent(.editingDidEndOnExit),
-            searchText: searchTextField.rx.text
-        )
-        _ = viewModel.transform(input: input)
-        
-        SearchState.shared.searchText
-            .bind(to:searchTextField.rx.text)
-            .disposed(by: disposeBag)
-        
-    }
-    
-    private func configureNavigationBar() {
-        navigationItem.leftItemsSupplementBackButton = true
-        let textField = UIBarButtonItem(customView: searchTextField)
-        navigationItem.leftBarButtonItem = textField
-    }
-    
 }
 
 extension SearchResultTabViewController: PageboyViewControllerDataSource, TMBarDataSource {
