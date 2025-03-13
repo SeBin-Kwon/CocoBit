@@ -17,12 +17,12 @@ final class LikeButton: UIButton {
         config.baseForegroundColor = .cocoBitBlack
         config.buttonSize = .mini
         config.cornerStyle = .capsule
-        configurationUpdateHandler = { btn in
+        configurationUpdateHandler = { [weak self] btn in
             switch btn.state {
             case .normal:
-                self.configuration?.image = .setSymbol(.star)
+                self?.configuration?.image = .setSymbol(.star)
             case .selected:
-                self.configuration?.image = .setSymbol(.starFill)
+                self?.configuration?.image = .setSymbol(.starFill)
             default:
                 return
             }
