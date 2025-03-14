@@ -21,7 +21,7 @@ final class DetailViewController: BaseViewController {
     
     private let likeButton = LikeButton()
     
-    private let dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<DetailSectionModel> (configureCell: { dataSource, collectionView, indexPath, item in
         
         switch item {
         case .chart(let item):
@@ -49,6 +49,11 @@ final class DetailViewController: BaseViewController {
         ) as! DetailSectionHeaderView
         let sectionHeader = dataSource.sectionModels[indexPath.section].header
         header.titleLabel.text = sectionHeader
+        header.moreButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.view.makeToast("준비 중입니다", position: .bottom)
+        }
+            .disposed(by: header.disposeBag)
         return header
     })
 
