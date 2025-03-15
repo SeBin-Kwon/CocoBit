@@ -51,7 +51,7 @@ final class DetailViewController: BaseViewController {
         header.titleLabel.text = sectionHeader
         header.moreButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.view.makeToast("준비 중입니다", position: .bottom)
+                owner.preparingToast()
         }
             .disposed(by: header.disposeBag)
         return header

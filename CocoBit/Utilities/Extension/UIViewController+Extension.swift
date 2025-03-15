@@ -25,6 +25,10 @@ extension UIViewController {
             view.makeToast("\(name)(이/가) 즐겨찾기에서 제거되었습니다.", position: .top)
         }
     }
+    
+    func preparingToast() {
+        view.makeToast("준비 중입니다.", position: .bottom)
+    }
 }
 
 enum NavigationType {
