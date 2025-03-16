@@ -26,10 +26,10 @@ final class NetworkManager {
                         let apiError: Error
                         guard let code = error.responseCode else { return }
                         switch api.error {
-                        case is UpBitError.Type:
-                            apiError = UpBitError(rawValue: code) ?? UpBitError.server
+                        case is UpbitError.Type:
+                            apiError = UpbitError(rawValue: code) ?? UpbitError.server
                         case is CoinGeckoError.Type:
-                            apiError = UpBitError(rawValue: code) ?? UpBitError.server
+                            apiError = UpbitError(rawValue: code) ?? UpbitError.server
                         default:
                             apiError = NetworkError.unknown
                         }

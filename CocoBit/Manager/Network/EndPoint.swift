@@ -43,7 +43,7 @@ enum EndPoint {
     
     var error: Error.Type {
         switch self {
-        case .market: UpBitError.self
+        case .market: UpbitError.self
         case .trending, .searchResult, .detail: CoinGeckoError.self
         }
     }

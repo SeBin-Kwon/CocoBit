@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum UpBitError: Int, Error {
+enum UpbitError: Int, Error {
     case badRequest = 400
     case unauthorized = 401
     case server = 500
 }
 
-extension UpBitError: LocalizedError {
+extension UpbitError: LocalizedError {
     
     var title: String {
         switch self {
@@ -25,9 +25,9 @@ extension UpBitError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
-        case .badRequest: return "잘못된 요청입니다.\n올바른 요청으로 다시 시도해 주세요."
-        case .unauthorized: return "서비스에 액세스할 수 있는\n권한이 없습니다."
-        case .server: return "서버 내부에 오류가 발생했습니다.\n개발자 포럼에 오류를 신고해 주십시오."
+        case .badRequest: return "잘못된 요청입니다.\nUpbit에 올바른 요청으로 다시 시도해 주세요."
+        case .unauthorized: return "Upbit 서비스에 액세스할 수 있는\n권한이 없습니다."
+        case .server: return "Upbit 서버 내부에 오류가 발생했습니다.\n개발자 포럼에 오류를 신고해 주십시오."
         }
     }
 }
@@ -56,12 +56,12 @@ extension CoinGeckoError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
-        case .badRequest: return "잘못된 요청입니다.\n올바른 요청으로 다시 시도해 주세요."
-        case .unauthorized: return "서비스에 액세스할 수 있는\n권한이 없습니다."
-        case .forbidden: return "귀하의 엑세스가 차단되어\n요청을 승인할 수 없습니다."
-        case .notFound: return "요청하신 리소스를 찾을 수 없습니다."
-        case .tooManyRequests: return "API 요금 한도에 도달하였습니다.\n서비스 플랜을 확장해 주세요."
-        case .server: return "서버 내부에 오류가 발생했습니다.\n개발자 포럼에 오류를 신고해 주십시오."
+        case .badRequest: return "잘못된 요청입니다.\nCoinGecko에 올바른 요청으로 다시 시도해 주세요."
+        case .unauthorized: return "CoinGecko 서비스에 액세스할 수 있는\n권한이 없습니다."
+        case .forbidden: return "귀하의 엑세스가 CoinGecko에서 차단되어\n요청을 승인할 수 없습니다."
+        case .notFound: return "CoinGecko에서 요청하신 리소스를 찾을 수 없습니다."
+        case .tooManyRequests: return "CoinGecko API 요금 한도에 도달하였습니다.\n서비스 플랜을 확장해 주세요."
+        case .server: return "CoinGecko 서버 내부에 오류가 발생했습니다.\n개발자 포럼에 오류를 신고해 주십시오."
         }
     }
 }

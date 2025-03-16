@@ -39,7 +39,7 @@ final class DetailViewModel: BaseViewModel {
                 NetworkManager.shared.fetchResults(api: .detail(currency: .KRW, id: id), type: [DetailData].self)
                     .catch { error in
                         let data = [DetailData]()
-                        guard let error = error as? APIError else { return Single.just(data) }
+                        guard let error = error as? CoinGeckoError else { return Single.just(data) }
                         errorAlert.accept( error.localizedDescription)
                         return Single.just(data)
                     }

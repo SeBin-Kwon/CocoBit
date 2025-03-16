@@ -35,7 +35,7 @@ final class SearchResultViewModel: BaseViewModel {
                 NetworkManager.shared.fetchResults(api: .searchResult(query: query), type: SearchResult.self)
                     .catch { error in
                         let data = SearchResult(coins: [SearchData]())
-                        guard let error = error as? APIError else { return Single.just(data) }
+                        guard let error = error as? CoinGeckoError else { return Single.just(data) }
                         errorAlert.accept(error.localizedDescription)
                         return Single.just(data)
                     }

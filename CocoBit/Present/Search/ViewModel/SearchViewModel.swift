@@ -38,7 +38,7 @@ final class SearchViewModel: BaseViewModel {
                 NetworkManager.shared.fetchResults(api: EndPoint.trending, type: Trending.self)
                     .catch { error in
                         let data = Trending(coins: [TrendingCoin](), nfts: [TrendingNFTItem]())
-                            guard let error = error as? APIError else { return Single.just(data) }
+                            guard let error = error as? CoinGeckoError else { return Single.just(data) }
                             errorAlert.accept(error.localizedDescription)
                         return Single.just(data)
                     }

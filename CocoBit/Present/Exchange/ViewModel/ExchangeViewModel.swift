@@ -106,7 +106,7 @@ final class ExchangeViewModel: BaseViewModel {
         NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
             .catch { [weak self] error in
                 let data = [MarketData]()
-                        guard let error = error as? APIError else { return Single.just(data) }
+                guard let error = error as? UpbitError else { return Single.just(data) }
                         self?.errorAlert.accept(error.localizedDescription)
                 return Single.just(data)
             }
