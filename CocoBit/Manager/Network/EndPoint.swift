@@ -40,6 +40,13 @@ enum EndPoint {
         case .trending: nil
         }
     }
+    
+    var error: Error.Type {
+        switch self {
+        case .market: UpBitError.self
+        case .trending, .searchResult, .detail: CoinGeckoError.self
+        }
+    }
 }
 
 enum MarketCurrency: String {
