@@ -16,7 +16,7 @@ final class PopUpViewController: UIViewController {
     var text: String?
     var isNetwork: Bool?
     let disposeBag = DisposeBag()
-    let networkMessage = "네트워크 연결이 일시적으로 원활하지\n않습니다. 데이터 또는 Wi-Fi 연결 상태를\n확인해주세요."
+//    let networkMessage = "네트워크 연결이 일시적으로 원활하지\n않습니다. 데이터 또는 Wi-Fi 연결 상태를\n확인해주세요."
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ final class PopUpViewController: UIViewController {
         view.backgroundColor = .black.withAlphaComponent(0.3)
         popupView.backgroundColor = .white
         if isNetwork != nil {
-            popupView.messageLabel.text = networkMessage
+            popupView.messageLabel.text = NetworkError.noConnection.errorDescription
         } else {
             popupView.messageLabel.text = text
         }
