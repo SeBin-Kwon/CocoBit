@@ -32,8 +32,10 @@ final class SearchViewModel: BaseViewModel {
         let detailValue = PublishRelay<TrendingSectionItem>()
         let errorAlert = PublishRelay<String>()
         
-        Observable<Int>
+        let timer = Observable<Int>
             .timer(.microseconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
+        
+        Observable.combineLatest(timer, NotificationCenterManager.retryAPI.addObserver().startWith(()))
             .flatMapLatest { _ in
                 NetworkManager.shared.fetchResults(api: EndPoint.trending, type: Trending.self)
                     .catch { error in

@@ -30,8 +30,8 @@ final class SearchResultViewModel: BaseViewModel {
         let errorAlert = PublishRelay<String>()
         let isNoResult = PublishRelay<Bool>()
         
-        SearchState.shared.searchText
-            .flatMapLatest { query in
+        Observable.combineLatest(SearchState.shared.searchText, NotificationCenterManager.retryAPI.addObserver().startWith(()))
+            .flatMapLatest { query, _ in
                 NetworkManager.shared.fetchResults(api: .searchResult(query: query), type: SearchResult.self)
                     .catch { error in
                         let data = SearchResult(coins: [SearchData]())

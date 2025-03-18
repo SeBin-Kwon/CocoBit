@@ -34,8 +34,8 @@ final class DetailViewModel: BaseViewModel {
         let isButtonTap = BehaviorRelay(value: false)
         let errorAlert = PublishRelay<String>()
         
-        id
-            .flatMapLatest { id in
+        Observable.combineLatest(id, NotificationCenterManager.retryAPI.addObserver().startWith(()))
+            .flatMapLatest { id, _ in
                 NetworkManager.shared.fetchResults(api: .detail(currency: .KRW, id: id), type: [DetailData].self)
                     .catch { error in
                         let data = [DetailData]()

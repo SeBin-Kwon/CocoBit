@@ -42,7 +42,8 @@ final class ExchangeViewModel: BaseViewModel {
         let timer = Observable<Int>
             .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
         
-        Observable.combineLatest(timer, currentSortType)
+        Observable.combineLatest(timer, currentSortType, NotificationCenterManager.retryAPI.addObserver().startWith(()))
+            .debug("api")
             .withUnretained(self)
             .flatMapLatest { owner, _ in
                 owner.callRequest()
