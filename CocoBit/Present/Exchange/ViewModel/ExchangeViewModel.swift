@@ -12,7 +12,7 @@ import RxCocoa
 final class ExchangeViewModel: BaseViewModel {
     
     var disposeBag = DisposeBag()
-    private let errorAlert = PublishRelay<String>()
+    
     
     struct Input {
         let tradeButtonTap: (tap: ControlEvent<Void>, state: BehaviorRelay<Bool?>)
@@ -36,17 +36,31 @@ final class ExchangeViewModel: BaseViewModel {
         
         let currentSortType = BehaviorRelay(value: SortType.price)
         let currentSortState = BehaviorRelay<Bool?>(value: nil)
-        
+        let errorAlert = PublishRelay<String>()
+        let pauseTrigger = PublishRelay<Void>()
         
         
         let timer = Observable<Int>
             .timer(.microseconds(0), period: .seconds(5), scheduler: MainScheduler.instance)
+            .take(until: pauseTrigger)
         
-        Observable.combineLatest(timer, currentSortType, NotificationCenterManager.retryAPI.addObserver().startWith(()))
+        let timerTrigger = NotificationCenterManager.retryAPI.addObserver().startWith(())
+            .flatMapLatest { _ in
+                timer
+            }
+        
+        Observable.combineLatest(currentSortType, timerTrigger)
             .debug("api")
             .withUnretained(self)
-            .flatMapLatest { owner, _ in
-                owner.callRequest()
+            .flatMapLatest { _ in
+                NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
+                    .catch {error in
+                        let data = [MarketData]()
+                        guard let error = error as? UpbitError else { return Single.just(data) }
+                        errorAlert.accept(error.localizedDescription)
+                        pauseTrigger.accept(())
+                        return Single.just(data)
+                    }
             }
             .bind(with: self) { owner, value in
                 let sortedResult = owner.sortedData(value: value, state: currentSortState.value, type: currentSortType.value)
@@ -103,15 +117,9 @@ final class ExchangeViewModel: BaseViewModel {
     }
     
 
-    private func callRequest() -> Single<[MarketData]> {
-        NetworkManager.shared.fetchResults(api: EndPoint.market(currency: .KRW), type: [MarketData].self)
-            .catch { [weak self] error in
-                let data = [MarketData]()
-                guard let error = error as? UpbitError else { return Single.just(data) }
-                        self?.errorAlert.accept(error.localizedDescription)
-                return Single.just(data)
-            }
-    }
+//    private func callRequest() -> Single<[MarketData]> {
+//
+//    }
     
     private func changeState(_ state: Bool?) -> Bool? {
         let newState: Bool?

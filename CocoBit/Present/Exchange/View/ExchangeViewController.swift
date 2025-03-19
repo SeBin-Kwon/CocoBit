@@ -85,7 +85,7 @@ final class ExchangeViewController: BaseViewController {
         NetworkMonitor.shared.isPopUp
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, value in
-                if !value {
+                if value {
                     let vc = PopUpViewController()
                     vc.modalPresentationStyle = .overFullScreen
                     vc.isNetwork = value

@@ -40,9 +40,9 @@ final class NetworkMonitor {
             self?.getConnectionType(path)
             
             if self?.isConnected == true {
-                self?.isPopUp.accept(true)
-            } else {
                 self?.isPopUp.accept(false)
+            } else {
+                self?.isPopUp.accept(true)
             }
             
         }

@@ -26,11 +26,16 @@ final class PopUpViewController: UIViewController {
     }
     
     private func bind() {
-        NetworkMonitor.shared.isPopUp
+        let retryButtonTap = PublishRelay<Void>()
+    
+        retryButtonTap
+            .withLatestFrom(NetworkMonitor.shared.isPopUp)
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, value in
-                if value {
+                if !value {
                     owner.navigate(.dismiss)
+                } else {
+                    owner.view.makeToast("네트워크 통신이 원활하지 않습니다.", position: .top)
                 }
             }
             .disposed(by: disposeBag)
@@ -38,8 +43,8 @@ final class PopUpViewController: UIViewController {
         popupView.retryButton.rx.tap
             .debug("retryButton")
             .bind(with: self) { owner, value in
-                print("retryButtonTap")
                 NotificationCenterManager.retryAPI.post()
+                retryButtonTap.accept(())
             }
             .disposed(by: disposeBag)
     }
